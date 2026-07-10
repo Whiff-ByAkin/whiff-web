@@ -67,10 +67,10 @@ export default function TermsPage() {
             and up to date. Don&rsquo;t share your credentials or impersonate
             anyone else. Notify us immediately at{" "}
             <a
-              href="mailto:hello@whiff-ai.com"
+              href="mailto:support@whi-ff.com"
               className="underline hover:text-white"
             >
-              hello@whiff-ai.com
+              support@whi-ff.com
             </a>{" "}
             if you suspect unauthorized use of your account.
           </p>
@@ -195,10 +195,10 @@ export default function TermsPage() {
             period using your saved payment method until you cancel. You can
             cancel at any time through your account or by contacting us at{" "}
             <a
-              href="mailto:hello@whiff-ai.com"
+              href="mailto:support@whi-ff.com"
               className="underline hover:text-white"
             >
-              hello@whiff-ai.com
+              support@whi-ff.com
             </a>
             . Cancellation takes effect at the end of the current billing
             period, and we do not provide refunds for unused time.
@@ -224,10 +224,10 @@ export default function TermsPage() {
             If you believe content on the Service infringes your copyright,
             please send a notice that complies with the DMCA to{" "}
             <a
-              href="mailto:copyright@whiff-ai.com"
+              href="mailto:press@whi-ff.com"
               className="underline hover:text-white"
             >
-              copyright@whiff-ai.com
+              press@whi-ff.com
             </a>
             . We may terminate the accounts of repeat infringers.
           </p>
@@ -290,10 +290,10 @@ export default function TermsPage() {
             <strong>Informal resolution first:</strong> before filing a claim,
             you agree to try to resolve the dispute informally by contacting{" "}
             <a
-              href="mailto:hello@whiff-ai.com"
+              href="mailto:support@whi-ff.com"
               className="underline hover:text-white"
             >
-              hello@whiff-ai.com
+              support@whi-ff.com
             </a>
             . If we can&rsquo;t resolve the dispute within 60 days, you and we
             agree to resolve any remaining dispute through{" "}
@@ -310,10 +310,10 @@ export default function TermsPage() {
             <strong>Opt-out:</strong> you may opt out of the arbitration
             agreement within 30 days of first accepting these Terms by emailing{" "}
             <a
-              href="mailto:hello@whiff-ai.com"
+              href="mailto:support@whi-ff.com"
               className="underline hover:text-white"
             >
-              hello@whiff-ai.com
+              support@whi-ff.com
             </a>{" "}
             with your name and the words &ldquo;arbitration opt-out.&rdquo;
           </p>
@@ -339,10 +339,10 @@ export default function TermsPage() {
           <p>
             Questions? Email us at{" "}
             <a
-              href="mailto:hello@whiff-ai.com"
+              href="mailto:support@whi-ff.com"
               className="underline hover:text-white"
             >
-              hello@whiff-ai.com
+              support@whi-ff.com
             </a>
             .
           </p>

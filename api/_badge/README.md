@@ -2,7 +2,7 @@
 
 A Python **serverless function** that lives inside this Next.js project and mints
 **one** founder badge per request. It stores the hidden code + email in the
-**same MongoDB** the app uses and (once Gmail is configured) emails the badge.
+**same MongoDB** the app uses and (once SMTP is configured) emails the badge.
 It's the "digital gift" the `do-you-know-me` flow promises.
 
 It runs **on demand** — nothing sits idle. When someone submits the form, the
@@ -13,7 +13,7 @@ Next route triggers this function once; it does its job and shuts down.
 - `api/badge.py` — the serverless entry point (Vercel serves it at `/api/badge`).
 - `api/_badge/render.py` — your tuned PIL rendering, one badge on demand.
 - `api/_badge/db.py` — MongoDB registry (replaces the CSV/JSON) + atomic counter.
-- `api/_badge/mailer.py` — Gmail sender (dormant until you add credentials).
+- `api/_badge/mailer.py` — SMTP sender (dormant until you add credentials).
 - `api/_badge/assets/` — the template PNG + bundled fonts.
 
 The `_badge` folder starts with an underscore so Vercel doesn't turn the helper
@@ -27,11 +27,11 @@ modules into routes. `requirements.txt` and `vercel.json` sit at the repo root.
    requests can never get the same number.
 3. `render.render_badge()` draws the badge for that number + a fresh hidden code.
 4. `db.save_badge()` stores `{ founderNumber, hiddenCode, email, ... }`.
-5. `mailer.send_badge_email()` emails it (once Gmail is set) and flags `sent`.
+5. `mailer.send_badge_email()` emails it (once SMTP is set) and flags `sent`.
 
 ## Your template
 
-Lives at `api/_badge/assets/whiff_founder_badge_template.png`. Swap the file to
+Lives at `api/_badge/assets/whiff-badge-no-number.png`. Swap the file to
 change the artwork (or set `BADGE_TEMPLATE_PATH`).
 
 ## Run locally
@@ -63,8 +63,11 @@ Set these in the project's env vars (Settings → Environment Variables):
     MONGODB_DB=olettrasocials
     BADGE_SERVICE_TOKEN    # optional shared secret
     BADGE_OUTPUT_DIR=/tmp  # Vercel's only writable dir
-    GMAIL_USER             # later
-    GMAIL_APP_PASSWORD     # later
+    SMTP_HOST=smtp.office365.com        # default if omitted
+    SMTP_PORT=587                       # default if omitted
+    SMTP_USER=admin@whi-ff.com         # real Microsoft mailbox
+    SMTP_PASSWORD                      # password/app password for SMTP_USER
+    SMTP_FROM=hello@whi-ff.com
 
 No `BADGE_SERVICE_URL` needed — the Next route calls this function same-origin.
 
@@ -83,8 +86,10 @@ and on Vercel's Linux — **Arimo** (Arial-compatible) for the number, **Cousine
 (monospace) for the hidden code. Both OFL-licensed. Override with
 `BADGE_NUMBER_FONT` / `BADGE_HIDDEN_FONT`.
 
-## Gmail (later)
+## Microsoft 365 SMTP
 
-Set `GMAIL_USER` + `GMAIL_APP_PASSWORD` (a Google
-[App Password](https://myaccount.google.com/apppasswords)) in the project's env
-vars. Delivery turns on automatically — no code change.
+For Microsoft 365, this function uses SMTP client submission:
+`smtp.office365.com`, port `587`, STARTTLS. Set `SMTP_USER` to the real
+mailbox, `SMTP_PASSWORD` to that mailbox's SMTP login secret, and `SMTP_FROM`
+to the alias you want recipients to see. Delivery turns on automatically — no
+code change.

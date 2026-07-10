@@ -86,6 +86,17 @@ export function Contact() {
           <p className="text-forest/65 text-[13px] md:text-sm">
             fill out the form below.
           </p>
+          <p className="text-forest/65 text-[13px] md:text-sm">
+            support:{" "}
+            <a href="mailto:support@whi-ff.com" className="underline underline-offset-2 hover:text-forest">
+              support@whi-ff.com
+            </a>
+            {" · "}
+            press:{" "}
+            <a href="mailto:press@whi-ff.com" className="underline underline-offset-2 hover:text-forest">
+              press@whi-ff.com
+            </a>
+          </p>
         </div>
 
         {sent ? (

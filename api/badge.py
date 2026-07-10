@@ -8,7 +8,7 @@ requests — Vercel spins this up on demand and tears it down after.
 Routes (file-based, so no rewrite config needed):
   POST /api/badge            {"email": "..."} -> mint one badge
   GET  /api/badge            -> health check
-  GET  /api/badge?code=ALR-… -> regenerate a stored badge as a PNG
+  GET  /api/badge?code=WHF-FND-… -> regenerate a stored badge as a PNG
 """
 
 import json

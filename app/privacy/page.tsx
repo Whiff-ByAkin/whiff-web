@@ -127,8 +127,8 @@ export default function PrivacyPage() {
           </h3>
           <ul className="space-y-3 list-none">
             <li>
-              <strong>Social media:</strong> if you engage with us on Instagram,
-              TikTok, or similar networks, we may receive limited profile
+              <strong>Social media:</strong> if you engage with us on Instagram
+              or similar networks, we may receive limited profile
               information you have allowed those networks to share.
             </li>
             <li>
@@ -300,10 +300,10 @@ export default function PrivacyPage() {
           <p>
             Questions or requests about this Privacy Notice? Email us at{" "}
             <a
-              href="mailto:hello@whiff-ai.com"
+              href="mailto:support@whi-ff.com"
               className="underline hover:text-white"
             >
-              hello@whiff-ai.com
+              support@whi-ff.com
             </a>
             .
           </p>

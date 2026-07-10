@@ -143,7 +143,18 @@ const jsonLd = {
       ],
       sameAs: [
         "https://www.instagram.com/discover_whiff/",
-        "https://www.tiktok.com/@discover_whiff",
+      ],
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          contactType: "customer support",
+          email: "support@whi-ff.com",
+        },
+        {
+          "@type": "ContactPoint",
+          contactType: "press",
+          email: "press@whi-ff.com",
+        },
       ],
     },
     {
