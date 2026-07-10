@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { MATCH_PROMPTS } from "@/lib/match-prompts";
 import { WhiffAd } from "./whiff-ad";
@@ -9,6 +9,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function CreateFlow() {
   const reduce = useReducedMotion();
+  const answerRef = useRef<HTMLTextAreaElement>(null);
 
   const [promptId, setPromptId] = useState<string | null>(null);
   const [answer, setAnswer] = useState("");
@@ -25,6 +26,20 @@ export function CreateFlow() {
     !!answer.trim() &&
     !!friendName.trim() &&
     EMAIL_PATTERN.test(email.trim());
+
+  function handlePromptSelect(nextPromptId: string) {
+    setPromptId(nextPromptId);
+    setError(null);
+
+    if (!window.matchMedia("(max-width: 1023px)").matches) return;
+
+    window.requestAnimationFrame(() => {
+      answerRef.current?.scrollIntoView({
+        behavior: reduce ? "auto" : "smooth",
+        block: "center",
+      });
+    });
+  }
 
   async function handleCreate() {
     if (!selected || !ready) return;
@@ -87,10 +102,7 @@ export function CreateFlow() {
                   <button
                     type="button"
                     aria-pressed={active}
-                    onClick={() => {
-                      setPromptId(p.id);
-                      setError(null);
-                    }}
+                    onClick={() => handlePromptSelect(p.id)}
                     className={`group flex h-full w-full items-start gap-3 rounded-2xl px-5 py-4 text-left font-serif text-[15px] leading-snug transition-all ${
                       active
                         ? "bg-sienna/10 text-forest ring-2 ring-sienna"
@@ -144,6 +156,7 @@ export function CreateFlow() {
               your answer
             </label>
             <textarea
+              ref={answerRef}
               id="answer"
               rows={2}
               maxLength={140}
