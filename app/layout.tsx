@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Geist, Fraunces, Caveat } from "next/font/google";
 import "./globals.css";
 import { AmbientBackground } from "./components/ambient-background";
@@ -213,6 +215,8 @@ export default function RootLayout({
         <ScrollProgress />
         <AmbientBackground />
         {children}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
