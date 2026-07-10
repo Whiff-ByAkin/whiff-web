@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/badge.py": {
+      "includeFiles": "api/_badge/**"
+    }
+  }
+}

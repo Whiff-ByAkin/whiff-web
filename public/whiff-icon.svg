@@ -1,0 +1,19 @@
+<svg width="100%" viewBox="0 0 200 200" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>whiff icon</title>
+  <desc>whiff app icon: a soft oatmeal rounded square with a deep espresso serif w lettermark and a warm terracotta accent glow.</desc>
+
+  <defs>
+    <radialGradient id="paper" cx="34%" cy="26%" r="85%">
+      <stop offset="0%" stop-color="#FBF6EC"/>
+      <stop offset="55%" stop-color="#F2EBE0"/>
+      <stop offset="100%" stop-color="#E7DCC9"/>
+    </radialGradient>
+  </defs>
+
+  <rect x="4" y="4" width="192" height="192" rx="44" fill="url(#paper)" stroke="#8A9A5B" stroke-width="1.5"/>
+
+  <!-- warm terracotta accent glow, echoing the site's living orbs -->
+  <circle cx="64" cy="66" r="30" fill="#C67B5C" opacity="0.5"/>
+
+  <text x="100" y="146" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="140" font-weight="400" fill="#2E2723" letter-spacing="-4">w</text>
+</svg>
