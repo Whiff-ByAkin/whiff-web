@@ -6,11 +6,14 @@ import { InfoDialog, NAV_PILL_CLASS } from "./info-dialog";
 export function Contact() {
   const [open, setOpen] = useState(false);
   const [sent, setSent] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
 
   const handleOpen = useCallback(() => setOpen(true), []);
   const handleClose = useCallback(() => {
     setOpen(false);
+    setError(null);
     requestAnimationFrame(() => triggerRef.current?.focus());
   }, []);
 
@@ -31,9 +34,38 @@ export function Contact() {
     return () => window.removeEventListener("hashchange", openFromHash);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSent(true);
+    if (submitting) return;
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const payload = {
+      name: String(data.get("name") ?? ""),
+      email: String(data.get("email") ?? ""),
+      location: String(data.get("location") ?? ""),
+      message: String(data.get("message") ?? ""),
+    };
+
+    setSubmitting(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        setSent(true);
+      } else {
+        const body = await res.json().catch(() => null);
+        setError(body?.error ?? "Something went wrong. Please try again.");
+      }
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -107,7 +139,7 @@ export function Contact() {
             thanks. we&apos;ll be in touch.
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-2.5">
+          <form onSubmit={handleSubmit} className="space-y-2.5" noValidate>
             <Field name="name" type="text" placeholder="name" required />
             <Field name="email" type="email" placeholder="email" required />
             <Field name="location" type="text" placeholder="location" />
@@ -118,11 +150,17 @@ export function Contact() {
               rows={4}
               className="w-full rounded-2xl ring-1 ring-forest/20 bg-transparent px-4 py-3 text-[14px] text-forest placeholder:text-forest/45 placeholder:font-serif placeholder:italic focus:outline-none focus:ring-2 focus:ring-forest/40 transition resize-none"
             />
+            {error && (
+              <p role="alert" className="text-[13px] text-sienna not-italic font-sans">
+                {error}
+              </p>
+            )}
             <button
               type="submit"
-              className="w-full inline-flex items-center justify-center rounded-full bg-sienna text-oat font-serif italic text-sm py-3 shadow-[0_8px_24px_-12px_rgba(120,44,26,0.5)] hover:bg-sienna-hover transition-colors duration-200"
+              disabled={submitting}
+              className="w-full inline-flex items-center justify-center rounded-full bg-sienna text-oat font-serif italic text-sm py-3 shadow-[0_8px_24px_-12px_rgba(120,44,26,0.5)] hover:bg-sienna-hover transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              send message
+              {submitting ? "sending…" : "send message"}
             </button>
           </form>
         )}

@@ -236,6 +236,20 @@ export async function submitGuess(
   };
 }
 
+// Has this email already started a game, and if so, what's the public share
+// code? Used by the create flow to recognize a repeat player and hand them
+// their existing link back instead of a dead end. Deliberately returns only
+// the public `code` (never `ownerKey`), so entering someone's email can't leak
+// their private reveal link.
+export async function getLatestGameCodeForEmail(email: string): Promise<string | null> {
+  const collection = await getCollection();
+  const doc = await collection.findOne(
+    { starterEmail: email },
+    { projection: { code: 1 }, sort: { createdAt: -1 } },
+  );
+  return doc?.code ?? null;
+}
+
 // Best-effort: who to ping when a guess lands (Option B). Returns the starter's
 // email so a caller can dispatch the "your friend guessed" notification once an
 // email provider is wired up. Kept separate so the guess path stays fast.

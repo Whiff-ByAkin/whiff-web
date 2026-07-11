@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { MatchStatus } from "@/lib/match";
@@ -280,12 +281,12 @@ function Reveal({
         <p className="mt-1 text-[14px] text-muted">
           that&rsquo;s the whole idea behind whiff.
         </p>
-        <a
+        <Link
           href="/"
           className="mt-4 inline-block rounded-full bg-sienna px-7 py-3 font-serif italic tracking-wide text-oat transition-colors hover:bg-sienna-hover"
         >
           meet whiff →
-        </a>
+        </Link>
       </div>
     </div>
   );

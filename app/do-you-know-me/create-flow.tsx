@@ -28,6 +28,7 @@ export function CreateFlow() {
   const [status, setStatus] = useState<"idle" | "submitting">("idle");
   const [error, setError] = useState<string | null>(null);
   const [alreadyPlayed, setAlreadyPlayed] = useState(false);
+  const [existingCode, setExistingCode] = useState<string | null>(null);
   const [result, setResult] = useState<{ code: string; ownerKey: string } | null>(null);
 
   const selected = MATCH_PROMPTS.find((p) => p.id === promptId) ?? null;
@@ -84,7 +85,9 @@ export function CreateFlow() {
       if (res.ok && data?.code) {
         setResult({ code: data.code, ownerKey: data.ownerKey });
       } else if (res.status === 409 || data?.already) {
-        // One game per person — this email has already played.
+        // One game per person — this email has already played. If the API
+        // handed back their existing game code, we can re-share their link.
+        setExistingCode(typeof data?.code === "string" ? data.code : null);
         setAlreadyPlayed(true);
       } else {
         setError(data?.error ?? "Something went wrong. Please try again.");
@@ -97,7 +100,7 @@ export function CreateFlow() {
   }
 
   if (alreadyPlayed) {
-    return <AlreadyPlayedPanel />;
+    return <AlreadyPlayedPanel existingCode={existingCode} />;
   }
 
   if (result) {
@@ -270,7 +273,22 @@ export function CreateFlow() {
   );
 }
 
-function AlreadyPlayedPanel() {
+function AlreadyPlayedPanel({ existingCode }: { existingCode: string | null }) {
+  const [copied, setCopied] = useState(false);
+  const origin = typeof window !== "undefined" ? window.location.origin : "";
+  const shareUrl = existingCode ? `${origin}/g/${existingCode}` : "";
+
+  async function copy() {
+    if (!shareUrl) return;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopied(false);
+    }
+  }
+
   return (
     <div className="mt-16 max-w-xl lg:mt-24">
       <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-sienna-hover">
@@ -281,8 +299,31 @@ function AlreadyPlayedPanel() {
       </h1>
       <p className="mt-4 text-[16px] leading-relaxed text-muted">
         this email already started a game — that&rsquo;s your one turn. check your
-        inbox for your founder badge, and your reveal link is where you left it.
+        inbox for your founder badge.
       </p>
+
+      {shareUrl ? (
+        <div className="mt-6 w-full max-w-md">
+          <p className="mb-2 text-sm font-medium text-forest">
+            here&rsquo;s your game link again — send it to your person:
+          </p>
+          <div className="flex items-center gap-2 rounded-full bg-card p-1.5 pl-5 ring-1 ring-forest/15">
+            <span className="flex-1 truncate text-left text-sm text-forest/70">{shareUrl}</span>
+            <button
+              type="button"
+              onClick={copy}
+              aria-label={copied ? "link copied to clipboard" : "copy share link to clipboard"}
+              className="shrink-0 rounded-full bg-sienna px-6 py-2.5 font-serif text-sm italic tracking-wide text-oat transition-colors hover:bg-sienna-hover"
+            >
+              {copied ? "copied ✓" : "copy link"}
+            </button>
+          </div>
+          <span role="status" aria-live="polite" className="sr-only">
+            {copied ? "link copied to clipboard" : ""}
+          </span>
+        </div>
+      ) : null}
+
       <Link
         href="/"
         className="mt-6 inline-block rounded-full bg-sienna px-7 py-3 font-serif italic tracking-wide text-oat transition-colors hover:bg-sienna-hover"

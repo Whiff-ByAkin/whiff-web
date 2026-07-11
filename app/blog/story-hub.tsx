@@ -5,6 +5,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { FEATURED_ESSAY_PATH, type StoryPreview } from "./data";
 import { StorySubmissionForm } from "./story-submission-form";
+import { FeedbackWidget } from "@/app/components/feedback-widget";
 
 // Warm tint rotation for the confession wall. Most cards are quiet paper; every
 // third/sixth beat is a saturated "pull quote" (sienna or forest) so the wall
@@ -148,6 +149,35 @@ export function StoryHub({ stories }: { stories: readonly StoryPreview[] }) {
             </div>
           </Link>
 
+          {/* ── play the game: a 2-minute detour from the fatigue ── */}
+          <Link
+            href="/do-you-know-me"
+            className="group mx-auto mt-8 grid max-w-3xl gap-5 rounded-[8px] border border-sienna/25 bg-sienna/5 p-5 shadow-[0_30px_80px_-60px_rgba(120,44,26,0.6)] transition hover:-translate-y-0.5 hover:border-sienna/45 sm:grid-cols-[8rem_1fr] sm:p-6"
+          >
+            <div className="flex items-center gap-3 sm:flex-col sm:items-start sm:border-r sm:border-sienna/20 sm:pr-5">
+              <p className="shrink-0 text-[10px] uppercase tracking-[0.22em] text-sienna/80">
+                Free game
+              </p>
+              <span aria-hidden="true" className="h-px flex-1 bg-sienna/20 sm:w-full sm:flex-none" />
+            </div>
+            <div className="min-w-0">
+              <h2 className="mt-1.5 font-serif text-xl font-semibold leading-tight text-forest sm:text-2xl">
+                Do they really get you? Play &ldquo;do you know me?&rdquo;
+              </h2>
+              <p className="mt-2 max-w-xl text-pretty text-sm leading-relaxed text-forest/70 sm:text-base">
+                No swiping, no strangers. Answer one honest prompt, send it to a
+                friend or partner, and see if they can guess what you said. Two
+                minutes, and it&rsquo;s free.
+              </p>
+              <span className="mt-5 inline-flex items-center gap-2 font-serif text-sm italic text-sienna transition group-hover:text-sienna-hover">
+                Play the game
+                <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
+                  &rarr;
+                </span>
+              </span>
+            </div>
+          </Link>
+
           {/* ── the wall ── */}
           <div className="mt-16 flex items-end justify-between gap-4 border-b border-forest/12 pb-3">
             <div>
@@ -203,6 +233,15 @@ export function StoryHub({ stories }: { stories: readonly StoryPreview[] }) {
               </div>
             </button>
           )}
+
+          {/* ── quiet feedback entry ── */}
+          <footer className="mt-20 flex flex-col items-center gap-3 border-t border-forest/12 pt-10 text-center">
+            <p className="max-w-md font-serif text-base italic text-forest/62">
+              whiff is being built for people tired of all this. tell us what
+              you&rsquo;d want it to be.
+            </p>
+            <FeedbackWidget source="blog" label="share your thoughts on whiff" />
+          </footer>
         </div>
       </div>
 

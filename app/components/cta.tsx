@@ -39,17 +39,31 @@ export function SignUpCTA() {
     setStatus("submitting");
     setError(null);
     try {
-      const res = await fetch(FORMSPREE_ENDPOINT, {
-        method: "POST",
-        headers: { Accept: "application/json", "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      if (res.ok) {
+      // Our own DB is the source of truth for the waitlist; Formspree is a
+      // best-effort email notification, so we don't fail the request if it's
+      // down. Success hinges on the invite being recorded.
+      const [inviteRes] = await Promise.allSettled([
+        fetch("/api/invite", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, source: "home_invite" }),
+        }),
+        fetch(FORMSPREE_ENDPOINT, {
+          method: "POST",
+          headers: { Accept: "application/json", "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }),
+      ]);
+
+      if (inviteRes.status === "fulfilled" && inviteRes.value.ok) {
         setStatus("success");
         setEmail("");
       } else {
-        const data = await res.json().catch(() => null);
-        setError(data?.errors?.[0]?.message ?? "Something went wrong. Please try again.");
+        const data =
+          inviteRes.status === "fulfilled"
+            ? await inviteRes.value.json().catch(() => null)
+            : null;
+        setError(data?.error ?? "Something went wrong. Please try again.");
         setStatus("error");
       }
     } catch {

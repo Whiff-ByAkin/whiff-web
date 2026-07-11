@@ -1,4 +1,4 @@
-import { createMatch } from "@/lib/match";
+import { createMatch, getLatestGameCodeForEmail } from "@/lib/match";
 import { getMatchPrompt } from "@/lib/match-prompts";
 import { hasFounderBadge, issueFounderBadge } from "@/lib/badge-service";
 
@@ -48,8 +48,22 @@ export async function POST(request: Request) {
     return Response.json({ error: "Add a valid email." }, { status: 400 });
   }
 
-  // One game per person: if this email already claimed a founder badge, they've
-  // already played. Turn them away rather than mint a second badge for them.
+  // One game per person. If this email already started a game, hand back the
+  // public share link so they can re-send it instead of hitting a dead end.
+  const existingCode = await getLatestGameCodeForEmail(email);
+  if (existingCode) {
+    return Response.json(
+      {
+        error: "You've already played — one game per person.",
+        already: true,
+        code: existingCode,
+      },
+      { status: 409 },
+    );
+  }
+
+  // Fallback: a founder badge with no game on record (e.g. a legacy badge)
+  // still counts as having played, so block a second badge for them.
   if (await hasFounderBadge(email)) {
     return Response.json(
       { error: "You've already played — one game per person.", already: true },
