@@ -46,7 +46,7 @@ def _asset(name):
 
 def _plain_text(founder_label):
     return (
-        "Thanks for playing.\n\n"
+        "Hi there,\n\n"
         "You're one of the very first people to try whiff, so here's a little "
         f"something to mark it: a Founding Witness badge. You're founder "
         f"#{founder_label}, and it's yours to keep.\n\n"
@@ -98,7 +98,7 @@ def _html(founder_label):
 
           <tr>
             <td bgcolor="{CARD}" style="border-top:3px solid {SIENNA};border-radius:6px 6px 0 0;padding:40px 44px 8px;font-family:Georgia,serif;color:{INK};">
-              <p style="margin:0 0 18px;font-size:24px;line-height:30px;">Thanks for playing.</p>
+              <p style="margin:0 0 18px;font-size:24px;line-height:30px;">Hi there,</p>
               <p style="margin:0 0 18px;font-size:16px;line-height:27px;">
                 You're one of the very first people to try whiff, so here's a
                 little something to mark it: a <strong>Founding Witness</strong>
@@ -166,7 +166,7 @@ def send_badge_email(to_email, png_bytes, founder_label, hidden_code):
     sender = os.getenv("SMTP_FROM", user)
 
     msg = EmailMessage()
-    msg["Subject"] = f"A little something for playing: founder #{founder_label}"
+    msg["Subject"] = f"Your Founding Witness badge from whiff (#{founder_label})"
     msg["From"] = sender
     msg["To"] = to_email
 

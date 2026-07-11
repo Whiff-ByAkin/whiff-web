@@ -41,7 +41,7 @@ CODE_PREFIX = "WHF-FND"
 
 # ----- Visible number placement -----
 NUMBER_CENTER_OFFSET_FROM_BADGE_BOTTOM = 160
-NUMBER_RIGHT_SHIFT = 42
+NUMBER_RIGHT_SHIFT = 35
 
 # ----- Hidden code placement -----
 HIDDEN_CODE_CENTER_OFFSET_FROM_BADGE_TOP = 435
