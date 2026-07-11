@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { MATCH_PROMPTS } from "@/lib/match-prompts";
+import { MATCH_PROMPTS, HOME_PROMPT_COUNT, pickRandomPrompts } from "@/lib/match-prompts";
 import { WhiffAd } from "./whiff-ad";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -11,6 +11,14 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export function CreateFlow() {
   const reduce = useReducedMotion();
   const answerRef = useRef<HTMLTextAreaElement>(null);
+
+  // We only ever show a random handful of the prompt bank at once. Seed with a
+  // deterministic slice so server and first client render match (no hydration
+  // mismatch), then reshuffle on mount so every visit feels fresh.
+  const [prompts, setPrompts] = useState(() => MATCH_PROMPTS.slice(0, HOME_PROMPT_COUNT));
+  useEffect(() => {
+    setPrompts(pickRandomPrompts());
+  }, []);
 
   const [promptId, setPromptId] = useState<string | null>(null);
   const [answer, setAnswer] = useState("");
@@ -118,7 +126,7 @@ export function CreateFlow() {
         <section aria-label="choose a prompt">
           <h2 className="mb-4 font-serif text-lg text-forest/70">choose your prompt</h2>
           <ul className="grid gap-3 sm:grid-cols-2">
-            {MATCH_PROMPTS.map((p) => {
+            {prompts.map((p) => {
               const active = p.id === promptId;
               return (
                 <li key={p.id}>

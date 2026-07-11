@@ -287,13 +287,6 @@ function Reveal({
           meet whiff →
         </a>
       </div>
-
-      <a
-        href="/do-you-know-me"
-        className="mt-6 inline-block text-sm text-muted underline underline-offset-2 hover:text-forest"
-      >
-        play it with someone else
-      </a>
     </div>
   );
 }
