@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { MATCH_PROMPTS } from "@/lib/match-prompts";
 import { WhiffAd } from "./whiff-ad";
@@ -18,9 +19,24 @@ export function CreateFlow() {
 
   const [status, setStatus] = useState<"idle" | "submitting">("idle");
   const [error, setError] = useState<string | null>(null);
+  const [alreadyPlayed, setAlreadyPlayed] = useState(false);
   const [result, setResult] = useState<{ code: string; ownerKey: string } | null>(null);
 
   const selected = MATCH_PROMPTS.find((p) => p.id === promptId) ?? null;
+  // Prompts are fill-in-the-blank ("…you'd find me ___"). Split on the blank so
+  // the answer field can sit *inside* the sentence — you complete the line, you
+  // don't read a sentence and then type into a separate box below it.
+  const [promptLead, promptTail] = (selected?.text ?? "").split("___");
+
+  // Grow the inline blank with the answer so it always reads as one flowing
+  // sentence rather than a fixed box.
+  useEffect(() => {
+    const el = answerRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  }, [answer, promptId]);
+
   const ready =
     !!selected &&
     !!answer.trim() &&
@@ -59,6 +75,9 @@ export function CreateFlow() {
       const data = await res.json().catch(() => null);
       if (res.ok && data?.code) {
         setResult({ code: data.code, ownerKey: data.ownerKey });
+      } else if (res.status === 409 || data?.already) {
+        // One game per person — this email has already played.
+        setAlreadyPlayed(true);
       } else {
         setError(data?.error ?? "Something went wrong. Please try again.");
       }
@@ -67,6 +86,10 @@ export function CreateFlow() {
     } finally {
       setStatus("idle");
     }
+  }
+
+  if (alreadyPlayed) {
+    return <AlreadyPlayedPanel />;
   }
 
   if (result) {
@@ -136,9 +159,14 @@ export function CreateFlow() {
             }}
             className="rounded-3xl bg-card p-6 ring-1 ring-forest/10 sm:p-7"
           >
-            <p className="mb-1 text-xs font-medium uppercase tracking-[0.18em] text-sienna-hover">
-              {selected ? "your honest answer" : "start here"}
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.18em] text-sienna-hover">
+              {selected ? "finish the sentence" : "start here"}
             </p>
+
+            <label htmlFor="answer" className="sr-only">
+              {selected ? selected.text : "your answer"}
+            </label>
+
             <AnimatePresence mode="wait">
               <motion.p
                 key={selected?.id ?? "none"}
@@ -146,26 +174,30 @@ export function CreateFlow() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={reduce ? { opacity: 0 } : { opacity: 0, y: -6 }}
                 transition={{ duration: 0.18 }}
-                className="mb-4 font-serif text-lg leading-snug text-forest"
+                className="mb-2 font-serif text-[22px] leading-relaxed text-forest"
               >
-                {selected ? selected.text : "pick a prompt on the left to begin."}
+                {selected ? (
+                  <>
+                    {promptLead}
+                    <textarea
+                      ref={answerRef}
+                      id="answer"
+                      rows={1}
+                      maxLength={140}
+                      value={answer}
+                      onChange={(e) => setAnswer(e.target.value)}
+                      placeholder="write it here…"
+                      className="mx-1 inline-block w-full max-w-full resize-none overflow-hidden border-b-2 border-dashed border-sienna/40 bg-transparent align-baseline font-serif text-[22px] italic leading-relaxed text-sienna placeholder:not-italic placeholder:text-sienna/35 focus:border-sienna focus:outline-none"
+                    />
+                    {promptTail}
+                  </>
+                ) : (
+                  <span className="text-forest/40">
+                    pick a prompt on the left, then finish the sentence right here.
+                  </span>
+                )}
               </motion.p>
             </AnimatePresence>
-
-            <label htmlFor="answer" className="sr-only">
-              your answer
-            </label>
-            <textarea
-              ref={answerRef}
-              id="answer"
-              rows={2}
-              maxLength={140}
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-              disabled={!selected}
-              placeholder={selected ? "fill in the blank…" : "choose a prompt first"}
-              className="w-full resize-none rounded-2xl bg-oat px-4 py-3 text-[16px] text-forest ring-1 ring-forest/15 placeholder:text-forest/35 focus:outline-none focus:ring-2 focus:ring-forest disabled:opacity-50"
-            />
             <p className="mb-4 mt-1 text-right text-xs text-muted">{answer.length}/140</p>
 
             <div className="grid gap-4">
@@ -226,6 +258,29 @@ export function CreateFlow() {
           </form>
         </section>
       </div>
+    </div>
+  );
+}
+
+function AlreadyPlayedPanel() {
+  return (
+    <div className="mt-16 max-w-xl lg:mt-24">
+      <p className="mb-3 text-xs font-medium uppercase tracking-[0.22em] text-sienna-hover">
+        one game per person
+      </p>
+      <h1 className="font-serif text-4xl leading-[1.05] text-forest sm:text-5xl">
+        you&rsquo;ve already <span className="italic text-sienna">played</span>
+      </h1>
+      <p className="mt-4 text-[16px] leading-relaxed text-muted">
+        this email already started a game — that&rsquo;s your one turn. check your
+        inbox for your founder badge, and your reveal link is where you left it.
+      </p>
+      <Link
+        href="/"
+        className="mt-6 inline-block rounded-full bg-sienna px-7 py-3 font-serif italic tracking-wide text-oat transition-colors hover:bg-sienna-hover"
+      >
+        meet whiff →
+      </Link>
     </div>
   );
 }

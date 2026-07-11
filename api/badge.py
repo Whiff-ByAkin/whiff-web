@@ -83,6 +83,22 @@ class handler(BaseHTTPRequestHandler):
         if not EMAIL_RE.match(email):
             return self._json(400, {"error": "A valid email is required."})
 
+        # One badge per email. If we already minted for this address, return it
+        # instead of handing out a second founder number (idempotent). This is
+        # what stops the same person from playing/claiming a badge twice.
+        existing = db.find_badge_by_email(email)
+        if existing:
+            return self._json(
+                200,
+                {
+                    "founderNumber": existing["founderNumber"],
+                    "founderLabel": existing["founderLabel"],
+                    "hiddenCode": existing["hiddenCode"],
+                    "sent": bool(existing.get("sent")),
+                    "already": True,
+                },
+            )
+
         # One request = one badge. The counter is the "what was the last number"
         # lookup, done atomically so concurrent requests never collide.
         founder_number = db.next_founder_number()
@@ -110,7 +126,16 @@ class handler(BaseHTTPRequestHandler):
             }
         )
 
-        sent = mailer.send_badge_email(email, png_bytes, founder_label, hidden_code)
+        # Email is best-effort: the badge is already minted and saved above, and
+        # it's regenerable from the DB, so a delivery failure must NEVER 500 the
+        # request. (Seen in prod: Microsoft 365 returns 535 "SmtpClientAuthentication
+        # is disabled for the Tenant" until Authenticated SMTP is enabled — see
+        # https://aka.ms/smtp_auth_disabled — which used to crash this function.)
+        sent = False
+        try:
+            sent = mailer.send_badge_email(email, png_bytes, founder_label, hidden_code)
+        except Exception as error:  # noqa: BLE001 — never let delivery break minting
+            print(f"[badge] email delivery failed for {email}: {error!r}")
         if sent:
             db.mark_sent(hidden_code)
 

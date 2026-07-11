@@ -1,6 +1,6 @@
 import { createMatch } from "@/lib/match";
 import { getMatchPrompt } from "@/lib/match-prompts";
-import { issueFounderBadge } from "@/lib/badge-service";
+import { hasFounderBadge, issueFounderBadge } from "@/lib/badge-service";
 
 export const runtime = "nodejs";
 
@@ -46,6 +46,15 @@ export async function POST(request: Request) {
   }
   if (!email || !EMAIL_PATTERN.test(email)) {
     return Response.json({ error: "Add a valid email." }, { status: 400 });
+  }
+
+  // One game per person: if this email already claimed a founder badge, they've
+  // already played. Turn them away rather than mint a second badge for them.
+  if (await hasFounderBadge(email)) {
+    return Response.json(
+      { error: "You've already played — one game per person.", already: true },
+      { status: 409 },
+    );
   }
 
   try {

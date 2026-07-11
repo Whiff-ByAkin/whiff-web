@@ -12,12 +12,15 @@ export const metadata: Metadata = {
 function Shell({ children }: { children: React.ReactNode }) {
   return (
     <main className="relative mx-auto flex min-h-[100svh] w-full max-w-2xl flex-col px-6 py-10 sm:py-14">
-      <Link
-        href="/"
-        aria-label="whiff home"
-        className="mx-auto mb-8 inline-flex items-center gap-2 font-serif text-lg tracking-tight text-forest/80 transition-colors hover:text-forest"
-      >
-        whiff<span className="h-1.5 w-1.5 rounded-full bg-terracotta" aria-hidden="true" />
+      <Link href="/" aria-label="whiff home" className="group mx-auto mb-8 inline-flex items-center">
+        {/* eslint-disable-next-line @next/next/no-img-element -- tiny logo asset, no responsive optimization needed */}
+        <img
+          src="/whiff-wordmark.png"
+          alt="whiff"
+          width={303}
+          height={145}
+          className="h-7 w-auto md:h-8 transition-transform duration-200 group-hover:scale-105"
+        />
       </Link>
       <div className="flex flex-1 flex-col">{children}</div>
     </main>

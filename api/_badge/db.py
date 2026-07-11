@@ -57,6 +57,13 @@ def find_badge(hidden_code):
     return _db()[BADGE_COLLECTION].find_one({"hiddenCode": hidden_code})
 
 
+def find_badge_by_email(email):
+    """One badge per email. Returns the existing badge for this email, or None.
+    Lets the mint path stay idempotent so we never hand the same person two
+    founder numbers."""
+    return _db()[BADGE_COLLECTION].find_one({"email": email})
+
+
 def mark_sent(hidden_code):
     _db()[BADGE_COLLECTION].update_one(
         {"hiddenCode": hidden_code},
