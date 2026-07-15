@@ -340,18 +340,18 @@ function StatementBlock() {
         {...(reduce ? {} : reveal(0.14))}
         className="max-w-xl text-balance font-serif font-semibold text-forest/85 text-[clamp(0.95rem,4.5vw,1.35rem)] leading-snug sm:text-[clamp(0.8rem,2.3vw,1.35rem)]"
       >
-        Because a real connection isn&rsquo;t matched. It&rsquo;s{" "}
+        A real connection is{" "}
         <span className="underline decoration-terracotta decoration-2 underline-offset-4">
           made
         </span>{" "}
-        &mdash; by two people who already love the same strange, specific thing.
+        by two people already into the same strange, specific thing.
       </motion.p>
 
       <motion.p
         {...(reduce ? {} : reveal(0.22))}
         className="max-w-xl text-balance font-serif font-semibold text-forest/85 text-[clamp(0.8rem,1.8vw,1.05rem)] leading-snug"
       >
-        Not profiles. You. Doing the thing you&rsquo;d do anyway.
+        We humans create connection. Not profiles.
       </motion.p>
 
       {/* who it's built for — gated by a feature flag (FLAGS.spectrumPositioning) */}
