@@ -331,7 +331,7 @@ function StatementBlock() {
 
       <motion.h3
         {...(reduce ? {} : reveal(0.08))}
-        className="text-balance font-serif font-semibold text-forest text-[clamp(1.9rem,5vw,3rem)] leading-[1.1] tracking-tight"
+        className="text-balance font-serif font-semibold text-forest text-[clamp(2.1rem,5.4vw,3.25rem)] leading-[1.1] tracking-tight"
       >
         We&rsquo;re anti&#8209;dating&#8209;app.
       </motion.h3>
@@ -340,14 +340,28 @@ function StatementBlock() {
         {...(reduce ? {} : reveal(0.14))}
         className="max-w-xl text-balance font-serif font-semibold text-forest/85 text-[clamp(0.85rem,3.6vw,1.15rem)] leading-snug sm:text-[clamp(0.75rem,2vw,1.15rem)]"
       >
-        A real connection is made by two people already into the same strange, specific thing.
+        A real connection is MADE by two people already into the same strange, weird, specific thing.
       </motion.p>
 
       <motion.p
         {...(reduce ? {} : reveal(0.22))}
         className="max-w-xl text-balance font-serif font-semibold text-forest/85 text-[clamp(0.72rem,1.6vw,0.95rem)] leading-snug"
       >
-        Humans create connection. Not profiles.
+        <span className="relative inline-block pb-[0.65em]">
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute bottom-[-0.03em] left-[-0.22em] right-[-0.2em] h-[0.5em] -rotate-[0.8deg] rounded-full bg-sienna/45"
+          />
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute bottom-[0.15em] left-[0.12em] right-[0.06em] h-[0.16em] rotate-[0.35deg] rounded-full bg-sienna/70"
+          />
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute bottom-[0.2em] left-[0.75em] right-[1.35em] h-[0.06em] -rotate-[0.2deg] rounded-full bg-oat/55"
+          />
+          <span className="relative">Humans create connection. Not profiles.</span>
+        </span>
       </motion.p>
 
       {/* who it's built for — gated by a feature flag (FLAGS.spectrumPositioning) */}
