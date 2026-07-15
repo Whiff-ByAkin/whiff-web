@@ -338,20 +338,16 @@ function StatementBlock() {
 
       <motion.p
         {...(reduce ? {} : reveal(0.14))}
-        className="max-w-xl text-balance font-serif font-semibold text-forest/85 text-[clamp(0.95rem,4.5vw,1.35rem)] leading-snug sm:text-[clamp(0.8rem,2.3vw,1.35rem)]"
+        className="max-w-xl text-balance font-serif font-semibold text-forest/85 text-[clamp(0.85rem,3.6vw,1.15rem)] leading-snug sm:text-[clamp(0.75rem,2vw,1.15rem)]"
       >
-        A real connection is{" "}
-        <span className="underline decoration-terracotta decoration-2 underline-offset-4">
-          made
-        </span>{" "}
-        by two people already into the same strange, specific thing.
+        A real connection is made by two people already into the same strange, specific thing.
       </motion.p>
 
       <motion.p
         {...(reduce ? {} : reveal(0.22))}
-        className="max-w-xl text-balance font-serif font-semibold text-forest/85 text-[clamp(0.8rem,1.8vw,1.05rem)] leading-snug"
+        className="max-w-xl text-balance font-serif font-semibold text-forest/85 text-[clamp(0.72rem,1.6vw,0.95rem)] leading-snug"
       >
-        We humans create connection. Not profiles.
+        Humans create connection. Not profiles.
       </motion.p>
 
       {/* who it's built for — gated by a feature flag (FLAGS.spectrumPositioning) */}
