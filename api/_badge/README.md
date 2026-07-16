@@ -63,11 +63,11 @@ Set these in the project's env vars (Settings → Environment Variables):
     MONGODB_DB=olettrasocials
     BADGE_SERVICE_TOKEN    # optional shared secret
     BADGE_OUTPUT_DIR=/tmp  # Vercel's only writable dir
-    SMTP_HOST=smtp.office365.com        # default if omitted
-    SMTP_PORT=587                       # default if omitted
-    SMTP_USER=admin@whi-ff.com         # real Microsoft mailbox
-    SMTP_PASSWORD                      # password/app password for SMTP_USER
-    SMTP_FROM=hello@whi-ff.com
+    SMTP_HOST=smtp.gmail.com           # default if omitted
+    SMTP_PORT=587                      # default if omitted
+    SMTP_USER=admin@whi-ff.com         # real Google Workspace mailbox
+    SMTP_PASSWORD                      # Google App Password for SMTP_USER
+    SMTP_FROM=hello@whi-ff.com         # "Send mail as" alias on SMTP_USER
 
 No `BADGE_SERVICE_URL` needed — the Next route calls this function same-origin.
 
@@ -86,10 +86,15 @@ and on Vercel's Linux — **Arimo** (Arial-compatible) for the number, **Cousine
 (monospace) for the hidden code. Both OFL-licensed. Override with
 `BADGE_NUMBER_FONT` / `BADGE_HIDDEN_FONT`.
 
-## Microsoft 365 SMTP
+## Gmail (Google Workspace) SMTP
 
-For Microsoft 365, this function uses SMTP client submission:
-`smtp.office365.com`, port `587`, STARTTLS. Set `SMTP_USER` to the real
-mailbox, `SMTP_PASSWORD` to that mailbox's SMTP login secret, and `SMTP_FROM`
-to the alias you want recipients to see. Delivery turns on automatically — no
-code change.
+This function uses Gmail SMTP submission: `smtp.gmail.com`, port `587`,
+STARTTLS. Set `SMTP_USER` to the real mailbox, `SMTP_PASSWORD` to a Google
+**App Password** for that mailbox (requires 2-Step Verification; regular
+passwords are rejected), and `SMTP_FROM` to the alias recipients should see —
+it must be configured as a verified "Send mail as" alias on `SMTP_USER`, or
+Gmail rewrites the From header back to the mailbox address. Delivery turns on
+automatically — no code change.
+
+Workspace SMTP caps at ~2,000 recipients/day; if volume ever outgrows that,
+move to a relay (Resend/SES) instead.

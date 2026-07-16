@@ -1,8 +1,10 @@
 """Badge email delivery via SMTP.
 
-Defaults target Microsoft 365 client SMTP submission. Delivery stays dormant
-until SMTP_USER + SMTP_PASSWORD are set, so issuing a badge never fails on
-email delivery while credentials are still being configured.
+Defaults target Gmail (Google Workspace) SMTP submission: authenticate as the
+real mailbox (SMTP_USER) with an App Password, and send from the "Send mail as"
+alias (SMTP_FROM). Delivery stays dormant until SMTP_USER + SMTP_PASSWORD are
+set, so issuing a badge never fails on email delivery while credentials are
+still being configured.
 
 Images (wordmark, badge, Instagram glyph) are embedded inline via CID so the
 email renders the same everywhere with no external hosting to depend on.
@@ -26,7 +28,7 @@ MUTED = "#6f665f"
 
 INSTAGRAM_URL = "https://www.instagram.com/discover_whiff/"
 INSTAGRAM_HANDLE = "@discover_whiff"
-CONTACT_EMAIL = os.getenv("SMTP_FROM") or "hi@whiff.com"
+CONTACT_EMAIL = os.getenv("SMTP_FROM") or "hello@whi-ff.com"
 
 
 def smtp_configured():
@@ -159,7 +161,7 @@ def send_badge_email(to_email, png_bytes, founder_label, hidden_code):
         )
         return False
 
-    host = os.getenv("SMTP_HOST", "smtp.office365.com")
+    host = os.getenv("SMTP_HOST", "smtp.gmail.com")
     port = int(os.getenv("SMTP_PORT", "587"))
     user = os.environ["SMTP_USER"]
     password = os.environ["SMTP_PASSWORD"]
