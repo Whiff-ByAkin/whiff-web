@@ -4,13 +4,17 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
 
-// A small "Status" button in the header. Clicking it opens a dialog that tells
-// visitors, plainly, where whiff is right now. Edit the copy below as the
-// launch progresses (stage, city, whether applications are open).
+const LIVE_STATES = ["Minnesota"];
+
+// A small "States" button in the header. Clicking it opens a dialog that tells
+// visitors, plainly, where whiff is live right now.
 export function Status() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -29,7 +33,7 @@ export function Status() {
         whileTap={{ scale: 0.96 }}
         className="rounded-full border border-line bg-card px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-rust hover:text-rust"
       >
-        Status
+        States
       </motion.button>
 
       {mounted &&
@@ -52,7 +56,7 @@ export function Status() {
                 <motion.div
                   role="dialog"
                   aria-modal="true"
-                  aria-label="Where whiff is right now"
+                  aria-label="States where whiff is live"
                   initial={{ opacity: 0, y: 12, scale: 0.98 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 8, scale: 0.98 }}
@@ -68,26 +72,15 @@ export function Status() {
                     ✕
                   </button>
 
-                  <span className="inline-flex items-center rounded-full border border-rust/25 bg-rust/10 px-3 py-1 text-xs font-semibold text-rust">
-                    applications open
-                  </span>
-
-                  <h2 className="mt-4 font-display text-2xl font-semibold text-ink">
-                    where we&rsquo;re at
+                  <h2 className="font-display text-2xl font-semibold text-ink">
+                    states we&rsquo;re in
                   </h2>
 
-                  <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">
-                    whiff is pre-launch. We&rsquo;re building our first city and
-                    forming the first activities with a small, invite-only group.
-                    If that&rsquo;s you, apply to join and we&rsquo;ll reach out
-                    as we open.
-                  </p>
-
-                  <dl className="mt-5 space-y-2.5 text-sm">
-                    <StatusRow label="Stage" value="Pre-launch" />
-                    <StatusRow label="Where" value="Our first city" />
-                    <StatusRow label="Access" value="Invite-only, limited spots" />
-                  </dl>
+                  <ul className="mt-5">
+                    {LIVE_STATES.map((state) => (
+                      <StateRow key={state} name={state} />
+                    ))}
+                  </ul>
                 </motion.div>
               </motion.div>
             )}
@@ -98,11 +91,10 @@ export function Status() {
   );
 }
 
-function StatusRow({ label, value }: { label: string; value: string }) {
+function StateRow({ name }: { name: string }) {
   return (
-    <div className="flex items-center justify-between gap-4 border-b border-line pb-2.5 last:border-0 last:pb-0">
-      <dt className="text-ink-soft">{label}</dt>
-      <dd className="font-medium text-ink">{value}</dd>
-    </div>
+    <li className="border-b border-line py-3 font-display text-lg font-semibold leading-none text-ink">
+      {name}
+    </li>
   );
 }
