@@ -1,31 +1,33 @@
 import { Header } from "./components/header";
+import { Hero } from "./components/hero";
 import { Footer } from "./components/footer";
-import { HowItWorksSection } from "./components/how-it-works-section";
-import { ABOUT, FAQ } from "./seo-content";
 
 export default function Home() {
   return (
     <>
       <Header />
-      <main id="main" className="h-[100svh] overflow-hidden">
-        {/* ── the statement, how it works, and the invite — one screen, no scroll ── */}
-        <HowItWorksSection />
+      <main id="main" className="flex-1">
+        <Hero />
 
-        {/* Crawlable answer-first content for search engines and AI models.
-            Mirrors the FAQPage JSON-LD and the in-dialog copy; visually hidden
-            but present in the static HTML and the accessibility tree. */}
+        {/* Crawlable, answer-first copy for search engines and AI models —
+            present in the static HTML, visually hidden. */}
         <section aria-label="About whiff" className="sr-only">
           <h2>What is whiff?</h2>
-          <p>{ABOUT}</p>
-          <h2>whiff frequently asked questions</h2>
-          <dl>
-            {FAQ.map(({ q, a }) => (
-              <div key={q}>
-                <dt>{q}</dt>
-                <dd>{a}</dd>
-              </div>
-            ))}
-          </dl>
+          <p>
+            whiff is an activity-first social platform. Plans, not profiles.
+            Instead of browsing profiles or swiping through people, you see real
+            activities happening near you — hiking, cycling, running, climbing,
+            chess, tennis, museums, local events — and join the small group
+            doing the one you like. Activities first, people second. whiff has
+            an AI that gets to know you, learns what would actually get you out
+            of the house, recommends activities you would enjoy, and sends you
+            on little missions to try something new with people who are into it
+            too. whiff is not a dating app: people may become friends or more
+            after meeting, but you come to do the activity, not to search for a
+            relationship. whiff launches in one city with a small set of curated
+            activities you can join, and grows into an on-demand model where you
+            tell whiff what you want to do and it helps form the group.
+          </p>
         </section>
       </main>
       <Footer />

@@ -1,299 +1,217 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────────────────────
+   whiff brand — the app palette, on the web (from Theme.swift).
+   One accent only: rust. Nothing pure — text is warm brown, the page is cream.
+   Green/orange are reserved as functional signals elsewhere, never as brand.
+   ───────────────────────────────────────────────────────────────────────── */
 @theme inline {
-  /* whiff brand: a warm, earthy palette. Soft oatmeal paper, deep espresso
-     ink (never pure black), and two clay accents — terracotta as the
-     signature warmth (glows, the wordmark dot, highlights) and burnt sienna
-     as the action color (buttons, CTAs). Muted olive is the calm support
-     tone. Token names are kept for stability: oat = the oatmeal paper,
-     forest = the espresso ink, ochre = olive, muted = a legible warm taupe,
-     card = a lifted ivory for elevated surfaces (never pure white). */
-  --color-oat: #f2ebe0;
-  --color-forest: #2e2723;
-  --color-ochre: #8a9a5b;
-  --color-muted: #6b5e4c;
-  --color-terracotta: #c67b5c;
-  --color-sienna: #b85c38;
-  --color-sienna-hover: #a04d2e;
-  --color-card: #fbf6ec;
+  --color-cream: #feece4; /* the warm base — every surface sits on this, never white */
+  --color-rust: #f2683c; /* the one brand color — buttons, links, accents */
+  --color-rust-edge: #d2501e; /* the pressed/darker rust — shadows, hover */
+  --color-ink: #3f2d22; /* headings & body — a warm near-black brown */
+  --color-ink-soft: #8a7565; /* secondary text, captions */
+  --color-line: #e7d6ca; /* hairline card borders */
+  --color-card: #ffffff; /* elevated surfaces on the cream */
 
-  --font-sans: var(--font-geist);
-  --font-serif: var(--font-fraunces);
-  --font-script: var(--font-caveat);
+  --font-display: var(--font-fredoka);
+  --font-body: var(--font-nunito);
 }
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
 }
 
 html,
 body {
-  background: var(--color-oat);
-  color: var(--color-forest);
+  background: var(--color-cream);
+  color: var(--color-ink);
   overflow-x: hidden;
 }
 
-/* Soft layered base wash beneath the animated ambient orbs — a lifted oatmeal
-   at the top, settling into a whisper of deeper clay-brown at the bottom edge */
-body {
-  background:
-    radial-gradient(
-      130% 110% at 50% -25%,
-      #f8f2e9 0%,
-      var(--color-oat) 62%,
-      color-mix(in srgb, var(--color-oat) 92%, var(--color-forest)) 100%
-    );
-}
-
+/* A soft warm wash beneath the animated orbs — a lifted cream at the top,
+   settling into a whisper of deeper clay at the bottom edge. Never flat. */
 body {
   min-height: 100svh;
-}
-
-body {
-  font-family: var(--font-sans);
+  background:
+    radial-gradient(
+      130% 115% at 50% -20%,
+      #fff3ec 0%,
+      var(--color-cream) 60%,
+      color-mix(in srgb, var(--color-cream) 88%, var(--color-rust-edge)) 100%
+    );
+  font-family: var(--font-body), system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: var(--color-forest);
-  color: var(--color-oat);
+  background: var(--color-rust);
+  color: #fff;
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-forest);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: 2px solid var(--color-rust);
+  outline-offset: 3px;
+  border-radius: 6px;
 }
 
-@keyframes chip-in {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes chip-out {
-  from {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-}
-
+/* ── entrance: a soft blur-up, used sparingly for chrome (header/footer) ── */
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(10px);
+    filter: blur(4px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+    filter: blur(0);
   }
 }
-
 .fade-up {
-  animation: fade-up 600ms ease-out both;
+  animation: fade-up 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* Story-wall card entrance. Uses `backwards` fill (not `both`), so once the
-   animation ends the element returns to its base state (opacity 1, no
-   transform) — the wall can never get stuck invisible, and hover transforms
-   still work afterward. Per-card delay is set inline for a staggered cascade. */
-@keyframes card-in {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.card-in {
-  animation: card-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-}
-
-/* ---- whiff chat: typing indicator + inline send spinner ---- */
-
-.typing-dot {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 9999px;
-  background: color-mix(in srgb, var(--color-sienna) 70%, transparent);
-  animation: typing-bounce 1.2s ease-in-out infinite;
-}
-.typing-dot:nth-child(2) {
-  animation-delay: 0.16s;
-}
-.typing-dot:nth-child(3) {
-  animation-delay: 0.32s;
-}
-
-@keyframes typing-bounce {
-  0%,
-  60%,
-  100% {
-    transform: translateY(0);
-    opacity: 0.45;
-  }
-  30% {
-    transform: translateY(-4px);
-    opacity: 1;
-  }
-}
-
-.typing-spinner,
-.typing-spinner-sienna {
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  border-radius: 9999px;
-  border: 2px solid transparent;
-  animation: spin 0.7s linear infinite;
-}
-.typing-spinner {
-  border-color: color-mix(in srgb, var(--color-oat) 40%, transparent);
-  border-top-color: var(--color-oat);
-}
-.typing-spinner-sienna {
-  border-color: color-mix(in srgb, var(--color-sienna) 30%, transparent);
-  border-top-color: var(--color-sienna);
-}
-
+/* ── spin (inline submit spinner) ── */
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
-
-/* One "look at me" burst: a shake struck like a bell and left to ring down —
-   tight, fast wobbles up front (with a little vertical hop), then wider/slower
-   ones as it settles. The deceleration lives in the keyframe spacing (dense
-   early, sparse late), so the animation itself runs linear. JS in the header
-   replays this on a random cadence; each play fires onAnimationEnd to schedule
-   the next. */
-@keyframes attention-wiggle {
-  0% {
-    transform: translateY(0) scale(1) rotate(0deg);
-  }
-  6% {
-    transform: translateY(-3px) scale(1.09) rotate(-8deg);
-  }
-  12% {
-    transform: translateY(0) scale(1.08) rotate(8deg);
-  }
-  18% {
-    transform: translateY(-2px) scale(1.06) rotate(-6.5deg);
-  }
-  24% {
-    transform: translateY(0) scale(1.06) rotate(6.5deg);
-  } /* fast */
-  33% {
-    transform: translateY(-1px) scale(1.04) rotate(-4.5deg);
-  }
-  42% {
-    transform: translateY(0) scale(1.03) rotate(4.5deg);
-  }
-  52% {
-    transform: scale(1.02) rotate(-3deg);
-  } /* medium */
-  66% {
-    transform: scale(1.01) rotate(2deg);
-  }
-  80% {
-    transform: scale(1) rotate(-1.2deg);
-  }
-  92% {
-    transform: scale(1) rotate(0.6deg);
-  } /* slow, settling */
-  100% {
-    transform: translateY(0) scale(1) rotate(0deg);
-  }
+.spinner {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 9999px;
+  border: 2px solid color-mix(in srgb, #fff 35%, transparent);
+  border-top-color: #fff;
+  animation: spin 0.7s linear infinite;
 }
 
-/* A continuous radar-ping ring emanating from the pill — soft, low-key, always
-   alive so the button reads as interactive even between shake bursts. */
-@keyframes attention-pulse {
+/* ── dialog choreography ── */
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.overlay-in {
+  animation: overlay-in 200ms ease-out both;
+}
+.modal-in {
+  animation: modal-in 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ── the invite pill's always-on radar ping — reads as "interactive" ── */
+@keyframes ping-ring {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-sienna) 45%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-rust) 45%, transparent);
   }
   70% {
-    box-shadow: 0 0 0 12px color-mix(in srgb, var(--color-sienna) 0%, transparent);
+    box-shadow: 0 0 0 12px color-mix(in srgb, var(--color-rust) 0%, transparent);
   }
   100% {
     box-shadow: 0 0 0 0 transparent;
   }
 }
-
-.attention-cta {
-  position: relative;
-  z-index: 2;
-  transform-origin: center;
-  box-shadow: 0 14px 32px -22px color-mix(in srgb, var(--color-sienna) 80%, black);
-}
-
-.attention-cta::after {
+.ping::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  animation: attention-pulse 2.6s ease-out infinite;
+  animation: ping-ring 2.8s ease-out infinite;
 }
 
-.attention-wiggle {
-  animation: attention-wiggle 1.5s linear both;
-  will-change: transform;
+/* ── the rust dot in the wordmark: a slow, calm breath ── */
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.28);
+    opacity: 0.85;
+  }
+}
+.breathe {
+  animation: breathe 3.4s ease-in-out infinite;
+  transform-origin: center;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .attention-wiggle,
-  .attention-cta::after {
-    animation: none;
+/* ── the hand-underline under a key line: a quick brush draw-in ── */
+@keyframes underline-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.underline-draw {
+  transform-origin: left center;
+  animation: underline-draw 700ms cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
+}
+
+/* ── step icons: draw the stroke on, then a gentle idle float ── */
+@keyframes draw-on {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes idle-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+.idle-float {
+  animation: idle-float 4.5s ease-in-out infinite;
+}
+
+/* ── connection arc: a light traveling along the drawn path ── */
+@keyframes arc-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes travel {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
   }
 }
 
-@keyframes overlay-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes modal-in {
-  from { opacity: 0; transform: translateY(8px) scale(0.98); }
-  to   { opacity: 1; transform: translateY(0)  scale(1); }
-}
-
-@keyframes sheet-in {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-.overlay-in {
-  animation: overlay-in 200ms ease-out both;
-}
-
-.modal-in {
-  animation: modal-in 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.sheet-in {
-  animation: sheet-in 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-/* ---- Ambient living background ---- */
-
+/* ─────────────────────────────  living background  ───────────────────────── */
 .ambient {
   position: fixed;
   inset: 0;
@@ -301,57 +219,51 @@ body {
   overflow: hidden;
   pointer-events: none;
 }
-
 .orb {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(80px);
-  opacity: 0.3;
+  filter: blur(85px);
   will-change: transform;
 }
-
 .orb-1 {
-  width: 46vmax;
-  height: 46vmax;
-  top: -14vmax;
-  left: -10vmax;
-  opacity: 0.4;
+  width: 48vmax;
+  height: 48vmax;
+  top: -16vmax;
+  left: -12vmax;
+  opacity: 0.5;
   background: radial-gradient(
     circle at 30% 30%,
-    color-mix(in srgb, var(--color-terracotta) 55%, transparent),
+    color-mix(in srgb, var(--color-rust) 55%, transparent),
     transparent 70%
   );
-  animation: drift-1 26s ease-in-out infinite;
+  animation: drift-1 28s ease-in-out infinite;
 }
-
 .orb-2 {
-  width: 40vmax;
-  height: 40vmax;
-  bottom: -16vmax;
-  right: -8vmax;
+  width: 42vmax;
+  height: 42vmax;
+  bottom: -18vmax;
+  right: -10vmax;
+  opacity: 0.32;
   background: radial-gradient(
     circle at 70% 70%,
-    color-mix(in srgb, var(--color-forest) 28%, transparent),
+    color-mix(in srgb, var(--color-rust-edge) 45%, transparent),
     transparent 70%
   );
-  opacity: 0.22;
-  animation: drift-2 32s ease-in-out infinite;
+  animation: drift-2 34s ease-in-out infinite;
 }
-
 .orb-3 {
-  width: 30vmax;
-  height: 30vmax;
-  top: 35%;
-  left: 55%;
+  width: 32vmax;
+  height: 32vmax;
+  top: 34%;
+  left: 54%;
+  opacity: 0.28;
   background: radial-gradient(
     circle at 50% 50%,
-    color-mix(in srgb, var(--color-ochre) 28%, transparent),
+    color-mix(in srgb, #ffd9c4 60%, transparent),
     transparent 70%
   );
-  opacity: 0.2;
-  animation: drift-3 22s ease-in-out infinite;
+  animation: drift-3 24s ease-in-out infinite;
 }
-
 @keyframes drift-1 {
   0%,
   100% {
@@ -361,7 +273,6 @@ body {
     transform: translate3d(8vmax, 6vmax, 0) scale(1.12);
   }
 }
-
 @keyframes drift-2 {
   0%,
   100% {
@@ -371,147 +282,49 @@ body {
     transform: translate3d(-7vmax, -5vmax, 0) scale(1);
   }
 }
-
 @keyframes drift-3 {
   0%,
   100% {
     transform: translate3d(-50%, 0, 0) scale(1);
   }
   50% {
-    transform: translate3d(-58%, -8vmax, 0) scale(1.18);
+    transform: translate3d(-58%, -8vmax, 0) scale(1.16);
   }
 }
 
-/* Fine film grain for an editorial, premium texture */
+/* fine film grain — an editorial, printed-paper tactility */
 .grain {
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0.04;
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* ---- Connection arcs marquee ---- */
-
-.marquee-row {
-  animation: marquee 34s linear infinite;
-}
-
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-/* fade the marquee edges so arcs slide in and out gracefully */
-.marquee-mask {
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 9%,
-    black 91%,
-    transparent
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 9%,
-    black 91%,
-    transparent
-  );
-}
-
-/* A soft light gliding slowly 1 → 2 → 3, then resetting back to 1 (fade, no reverse) */
-.dot-travel {
-  animation: dot-travel 11s ease-in-out infinite;
-}
-
-@keyframes dot-travel {
-  0% {
-    left: 16.66%;
-    opacity: 1;
-  }
-  28% {
-    left: 50%;
-  }
-  56% {
-    left: 83.34%;
-    opacity: 1;
-  }
-  64% {
-    left: 83.34%;
-    opacity: 0;
-  }
-  65% {
-    left: 16.66%;
-    opacity: 0;
-  }
-  73% {
-    left: 16.66%;
-    opacity: 1;
-  }
-  100% {
-    left: 16.66%;
-    opacity: 1;
-  }
-}
-
-/* Blinking caret for the typed "Feel ___" headline */
-.type-caret {
-  display: inline-block;
-  width: 2px;
-  height: 0.82em;
-  margin-left: 0.08em;
-  transform: translateY(0.1em);
-  background: var(--color-forest);
-  animation: caret-blink 1.05s steps(1) infinite;
-}
-
-@keyframes caret-blink {
-  0%,
-  50% {
-    opacity: 1;
-  }
-  50.01%,
-  100% {
-    opacity: 0;
-  }
-}
-
-/* A quick camera-flash as each polaroid quote appears */
-.polaroid-flash {
-  animation: polaroid-flash 0.55s ease-out forwards;
-}
-
-@keyframes polaroid-flash {
-  0% {
-    opacity: 0.85;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-/* Soft vignette to pull focus to the center */
+/* soft vignette to pull focus to the center of the screen */
 .vignette {
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
   background: radial-gradient(
-    100% 85% at 50% 45%,
-    transparent 68%,
-    color-mix(in srgb, var(--color-forest) 5%, transparent) 100%
+    100% 88% at 50% 44%,
+    transparent 66%,
+    color-mix(in srgb, var(--color-rust-edge) 7%, transparent) 100%
   );
 }
 
+/* ── respect the user who asked for stillness ── */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  .orb {
+  .orb,
+  .breathe,
+  .idle-float,
+  .ping::after {
     animation: none !important;
   }
   *,

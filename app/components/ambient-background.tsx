@@ -1,3 +1,6 @@
+// The living backdrop: three warm rust orbs drifting on long, offset loops,
+// a whisper of film grain for printed-paper tactility, and a soft vignette to
+// pull the eye to the center. All pure CSS, all paused under reduced-motion.
 export function AmbientBackground() {
   return (
     <>

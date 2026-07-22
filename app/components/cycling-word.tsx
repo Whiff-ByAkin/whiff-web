@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
-/** Drives a shared index that advances on an interval — lets two separate
- * words (e.g. a pill + the text beside it) cycle in sync. */
-export function useWordCycle(length: number, interval = 2200) {
+/** A shared index that advances on an interval — lets two separate words
+ *  (a pill + the word beside it) cycle in perfect sync. */
+export function useWordCycle(length: number, interval = 2000) {
   const reduce = useReducedMotion();
   const [i, setI] = useState(0);
 
@@ -18,7 +18,7 @@ export function useWordCycle(length: number, interval = 2200) {
   return i;
 }
 
-/** Animates a single word swapping in place. */
+/** One word, swapping in place: blurs and slides up out, blurs in from below. */
 export function AnimatedWord({
   word,
   className = "",
@@ -30,26 +30,14 @@ export function AnimatedWord({
     <AnimatePresence mode="popLayout" initial={false}>
       <motion.span
         key={word}
-        initial={{ opacity: 0, y: 8, filter: "blur(5px)" }}
+        initial={{ opacity: 0, y: 9, filter: "blur(6px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        exit={{ opacity: 0, y: -8, filter: "blur(5px)" }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        exit={{ opacity: 0, y: -9, filter: "blur(6px)" }}
+        transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
         className={`inline-block whitespace-nowrap ${className}`}
       >
         {word}
       </motion.span>
     </AnimatePresence>
   );
-}
-
-/** Swaps through a list of words in place, e.g. "Meet your ___." */
-export function CyclingWord({
-  words,
-  interval = 2200,
-}: {
-  words: string[];
-  interval?: number;
-}) {
-  const i = useWordCycle(words.length, interval);
-  return <AnimatedWord word={words[i]} className="italic text-sienna" />;
 }

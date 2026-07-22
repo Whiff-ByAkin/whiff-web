@@ -1,4 +1,2 @@
-export const dynamic = "force-static";
-
-export { alt, size, contentType } from "./og-render";
-export { default } from "./og-render";
+// Reuse the Open Graph card for Twitter/X shares.
+export { default, alt, size, contentType } from "./opengraph-image";
