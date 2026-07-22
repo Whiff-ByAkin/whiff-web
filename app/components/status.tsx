@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
 
-const CONTACT_EMAIL = "hello@whiff-ai.com";
-const INSTAGRAM = "https://www.instagram.com/discover_whiff/";
-
-export function Contact() {
+// A small "Status" button in the header. Clicking it opens a dialog that tells
+// visitors, plainly, where whiff is right now. Edit the copy below as the
+// launch progresses (stage, city, whether applications are open).
+export function Status() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -29,7 +29,7 @@ export function Contact() {
         whileTap={{ scale: 0.96 }}
         className="rounded-full border border-line bg-card px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-rust hover:text-rust"
       >
-        Contact
+        Status
       </motion.button>
 
       {mounted &&
@@ -52,12 +52,12 @@ export function Contact() {
                 <motion.div
                   role="dialog"
                   aria-modal="true"
-                  aria-label="Contact whiff"
+                  aria-label="Where whiff is right now"
                   initial={{ opacity: 0, y: 12, scale: 0.98 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 8, scale: 0.98 }}
                   transition={{ type: "spring", stiffness: 320, damping: 26 }}
-                  className="relative w-full max-w-sm rounded-3xl border border-line bg-card p-7 text-center shadow-[0_40px_80px_-30px_rgba(63,45,34,0.4)]"
+                  className="relative w-full max-w-sm rounded-3xl border border-line bg-card p-7 shadow-[0_40px_80px_-30px_rgba(63,45,34,0.4)]"
                 >
                   <button
                     type="button"
@@ -68,30 +68,26 @@ export function Contact() {
                     ✕
                   </button>
 
-                  <h2 className="font-display text-2xl font-semibold text-ink">
-                    say hello
+                  <span className="inline-flex items-center rounded-full border border-rust/25 bg-rust/10 px-3 py-1 text-xs font-semibold text-rust">
+                    applications open
+                  </span>
+
+                  <h2 className="mt-4 font-display text-2xl font-semibold text-ink">
+                    where we&rsquo;re at
                   </h2>
+
                   <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">
-                    questions, press, or partnerships. we&rsquo;d love to hear
-                    from you.
+                    whiff is pre-launch. We&rsquo;re building our first city and
+                    forming the first activities with a small, invite-only group.
+                    If that&rsquo;s you, apply to join and we&rsquo;ll reach out
+                    as we open.
                   </p>
 
-                  <div className="mt-5 flex flex-col gap-3">
-                    <a
-                      href={`mailto:${CONTACT_EMAIL}`}
-                      className="inline-flex w-full items-center justify-center rounded-full bg-rust px-6 py-3 font-display font-semibold tracking-wide text-white transition-colors hover:bg-rust-edge"
-                    >
-                      email us
-                    </a>
-                    <a
-                      href={INSTAGRAM}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex w-full items-center justify-center rounded-full border border-line bg-cream px-6 py-3 font-display font-medium text-ink transition-colors hover:border-rust hover:text-rust"
-                    >
-                      message us on Instagram
-                    </a>
-                  </div>
+                  <dl className="mt-5 space-y-2.5 text-sm">
+                    <StatusRow label="Stage" value="Pre-launch" />
+                    <StatusRow label="Where" value="Our first city" />
+                    <StatusRow label="Access" value="Invite-only, limited spots" />
+                  </dl>
                 </motion.div>
               </motion.div>
             )}
@@ -99,5 +95,14 @@ export function Contact() {
           document.body,
         )}
     </>
+  );
+}
+
+function StatusRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex items-center justify-between gap-4 border-b border-line pb-2.5 last:border-0 last:pb-0">
+      <dt className="text-ink-soft">{label}</dt>
+      <dd className="font-medium text-ink">{value}</dd>
+    </div>
   );
 }

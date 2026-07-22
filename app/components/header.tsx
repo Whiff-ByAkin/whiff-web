@@ -1,64 +1,29 @@
-"use client";
-
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 import { Contact } from "./contact";
-import { NAV_PILL_CLASS } from "./info-dialog";
+import { Status } from "./status";
 
-// The "Click Me" pill nags for attention in bursts: a quick shake that rings
-// down from fast → medium → slow (see the .attention-wiggle keyframes), then
-// holds perfectly still for a random beat — 5s, 10s, or 20s — before doing it
-// again. The randomness keeps it from becoming predictable wallpaper the eye
-// learns to ignore.
-const PAUSES = [5000, 10000, 20000];
-const FIRST_DELAY = 1600;
-
+// The wordmark is set in Fredoka, not an image — so it's crisp at any size and
+// carries the brand font. The rust dot over the "i" is a fixed brand detail
+// (no pulsing). "whiff" stays lowercase, the way the app writes it.
 export function Header() {
-  const [wiggling, setWiggling] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    timer.current = setTimeout(() => setWiggling(true), FIRST_DELAY);
-    return () => {
-      if (timer.current) clearTimeout(timer.current);
-    };
-  }, []);
-
-  // One shake burst just finished: sit still, then queue the next one after a
-  // random pause so the rhythm never settles into something ignorable. Guard on
-  // the animation name so the always-on pulse ring can't be mistaken for it.
-  function handleAnimationEnd(event: React.AnimationEvent<HTMLAnchorElement>) {
-    if (event.animationName !== "attention-wiggle") return;
-    setWiggling(false);
-    const pause = PAUSES[Math.floor(Math.random() * PAUSES.length)];
-    timer.current = setTimeout(() => setWiggling(true), pause);
-  }
-
   return (
-    <header className="fade-up fixed top-0 inset-x-0 z-50 px-6 md:px-10 py-5 flex items-center justify-between">
-      <Link href="/" aria-label="whiff home" className="group inline-flex items-center">
-        {/* eslint-disable-next-line @next/next/no-img-element -- tiny logo asset, no responsive optimization needed */}
-        <img
-          src="/whiff-wordmark.png"
-          alt="whiff"
-          width={303}
-          height={145}
-          className="h-7 w-auto md:h-8 transition-transform duration-200 group-hover:scale-105"
-        />
-      </Link>
+    <header className="fade-up fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-5 md:px-10">
+      <a href="/" aria-label="whiff home" className="group inline-flex items-end">
+        <span className="relative font-display text-2xl font-semibold lowercase tracking-tight text-ink transition-transform duration-200 group-hover:-translate-y-0.5 md:text-3xl">
+          wh
+          {/* the dotless i + a static rust dot */}
+          <span className="relative">
+            <span aria-hidden="true">ı</span>
+            <span
+              aria-hidden="true"
+              className="absolute left-1/2 top-[0.08em] h-[0.18em] w-[0.18em] -translate-x-1/2 rounded-full bg-rust"
+            />
+          </span>
+          ff
+        </span>
+      </a>
+
       <nav aria-label="Primary" className="flex items-center gap-2">
-        <Link
-          href="/blog"
-          aria-label="Click me: read real dating app stories"
-          onAnimationEnd={handleAnimationEnd}
-          className={`${NAV_PILL_CLASS} attention-cta !border-sienna/25 !bg-sienna !text-oat hover:!bg-sienna-hover ${
-            wiggling ? "attention-wiggle" : ""
-          }`}
-        >
-          Click Me
-        </Link>
+        <Status />
         <Contact />
       </nav>
     </header>
