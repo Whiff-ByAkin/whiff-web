@@ -29,7 +29,8 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: TITLE,
+    // The browser tab just says "whiff"; sub-pages become "Privacy Policy · whiff".
+    default: SITE_NAME,
     template: "%s · whiff",
   },
   description: DESCRIPTION,
