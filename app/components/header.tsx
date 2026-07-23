@@ -1,5 +1,5 @@
 import { Contact } from "./contact";
-import { Status } from "./status";
+import { StatesWhiffIsIn } from "./states-whiff-is-in";
 
 // The wordmark is set in Fredoka, not an image — so it's crisp at any size and
 // carries the brand font. The rust dot over the "i" is a fixed brand detail
@@ -23,7 +23,7 @@ export function Header() {
       </a>
 
       <nav aria-label="Primary" className="flex items-center gap-2">
-        <Status />
+        <StatesWhiffIsIn />
         <Contact />
       </nav>
     </header>
