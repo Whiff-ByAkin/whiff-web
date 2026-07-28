@@ -3,14 +3,17 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
+import { CONTACT_EMAIL } from "../config/site";
 
-const CONTACT_EMAIL = "hello@whiff-ai.com";
 const INSTAGRAM = "https://www.instagram.com/discover_whiff/";
 
 export function Contact() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {

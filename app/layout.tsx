@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fredoka, Nunito } from "next/font/google";
 import "./globals.css";
 import { AmbientBackground } from "./components/ambient-background";
+import { CONTACT_EMAIL, SITE_URL } from "./config/site";
 
 // Fredoka — the display face: wordmark, headings, the emotional lines.
 const fredoka = Fredoka({
@@ -20,7 +21,6 @@ const nunito = Nunito({
   display: "swap",
 });
 
-const SITE_URL = "https://whiff-ai.com";
 const SITE_NAME = "whiff";
 const TITLE = "whiff — activities first, people second";
 const DESCRIPTION =
@@ -104,7 +104,7 @@ const jsonLd = {
         {
           "@type": "ContactPoint",
           contactType: "customer support",
-          email: "hello@whiff-ai.com",
+          email: CONTACT_EMAIL,
         },
       ],
     },

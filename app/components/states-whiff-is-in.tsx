@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
+import { CONTACT_EMAIL } from "../config/site";
 
-const CONTACT_EMAIL = "hello@whiff-ai.com";
+const STATE_EMAIL_SUBJECT = encodeURIComponent("Bring whiff to my state");
 const LIVE_STATES = ["Minnesota"];
 
 // Header dialog showing where whiff is live. Deliberately three elements and
@@ -103,7 +104,7 @@ export function StatesWhiffIsIn() {
                     </ul>
 
                     <a
-                      href={`mailto:${CONTACT_EMAIL}?subject=Bring whiff to my state`}
+                      href={`mailto:${CONTACT_EMAIL}?subject=${STATE_EMAIL_SUBJECT}`}
                       className="btn-latte mt-8 inline-flex w-full items-center justify-center rounded-full px-5 py-3 font-display text-sm font-semibold tracking-wide"
                     >
                       tell us your state

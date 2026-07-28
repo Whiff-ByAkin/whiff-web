@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Contact } from "./contact";
 import { StatesWhiffIsIn } from "./states-whiff-is-in";
 
@@ -8,7 +9,11 @@ import { StatesWhiffIsIn } from "./states-whiff-is-in";
 export function Header() {
   return (
     <header className="fade-up fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-5 md:px-10">
-      <a href="/" aria-label="whiff home" className="group inline-flex items-end">
+      <Link
+        href="/"
+        aria-label="whiff home"
+        className="group inline-flex items-end"
+      >
         <span className="relative font-display text-2xl font-semibold lowercase tracking-tight text-ink transition-transform duration-200 group-hover:-translate-y-0.5 md:text-3xl">
           wh
           {/* the dotless i + a static dot carrying the brand gradient */}
@@ -21,7 +26,7 @@ export function Header() {
           </span>
           ff
         </span>
-      </a>
+      </Link>
 
       <nav aria-label="Primary" className="flex items-center gap-2">
         <StatesWhiffIsIn />

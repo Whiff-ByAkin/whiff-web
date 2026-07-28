@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { LegalShell } from "../components/legal-shell";
+import { CONTACT_EMAIL } from "../config/site";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
   description: "The terms that govern your use of whiff.",
   alternates: { canonical: "/terms" },
 };
-
-const EMAIL = "hello@whiff-ai.com";
 
 export default function TermsPage() {
   return (
@@ -132,7 +131,7 @@ export default function TermsPage() {
       <h2>Contact us</h2>
       <p>
         Questions about these Terms? Email{" "}
-        <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
       </p>
     </LegalShell>
   );

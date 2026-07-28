@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
-
-const SITE_URL = "https://whiff-ai.com";
+import { SITE_URL } from "./config/site";
 
 export default function robots(): MetadataRoute.Robots {
   return {

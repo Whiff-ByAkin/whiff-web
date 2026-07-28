@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "./config/site";
 
-const SITE_URL = "https://whiff-ai.com";
 // A fixed date keeps this sitemap statically generated and deterministic.
 const LAST_MODIFIED = new Date("2026-07-22");
 

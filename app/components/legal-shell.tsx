@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Header } from "./header";
 
 // Shared frame for the legal pages: the site header, a readable white card of
@@ -17,12 +18,12 @@ export function LegalShell({
       <Header />
 
       <main className="mx-auto w-full max-w-2xl flex-1 px-6 pb-16 pt-28">
-        <a
+        <Link
           href="/"
           className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-soft transition-colors hover:text-espresso"
         >
           <span aria-hidden="true">←</span> back home
-        </a>
+        </Link>
 
         <article className="mt-5 rounded-3xl border border-line bg-card p-7 shadow-[0_30px_60px_-40px_rgba(24,24,27,0.25)] sm:p-10">
           <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
@@ -37,15 +38,15 @@ export function LegalShell({
 
         <footer className="mt-8 flex flex-col items-center gap-1 text-center text-xs text-ink-soft">
           <div className="flex items-center gap-3">
-            <a href="/privacy" className="transition-colors hover:text-ink">
+            <Link href="/privacy" className="transition-colors hover:text-ink">
               privacy
-            </a>
+            </Link>
             <span aria-hidden="true" className="text-ink-soft/40">
               ·
             </span>
-            <a href="/terms" className="transition-colors hover:text-ink">
+            <Link href="/terms" className="transition-colors hover:text-ink">
               terms
-            </a>
+            </Link>
             <span aria-hidden="true" className="text-ink-soft/40">
               ·
             </span>

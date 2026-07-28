@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { LegalShell } from "../components/legal-shell";
+import { CONTACT_EMAIL } from "../config/site";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description: "How whiff collects, uses, and protects your information.",
   alternates: { canonical: "/privacy" },
 };
-
-const EMAIL = "hello@whiff-ai.com";
 
 export default function PrivacyPage() {
   return (
@@ -72,9 +71,9 @@ export default function PrivacyPage() {
         We keep your information only as long as needed for the purposes above.
         You can ask us to access, correct, or delete your information, or to stop
         contacting you, at any time by emailing{" "}
-        <a href={`mailto:${EMAIL}`}>{EMAIL}</a>. Depending on where you live, you
-        may have additional rights under laws such as the GDPR or CCPA; we honor
-        applicable rights.
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Depending on
+        where you live, you may have additional rights under laws such as the
+        GDPR or CCPA; we honor applicable rights.
       </p>
 
       <h2>Security</h2>
@@ -101,7 +100,7 @@ export default function PrivacyPage() {
       <h2>Contact us</h2>
       <p>
         Questions about privacy? Email{" "}
-        <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
       </p>
     </LegalShell>
   );

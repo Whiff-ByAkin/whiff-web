@@ -24,7 +24,10 @@ export function ApplyCTA() {
   // animates transform/filter, and either would trap a position:fixed overlay
   // in that wrapper's box instead of the viewport. Portaling escapes it.
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   // Magnetic pull: the button drifts toward the cursor, spring-eased so it
   // feels weighty rather than twitchy.
@@ -45,14 +48,6 @@ export function ApplyCTA() {
     my.set(0);
   }
 
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") close();
-    }
-    if (open) window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
-
   function close() {
     setOpen(false);
     setTimeout(() => {
@@ -60,6 +55,14 @@ export function ApplyCTA() {
       setError(null);
     }, 200);
   }
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") close();
+    }
+    if (open) window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
