@@ -4,9 +4,10 @@ export const alt = "whiff — activities first, people second";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-// A warm, on-brand share card: cream base, the wordmark with its rust underline,
-// the movement line, and the disqualifier. Uses the default font (reliable in
-// the build sandbox) — the brand carries on color and layout.
+// The on-brand share card: page grey, the wordmark with its brand-gradient
+// underline (a mark moment, so the gradient is allowed), the movement line, and
+// the disqualifier. Uses the default font (reliable in the build sandbox) — the
+// brand carries on color and layout.
 export default function Image() {
   return new ImageResponse(
     (
@@ -18,8 +19,8 @@ export default function Image() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#FEECE4",
-          color: "#3F2D22",
+          backgroundColor: "#F2F2F7",
+          color: "#18181B",
           padding: "80px",
           textAlign: "center",
         }}
@@ -33,7 +34,7 @@ export default function Image() {
               width: 200,
               height: 12,
               borderRadius: 9999,
-              backgroundColor: "#F2683C",
+              backgroundImage: "linear-gradient(135deg, #6B4A38, #A76642)",
               marginTop: 8,
             }}
           />
@@ -43,7 +44,7 @@ export default function Image() {
           Activities first. People second.
         </div>
 
-        <div style={{ fontSize: 30, color: "#8A7565", marginTop: 24, fontStyle: "italic" }}>
+        <div style={{ fontSize: 30, color: "#6B6B70", marginTop: 24, fontStyle: "italic" }}>
           this is not a dating app.
         </div>
       </div>

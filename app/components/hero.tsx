@@ -1,13 +1,16 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
 import { AnimatedWord, useWordCycle } from "./cycling-word";
-import { ConnectionArc } from "./connection-arc";
-import {ApplyCTA} from "@/app/components/invite-cta";
+import { ApplyCTA } from "@/app/components/invite-cta";
 
-// "Find your [ACTIVITY] [ROLE]" — the two lists cycle in sync by index, so the
-// pill (the activity) and the word beside it (who they are to you, through that
-// activity) swap together: "hiking buddy" → "chess rival" → "tennis partner".
+// "a [ACTIVITY] [ROLE]" — the two lists cycle in sync by index, so the pill
+// (the activity) and the word beside it (who that activity makes of someone)
+// swap together: "a hiking buddy" → "a chess rival" → "a tennis partner".
+// Deliberately not "find your ___": that is the exact phrasing every dating,
+// friends and meetup app in this category uses. The line instantiates the
+// headline's "someone" instead of instructing anyone to go looking.
 const ACTIVITIES = [
   "hiking",
   "cycling",
@@ -44,73 +47,43 @@ export function Hero() {
   return (
     <section
       aria-label="What whiff is"
-      className="relative flex h-[100svh] flex-col items-center justify-center gap-5 px-6 pb-16 pt-20 text-center sm:gap-6 md:px-10"
+      className="relative flex h-[100svh] flex-col items-center justify-center gap-6 px-6 pb-16 pt-20 text-center md:px-10"
     >
-      {/* eyebrow */}
-      <motion.div {...R(0)} className="flex items-center gap-2">
-        <span className="h-px w-6 bg-ink/20" aria-hidden="true" />
-        <p className="font-display text-[11px] font-medium uppercase tracking-[0.28em] text-ink-soft">
-          our statement
-        </p>
-        <span className="h-px w-6 bg-ink/20" aria-hidden="true" />
+      {/* the mascot carries the warmth the paragraphs used to. alt is empty
+          because the headline right below says everything it says. */}
+      <motion.div {...R(0)}>
+        <Image
+          src="/whiff-mascot.png"
+          alt=""
+          width={515}
+          height={560}
+          loading="eager"
+          fetchPriority="high"
+          className="h-[clamp(8rem,21vh,14rem)] w-auto select-none"
+          draggable={false}
+        />
       </motion.div>
 
-      {/* the headline — the movement */}
+      {/* the whole pitch, in two beats */}
       <motion.h1
-        {...R(0.08)}
-        className="text-balance font-display text-[clamp(2.5rem,7vw,4.2rem)] font-semibold leading-[1.02] tracking-tight text-ink"
+        {...R(0.1)}
+        className="font-display text-[clamp(1.9rem,5.4vw,3.4rem)] font-semibold leading-[1.08] tracking-tight text-ink"
       >
-        Activities first. People second.
+        <span className="block">Something you love doing.</span>
+        <span className="block">Someone to do it with.</span>
       </motion.h1>
 
-      {/* the promise, with a hand-drawn rust underline under "out the door" */}
-      <motion.p
-        {...R(0.16)}
-        className="max-w-xl text-balance font-display text-[clamp(1.05rem,3.4vw,1.45rem)] font-medium leading-snug text-ink"
-      >
-        Let whiff get you{" "}
-        <span className="relative inline-block">
-          out the door
-          <span
-            aria-hidden="true"
-            className="underline-draw absolute -bottom-0.5 left-0 h-[0.14em] w-full rounded-full bg-rust"
-          />
-        </span>{" "}
-        to do something you love, with someone who loves it too.
-      </motion.p>
-
-      {/* the statement — three beats, the last one the emotional payoff */}
-      <motion.div
-        {...R(0.24)}
-        className="flex max-w-xl flex-col gap-2.5 text-[15px] leading-relaxed text-ink-soft sm:text-base"
-      >
-        <p>
-          Other apps start with a stranger and hope a connection happens. whiff
-          starts with something you already want to do.
-        </p>
-        <p>Show up for the activity. Meet the people who belong there.</p>
-        <p className="font-display font-medium text-ink">
-          Real connection. What humans are made for, without the profiles.
-        </p>
-      </motion.div>
-
-      {/* the signature: whiff drawing the line between two people */}
-      <motion.div {...R(0.34)} className="py-1">
-        <ConnectionArc />
-      </motion.div>
-
-      {/* the find-your line + the ask */}
-      <div className="flex flex-col items-center gap-4">
-        <motion.div {...R(0.46)}>
-          <FindYourLine />
+      <div className="flex flex-col items-center gap-5">
+        <motion.div {...R(0.22)}>
+          <SomeoneLine />
         </motion.div>
 
-        <motion.div {...R(0.56)}>
+        <motion.div {...R(0.32)}>
           <ApplyCTA />
         </motion.div>
 
         <motion.p
-          {...R(0.64)}
+          {...R(0.42)}
           className="font-body text-lg italic text-ink-soft sm:text-xl"
           style={{ transform: "rotate(-2deg)" }}
         >
@@ -121,15 +94,15 @@ export function Hero() {
   );
 }
 
-function FindYourLine() {
+function SomeoneLine() {
   const i = useWordCycle(ACTIVITIES.length, 1900);
   return (
-    <p className="flex items-center gap-2 whitespace-nowrap font-display text-base text-ink sm:text-lg">
-      Find your
-      <span className="inline-flex items-center rounded-full border border-rust/25 bg-rust/10 px-3.5 py-1.5 font-semibold text-rust">
+    <p className="flex items-center gap-2 whitespace-nowrap font-display text-base text-ink-soft sm:text-lg">
+      a
+      <span className="inline-flex items-center rounded-full border border-espresso/20 bg-espresso/[0.07] px-3.5 py-1.5 font-semibold text-espresso">
         <AnimatedWord word={ACTIVITIES[i]} />
       </span>
-      <AnimatedWord word={ROLES[i]} className="font-semibold" />
+      <AnimatedWord word={ROLES[i]} className="font-semibold text-ink" />
     </p>
   );
 }

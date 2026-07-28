@@ -1,18 +1,32 @@
 @import "tailwindcss";
 
 /* ─────────────────────────────────────────────────────────────────────────
-   whiff brand — the app palette, on the web (from Theme.swift).
-   One accent only: rust. Nothing pure — text is warm brown, the page is cream.
-   Green/orange are reserved as functional signals elsewhere, never as brand.
+   whiff brand — the app palette, on the web.
+   One brand colour: espresso. It sits at 21° on the hue wheel but at 48%
+   saturation, so it reads earthy rather than orange — that distance from the
+   0–30° crowd (Tinder, Reddit, Strava) is the whole point. Never warm it up.
+   Buttons are latte and only latte, everywhere, on purpose.
    ───────────────────────────────────────────────────────────────────────── */
 @theme inline {
-  --color-cream: #feece4; /* the warm base — every surface sits on this, never white */
-  --color-rust: #f2683c; /* the one brand color — buttons, links, accents */
-  --color-rust-edge: #d2501e; /* the pressed/darker rust — shadows, hover */
-  --color-ink: #3f2d22; /* headings & body — a warm near-black brown */
-  --color-ink-soft: #8a7565; /* secondary text, captions */
-  --color-line: #e7d6ca; /* hairline card borders */
-  --color-card: #ffffff; /* elevated surfaces on the cream */
+  --color-espresso: #6b4a38; /* the one brand colour — logo, links, headings, tints */
+  --color-sienna: #a76642; /* gradient partner to espresso — the mark only */
+
+  --color-latte: #d8b9a3; /* every button fill */
+  --color-on-latte: #241812; /* type on those buttons */
+  --color-latte-edge: #b49377; /* the 3D underside of buttons */
+
+  --color-page: #f2f2f7; /* site background */
+  --color-card: #ffffff; /* panels */
+  --color-ink: #18181b; /* body headings */
+  --color-ink-soft: #6b6b70; /* secondary text */
+  --color-line: #e3e3e8; /* hairlines */
+
+  /* accents, sparingly */
+  --color-sand: #f0d8b4;
+  --color-camel: #8a6340;
+  --color-go: #4a6b3a;
+  --color-amber: #8a6414;
+  --color-crimson: #a8180c;
 
   --font-display: var(--font-fredoka);
   --font-body: var(--font-nunito);
@@ -24,21 +38,21 @@ html {
 
 html,
 body {
-  background: var(--color-cream);
+  background: var(--color-page);
   color: var(--color-ink);
   overflow-x: hidden;
 }
 
-/* A soft warm wash beneath the animated orbs — a lifted cream at the top,
-   settling into a whisper of deeper clay at the bottom edge. Never flat. */
+/* A soft wash beneath the animated orbs — lifted to near-white at the top,
+   settling into a whisper of espresso at the bottom edge. Never flat. */
 body {
   min-height: 100svh;
   background:
     radial-gradient(
       130% 115% at 50% -20%,
-      #fff3ec 0%,
-      var(--color-cream) 60%,
-      color-mix(in srgb, var(--color-cream) 88%, var(--color-rust-edge)) 100%
+      #ffffff 0%,
+      var(--color-page) 58%,
+      color-mix(in srgb, var(--color-page) 93%, var(--color-espresso)) 100%
     );
   font-family: var(--font-body), system-ui, sans-serif;
   font-size: 16px;
@@ -48,14 +62,44 @@ body {
 }
 
 ::selection {
-  background: var(--color-rust);
+  background: var(--color-espresso);
   color: #fff;
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-rust);
+  outline: 2px solid var(--color-espresso);
   outline-offset: 3px;
   border-radius: 6px;
+}
+
+/* ── the mark: espresso → sienna, top-left to bottom-right. This gradient is
+   the most recognisable asset we have, so it touches the mark and celebration
+   moments only — never a button, never a link, never small type. ── */
+.brand-gradient {
+  background-image: linear-gradient(
+    135deg,
+    var(--color-espresso),
+    var(--color-sienna)
+  );
+}
+
+/* ── buttons don't follow the theme. One latte everywhere, with the edge as a
+   real 3D underside so the press has somewhere to go. ── */
+.btn-latte {
+  background-color: var(--color-latte);
+  color: var(--color-on-latte);
+  box-shadow: 0 4px 0 var(--color-latte-edge);
+  transition:
+    background-color 200ms ease,
+    box-shadow 120ms ease,
+    transform 120ms ease;
+}
+.btn-latte:hover {
+  background-color: color-mix(in srgb, var(--color-latte) 90%, #fff);
+}
+.btn-latte:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--color-latte-edge);
 }
 
 /* ── entrance: a soft blur-up, used sparingly for chrome (header/footer) ── */
@@ -86,8 +130,9 @@ body {
   width: 15px;
   height: 15px;
   border-radius: 9999px;
-  border: 2px solid color-mix(in srgb, #fff 35%, transparent);
-  border-top-color: #fff;
+  /* currentColor so it reads on the latte button's dark type, not just on white */
+  border: 2px solid color-mix(in srgb, currentColor 30%, transparent);
+  border-top-color: currentColor;
   animation: spin 0.7s linear infinite;
 }
 
@@ -120,10 +165,10 @@ body {
 /* ── the invite pill's always-on radar ping — reads as "interactive" ── */
 @keyframes ping-ring {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-rust) 45%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-espresso) 35%, transparent);
   }
   70% {
-    box-shadow: 0 0 0 12px color-mix(in srgb, var(--color-rust) 0%, transparent);
+    box-shadow: 0 0 0 12px color-mix(in srgb, var(--color-espresso) 0%, transparent);
   }
   100% {
     box-shadow: 0 0 0 0 transparent;
@@ -138,7 +183,7 @@ body {
   animation: ping-ring 2.8s ease-out infinite;
 }
 
-/* ── the rust dot in the wordmark: a slow, calm breath ── */
+/* ── the brand dot in the wordmark: a slow, calm breath ── */
 @keyframes breathe {
   0%,
   100% {
@@ -230,10 +275,12 @@ body {
   height: 48vmax;
   top: -16vmax;
   left: -12vmax;
-  opacity: 0.5;
+  /* espresso over a cool page goes muddy fast, so the orbs sit low enough to
+     read as warmth in the paper rather than as a colour. */
+  opacity: 0.16;
   background: radial-gradient(
     circle at 30% 30%,
-    color-mix(in srgb, var(--color-rust) 55%, transparent),
+    color-mix(in srgb, var(--color-espresso) 55%, transparent),
     transparent 70%
   );
   animation: drift-1 28s ease-in-out infinite;
@@ -243,10 +290,10 @@ body {
   height: 42vmax;
   bottom: -18vmax;
   right: -10vmax;
-  opacity: 0.32;
+  opacity: 0.14;
   background: radial-gradient(
     circle at 70% 70%,
-    color-mix(in srgb, var(--color-rust-edge) 45%, transparent),
+    color-mix(in srgb, var(--color-sienna) 45%, transparent),
     transparent 70%
   );
   animation: drift-2 34s ease-in-out infinite;
@@ -256,10 +303,10 @@ body {
   height: 32vmax;
   top: 34%;
   left: 54%;
-  opacity: 0.28;
+  opacity: 0.22;
   background: radial-gradient(
     circle at 50% 50%,
-    color-mix(in srgb, #ffd9c4 60%, transparent),
+    color-mix(in srgb, var(--color-sand) 70%, transparent),
     transparent 70%
   );
   animation: drift-3 24s ease-in-out infinite;
@@ -312,7 +359,7 @@ body {
   background: radial-gradient(
     100% 88% at 50% 44%,
     transparent 66%,
-    color-mix(in srgb, var(--color-rust-edge) 7%, transparent) 100%
+    color-mix(in srgb, var(--color-espresso) 6%, transparent) 100%
   );
 }
 

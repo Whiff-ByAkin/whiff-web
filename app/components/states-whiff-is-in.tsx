@@ -5,13 +5,12 @@ import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
 
 const CONTACT_EMAIL = "hello@whiff-ai.com";
-const LIVE_STATES = [
-  {
-    name: "Minnesota",
-  },
-];
+const LIVE_STATES = ["Minnesota"];
 
-// Header dialog showing where whiff is currently launching.
+// Header dialog showing where whiff is live. Deliberately three elements and
+// nothing else: no progress framing (that implies a roadmap we haven't
+// promised) and no "quality over quantity" explainer — pre-emptively
+// justifying why the list is short is what draws attention to it being short.
 export function StatesWhiffIsIn() {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -44,7 +43,7 @@ export function StatesWhiffIsIn() {
         onClick={() => setOpen(true)}
         whileHover={{ y: -2 }}
         whileTap={{ scale: 0.96 }}
-        className="rounded-full border border-line bg-card px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-rust hover:text-rust"
+        className="rounded-full border border-line bg-card px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-espresso hover:text-espresso"
       >
         States
       </motion.button>
@@ -70,60 +69,42 @@ export function StatesWhiffIsIn() {
                   role="dialog"
                   aria-modal="true"
                   aria-labelledby="states-title"
-                  aria-describedby="states-description"
                   initial={{ opacity: 0, y: 12, scale: 0.98 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 8, scale: 0.98 }}
                   transition={{ type: "spring", stiffness: 320, damping: 26 }}
-                  className="relative w-full max-w-[27rem] overflow-hidden rounded-3xl border border-line bg-card shadow-[0_40px_80px_-30px_rgba(63,45,34,0.4)]"
+                  className="relative w-full max-w-[27rem] overflow-hidden rounded-3xl border border-line bg-card shadow-[0_40px_80px_-30px_rgba(24,24,27,0.28)]"
                 >
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
                     aria-label="Close"
-                    className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-cream hover:text-ink"
+                    className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-page hover:text-ink"
                   >
                     ✕
                   </button>
 
-                  <div className="border-b border-line bg-cream/55 px-7 pb-6 pt-7">
-                    <p className="font-display text-[11px] font-semibold uppercase tracking-[0.24em] text-rust">
-                      Launch progress
-                    </p>
+                  <div className="px-7 pb-7 pt-10 text-center">
                     <h2
                       id="states-title"
-                      className="mt-2 max-w-[15rem] font-display text-3xl font-semibold leading-tight text-ink"
+                      className="font-display text-sm font-medium text-ink-soft"
                     >
-                      states whiff is in
+                      whiff is live in
                     </h2>
-                    <p
-                      id="states-description"
-                      className="mt-3 max-w-xs text-[15px] leading-relaxed text-ink-soft"
-                    >
-                      We&rsquo;re launching with progress in mind: quality over
-                      quantity, one state at a time.
-                    </p>
-                  </div>
-
-                  <div className="px-7 py-6">
-                    <p className="font-display text-sm font-semibold text-ink">
-                      Current state
-                    </p>
-
-                    <ul className="mt-3 border-t border-line">
+                    <ul className="mt-2 space-y-1">
                       {LIVE_STATES.map((state) => (
-                        <StateRow key={state.name} state={state} />
+                        <li
+                          key={state}
+                          className="font-display text-[2.5rem] font-semibold leading-tight tracking-tight text-ink"
+                        >
+                          {state}
+                        </li>
                       ))}
                     </ul>
-                  </div>
 
-                  <div className="border-t border-line bg-cream/45 px-7 py-5">
-                    <p className="font-display text-sm font-semibold text-ink">
-                      Want whiff where you are?
-                    </p>
                     <a
                       href={`mailto:${CONTACT_EMAIL}?subject=Bring whiff to my state`}
-                      className="mt-3 inline-flex w-full items-center justify-center rounded-full bg-rust px-5 py-3 font-display text-sm font-semibold tracking-wide text-white transition-colors hover:bg-rust-edge"
+                      className="btn-latte mt-8 inline-flex w-full items-center justify-center rounded-full px-5 py-3 font-display text-sm font-semibold tracking-wide"
                     >
                       tell us your state
                     </a>
@@ -135,17 +116,5 @@ export function StatesWhiffIsIn() {
           document.body,
         )}
     </>
-  );
-}
-
-type LiveState = (typeof LIVE_STATES)[number];
-
-function StateRow({ state }: { state: LiveState }) {
-  return (
-    <li className="py-4">
-      <p className="font-display text-2xl font-semibold leading-none text-ink">
-        {state.name}
-      </p>
-    </li>
   );
 }

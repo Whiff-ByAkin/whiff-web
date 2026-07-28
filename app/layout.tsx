@@ -132,7 +132,7 @@ const jsonLd = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#feece4",
+  themeColor: "#f2f2f7",
   width: "device-width",
   initialScale: 1,
   colorScheme: "light",

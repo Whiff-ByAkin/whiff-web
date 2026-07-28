@@ -27,7 +27,7 @@ export function Contact() {
         onClick={() => setOpen(true)}
         whileHover={{ y: -2 }}
         whileTap={{ scale: 0.96 }}
-        className="rounded-full border border-line bg-card px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-rust hover:text-rust"
+        className="rounded-full border border-line bg-card px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-espresso hover:text-espresso"
       >
         Contact
       </motion.button>
@@ -57,13 +57,13 @@ export function Contact() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 8, scale: 0.98 }}
                   transition={{ type: "spring", stiffness: 320, damping: 26 }}
-                  className="relative w-full max-w-sm rounded-3xl border border-line bg-card p-7 text-center shadow-[0_40px_80px_-30px_rgba(63,45,34,0.4)]"
+                  className="relative w-full max-w-sm rounded-3xl border border-line bg-card p-7 text-center shadow-[0_40px_80px_-30px_rgba(24,24,27,0.28)]"
                 >
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
                     aria-label="Close"
-                    className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-cream hover:text-ink"
+                    className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-page hover:text-ink"
                   >
                     ✕
                   </button>
@@ -79,7 +79,7 @@ export function Contact() {
                   <div className="mt-5 flex flex-col gap-3">
                     <a
                       href={`mailto:${CONTACT_EMAIL}`}
-                      className="inline-flex w-full items-center justify-center rounded-full bg-rust px-6 py-3 font-display font-semibold tracking-wide text-white transition-colors hover:bg-rust-edge"
+                      className="btn-latte inline-flex w-full items-center justify-center rounded-full px-6 py-3 font-display font-semibold tracking-wide"
                     >
                       email us
                     </a>
@@ -87,7 +87,7 @@ export function Contact() {
                       href={INSTAGRAM}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex w-full items-center justify-center rounded-full border border-line bg-cream px-6 py-3 font-display font-medium text-ink transition-colors hover:border-rust hover:text-rust"
+                      className="inline-flex w-full items-center justify-center rounded-full border border-line bg-page px-6 py-3 font-display font-medium text-ink transition-colors hover:border-espresso hover:text-espresso"
                     >
                       message us on Instagram
                     </a>

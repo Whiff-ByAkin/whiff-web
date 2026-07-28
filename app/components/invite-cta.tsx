@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { createPortal } from "react-dom";
 import {
   AnimatePresence,
@@ -95,12 +96,12 @@ export function ApplyCTA() {
         whileHover={{ scale: 1.04 }}
         whileTap={{ scale: 0.97 }}
         transition={{ type: "spring", stiffness: 400, damping: 20 }}
-        className="ping group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-rust px-7 py-3.5 font-display font-semibold tracking-wide text-white shadow-[0_14px_30px_-14px_var(--color-rust-edge)] transition-colors duration-200 hover:bg-rust-edge sm:px-9 sm:py-4"
+        className="btn-latte ping group relative inline-flex items-center gap-2 overflow-hidden rounded-full px-7 py-3.5 font-display font-semibold tracking-wide sm:px-9 sm:py-4"
       >
         {/* shine sweep on hover */}
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/45 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
+          className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/55 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
         />
         <span className="relative text-sm sm:text-base">Apply to join</span>
         <span
@@ -136,19 +137,28 @@ export function ApplyCTA() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.98 }}
               transition={{ type: "spring", stiffness: 320, damping: 26 }}
-              className="relative w-full max-w-sm rounded-3xl border border-line bg-card p-7 shadow-[0_40px_80px_-30px_rgba(63,45,34,0.4)]"
+              className="relative w-full max-w-sm rounded-3xl border border-line bg-card p-7 shadow-[0_40px_80px_-30px_rgba(24,24,27,0.28)]"
             >
               <button
                 type="button"
                 onClick={close}
                 aria-label="Close"
-                className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-cream hover:text-ink"
+                className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-page hover:text-ink"
               >
                 ✕
               </button>
 
               {status === "success" ? (
                 <div className="py-3 text-center">
+                  {/* the one celebration moment on the site */}
+                  <Image
+                    src="/whiff-mascot-cheer.png"
+                    alt=""
+                    width={298}
+                    height={380}
+                    className="mx-auto mb-3 h-28 w-auto select-none"
+                    draggable={false}
+                  />
                   <p className="font-display text-xl font-semibold text-ink">
                     you&rsquo;re on the list.
                   </p>
@@ -158,7 +168,7 @@ export function ApplyCTA() {
                   <button
                     type="button"
                     onClick={close}
-                    className="mt-5 inline-flex items-center justify-center rounded-full bg-rust px-6 py-2.5 font-display font-semibold text-white transition-colors hover:bg-rust-edge"
+                    className="btn-latte mt-5 inline-flex items-center justify-center rounded-full px-6 py-2.5 font-display font-semibold"
                   >
                     close
                   </button>
@@ -181,17 +191,17 @@ export function ApplyCTA() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={status === "submitting"}
-                    className="w-full rounded-full border border-line bg-cream px-5 py-3 text-ink placeholder:text-ink-soft/60 transition-shadow focus:border-rust focus:outline-none focus:ring-2 focus:ring-rust/40 disabled:opacity-60"
+                    className="w-full rounded-full border border-line bg-page px-5 py-3 text-ink placeholder:text-ink-soft/60 transition-shadow focus:border-espresso focus:outline-none focus:ring-2 focus:ring-espresso/30 disabled:opacity-60"
                   />
                   {error && (
-                    <p role="alert" className="text-sm text-rust-edge">
+                    <p role="alert" className="text-sm text-crimson">
                       {error}
                     </p>
                   )}
                   <button
                     type="submit"
                     disabled={status === "submitting" || !email}
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-rust px-6 py-3 font-display font-semibold tracking-wide text-white transition-colors hover:bg-rust-edge disabled:cursor-not-allowed disabled:opacity-60"
+                    className="btn-latte inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3 font-display font-semibold tracking-wide disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {status === "submitting" ? (
                       <>
