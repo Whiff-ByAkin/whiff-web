@@ -99,14 +99,19 @@ export function ApplyCTA() {
         whileHover={{ scale: 1.04 }}
         whileTap={{ scale: 0.97 }}
         transition={{ type: "spring", stiffness: 400, damping: 20 }}
-        className="btn-latte ping group relative inline-flex items-center gap-2 overflow-hidden rounded-full px-7 py-3.5 font-display font-semibold tracking-wide sm:px-9 sm:py-4"
+        // Scales with the viewport like everything else in the hero. It had fixed
+        // padding and a fixed label, which was fine when the headline was a fixed
+        // 1.9rem — under a fluid headline it ends up the largest thing on a small
+        // phone, and a button bigger than the sentence it's answering reads as the
+        // page shouting.
+        className="btn-latte ping group relative inline-flex items-center gap-2 overflow-hidden rounded-full px-[clamp(1.05rem,4.6vw,2.25rem)] py-[clamp(0.45rem,1.9vw,1rem)] font-display font-semibold tracking-wide"
       >
         {/* shine sweep on hover */}
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/55 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
         />
-        <span className="relative text-sm sm:text-base">Apply to join</span>
+        <span className="relative text-[clamp(0.7rem,2.5vw,1rem)]">Apply to join</span>
         <span
           aria-hidden="true"
           className="relative transition-transform duration-200 group-hover:translate-x-1"

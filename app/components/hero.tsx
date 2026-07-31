@@ -42,7 +42,7 @@ export function Hero() {
   return (
     <section
       aria-label="What whiff is"
-      className="relative flex h-[100svh] flex-col items-center justify-center gap-6 px-6 pb-16 pt-20 text-center md:px-10"
+      className="relative flex h-[100svh] flex-col items-center justify-center gap-[clamp(0.8rem,3.5vw,1.5rem)] px-6 pb-16 pt-20 text-center md:px-10"
     >
       {/* the mascot carries the warmth the paragraphs used to. alt is empty
           because the headline right below says everything it says. */}
@@ -54,7 +54,7 @@ export function Hero() {
           height={560}
           loading="eager"
           fetchPriority="high"
-          className="h-[clamp(8rem,21vh,14rem)] w-auto select-none"
+          className="h-[min(clamp(5.5rem,21vh,14rem),34vw)] w-auto select-none"
           draggable={false}
         />
       </motion.div>
@@ -76,7 +76,7 @@ export function Hero() {
         Let me introduce you to your new <BecomesPill />
       </motion.h1>
 
-      <div className="flex flex-col items-center gap-5">
+      <div className="flex flex-col items-center gap-[clamp(0.7rem,3vw,1.25rem)]">
         <motion.div {...R(0.22)}>
           <SomeoneLine />
         </motion.div>
