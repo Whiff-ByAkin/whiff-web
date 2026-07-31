@@ -14,9 +14,8 @@ export default function PrivacyPage() {
       <p>
         This Privacy Policy explains how whiff (&ldquo;whiff,&rdquo;
         &ldquo;we,&rdquo; &ldquo;us&rdquo;) collects, uses, and protects your
-        information when you visit our website or ask to join. whiff is an
-        activity-first platform that helps people meet through real-world
-        activities. By using our site, you agree to this policy.
+        information when you visit our website or ask to join. whiff puts people
+        into small groups that meet in person, the same night every week. By using our site, you agree to this policy.
       </p>
 
       <h2>Information we collect</h2>

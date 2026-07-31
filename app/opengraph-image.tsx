@@ -41,7 +41,7 @@ export default function Image() {
         </div>
 
         <div style={{ fontSize: 58, fontWeight: 700, marginTop: 48, letterSpacing: "-1px" }}>
-          Activities first. People second.
+          Six people. One night a week.
         </div>
 
         <div style={{ fontSize: 30, color: "#6B6B70", marginTop: 24, fontStyle: "italic" }}>

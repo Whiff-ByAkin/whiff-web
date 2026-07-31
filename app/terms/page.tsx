@@ -13,9 +13,9 @@ export default function TermsPage() {
     <LegalShell title="Terms of Service" updated="July 2026">
       <p>
         These Terms of Service (&ldquo;Terms&rdquo;) govern your use of whiff
-        (&ldquo;whiff,&rdquo; &ldquo;we,&rdquo; &ldquo;us&rdquo;), an
-        activity-first platform that helps people meet through real-world
-        activities. By using our site or applying to join, you agree to these
+        (&ldquo;whiff,&rdquo; &ldquo;we,&rdquo; &ldquo;us&rdquo;), which puts
+        people into small groups that meet in person, the same night every
+        week. By using our site or applying to join, you agree to these
         Terms. If you do not agree, please do not use whiff.
       </p>
 

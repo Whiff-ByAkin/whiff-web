@@ -11,24 +11,22 @@ export default function Home() {
 
         {/* Crawlable, answer-first copy for search engines and AI models —
             present in the static HTML, visually hidden. */}
+        {/* Crawlable, answer-first copy for search engines and AI models —
+            present in the static HTML, visually hidden. Kept short on purpose:
+            the product is one sentence and padding it out only buries it. */}
         <section aria-label="About whiff" className="sr-only">
           <h2>What is whiff?</h2>
           <p>
-            whiff is an activity-first social platform. Plans, not profiles.
-            Instead of browsing profiles or swiping through people, you see real
-            activities happening near you — hiking, cycling, running, climbing,
-            chess, tennis, museums, local events — and join the small group
-            doing the one you like. Activities first, people second. whiff has
-            an AI that gets to know you, learns what would actually get you out
-            of the house, recommends activities you would enjoy, and sends you
-            on little missions to try something new with people who are into it
-            too. whiff is not a dating app: people may become friends or more
-            after meeting, but you come to do the activity, not to search for a
-            relationship. whiff launches in one city with a small set of curated
-            activities you can join, and grows into an on-demand model where you
-            tell whiff what you want to do and it helps form the group.
+            whiff puts you in a circle of six people who go out together the
+            same night every week. You don&apos;t browse anything and you
+            don&apos;t arrange anything — whiff works out who you belong with
+            from a few questions, and then it&apos;s the same faces every week
+            until they&apos;re yours. There is no feed, no swiping and no group
+            chat. whiff is not a dating app. It launches in one city at a time,
+            starting with Saint Paul.
           </p>
         </section>
+
       </main>
       <Footer />
     </>

@@ -22,9 +22,9 @@ const nunito = Nunito({
 });
 
 const SITE_NAME = "whiff";
-const TITLE = "whiff — activities first, people second";
+const TITLE = "whiff — six people, one night a week";
 const DESCRIPTION =
-  "whiff is an activity-first way to meet people. Don't browse profiles or swipe — pick something you want to do, from hiking and cycling to chess and tennis, and whiff brings the right few people to do it with. This is not a dating app.";
+  "whiff puts you in a circle of six who go out the same night every week. No browsing, no swiping, nothing to arrange — the same faces until they're yours. Not a dating app.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -44,16 +44,14 @@ export const metadata: Metadata = {
   formatDetection: { email: false, address: false, telephone: false },
   keywords: [
     "whiff",
-    "activity-first social app",
-    "meet people through activities",
-    "find a hiking buddy",
-    "find a tennis partner",
-    "find a chess partner",
+    "meet the same people every week",
+    "small group of friends app",
+    "weekly night out with strangers",
     "meet people without swiping",
     "alternative to dating apps",
-    "find people to do things with",
     "make friends as an adult",
-    "plans not profiles",
+    "find a friend group",
+    "social club app",
   ],
   alternates: { canonical: SITE_URL },
   openGraph: {
@@ -98,7 +96,7 @@ const jsonLd = {
       name: SITE_NAME,
       url: SITE_URL,
       description: DESCRIPTION,
-      slogan: "Activities first. People second.",
+      slogan: "Six people. One night a week.",
       sameAs: ["https://www.instagram.com/discover_whiff/"],
       contactPoint: [
         {
@@ -123,7 +121,7 @@ const jsonLd = {
       name: "whiff",
       serviceType: "Activity-first platform for meeting people through real-world activities",
       description:
-        "whiff helps people meet through real-world activities. You see real activities near you and join a small group doing the one you like, from hiking and cycling to chess and tennis. Activities first, people second. Not a dating app.",
+        "whiff puts you in a circle of six people who go out the same night every week. No browsing and nothing to arrange — whiff works out who you belong with, and then it's the same faces every week. Not a dating app.",
       url: SITE_URL,
       provider: { "@id": `${SITE_URL}#organization` },
       areaServed: "Worldwide",

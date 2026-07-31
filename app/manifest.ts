@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "whiff",
     short_name: "whiff",
     description:
-      "An activity-first way to meet people. Do what you love, with someone who loves it too.",
+      "Six people, one night a week. The same faces until they're yours.",
     start_url: "/",
     display: "standalone",
     background_color: "#f2f2f7",
