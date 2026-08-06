@@ -28,7 +28,17 @@ export function Header() {
         </span>
       </Link>
 
+      {/* The home page cannot scroll, so this link is the only route to the
+          explanatory content. It is a real link rather than a dialog because
+          it is also the one internal edge a crawler can follow off the home
+          page. */}
       <nav aria-label="Primary" className="flex items-center gap-2">
+        <Link
+          href="/blog"
+          className="rounded-full border border-line bg-card px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-espresso hover:text-espresso"
+        >
+          Blog
+        </Link>
         <StatesWhiffIsIn />
         <Contact />
       </nav>

@@ -256,6 +256,150 @@ body {
   }
 }
 
+/* ─────────────────────────────────  the dawn  ─────────────────────────────
+   The page opens dark. Six lights travel in, take their places, and the moment
+   the circle closes it releases — light spreads out from the ring and the real
+   page is underneath it. The circle is the light source; that is the whole
+   idea, so nothing else on the page is allowed to be the thing that arrives.
+
+   Deliberately pure CSS rather than another motion timeline:
+
+   1. It is in the first paint. A JS-driven veil would flash the light page for
+      however long hydration takes, which is exactly the frame we are trying to
+      own.
+   2. If the bundle never arrives, a CSS animation still opens. A JS one would
+      leave a visitor staring at a black rectangle forever.
+
+   The reveal is a hole punched in a flat dark field — an animated radius on a
+   radial gradient, not a mask, because the gradient can carry the bright rim at
+   the leading edge in the same paint. `@property` is what makes the length
+   interpolate at all; an unregistered custom property would jump.
+
+   The one number shared with the motion side is the delay, and it comes in as
+   --dawn-delay from CircleHalo, so the moment the last dot lands is defined in
+   exactly one place (circle-halo.tsx) and both timelines read it. ── */
+@property --dawn-r {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+.dawn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* Centred on the ring, and large enough that the dark field still covers the
+     viewport no matter where in it the ring happens to sit. The page root is
+     overflow-hidden, so the overhang is clipped and never rasterised. */
+  width: 300vmax;
+  height: 300vmax;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  /* over the mascot, under the dots — the lights have to stay above the dark */
+  z-index: 1;
+  background: radial-gradient(
+    circle var(--dawn-r) at 50% 50%,
+    rgba(255, 233, 205, 0) 0,
+    rgba(255, 233, 205, 0) 86%,
+    rgba(255, 233, 205, 0.5) 95%,
+    #150e0a 100%
+  );
+  animation:
+    /* Fast off the mark and decelerating, but nothing like an expo curve.
+       The first attempt used cubic-bezier(0.16, 1, 0.3, 1) to 150vmax, and the
+       two compounded: the radius only has to reach ~75vmax to clear the far
+       corner of a viewport, so the visible part of the reveal was over in the
+       first 100ms. It read as the lights being switched on, not as light
+       travelling. The radius now stops just past what is needed and the curve
+       spends its time in the range you can actually see. */
+    dawn-open 1.3s cubic-bezier(0.3, 0.7, 0.3, 1) var(--dawn-delay, 1.8s) both,
+    /* Anything still dark in a corner leaves on a fade rather than a cut —
+       which is also what lets the radius stop at a sane number. */
+      dawn-fade 500ms ease-out calc(var(--dawn-delay, 1.8s) + 0.95s) forwards;
+}
+
+/* The charge: a warm haze gathering under the dots while they travel, so the
+   dark is doing something before it opens. It blooms outward on release. */
+.dawn::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 62vmax;
+  height: 62vmax;
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 226, 190, 0.17),
+    transparent 62%
+  );
+  animation:
+    dawn-charge var(--dawn-delay, 1.8s) ease-in both,
+    /* `forwards`, not `both`: a backwards fill would apply this keyframe's
+       start values during its delay and overwrite the charge entirely */
+      dawn-flash 900ms ease-out var(--dawn-delay, 1.8s) forwards;
+}
+
+@keyframes dawn-open {
+  from {
+    --dawn-r: 0px;
+  }
+  to {
+    /* Comfortably past the far corner of any real viewport measured from the
+       ring, without the huge dead range that made the sweep invisible. */
+    --dawn-r: 105vmax;
+  }
+}
+@keyframes dawn-fade {
+  from {
+    opacity: 1;
+  }
+  /* visibility flips discretely at the midpoint of whatever range it spans, so
+     it gets its own sliver at the very end — otherwise the field would vanish
+     halfway through its own fade. */
+  99% {
+    opacity: 0;
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+@keyframes dawn-charge {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.35);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+@keyframes dawn-flash {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.4);
+  }
+}
+
+/* The dots are the light source, so they carry a glow for as long as there is
+   dark to cast it into, and lose it once the page is lit. */
+.dawn-lights {
+  filter: drop-shadow(0 0 11px rgba(255, 221, 181, 0.6));
+  animation: dawn-unglow 800ms ease-out calc(var(--dawn-delay, 1.8s) + 0.2s)
+    forwards;
+}
+@keyframes dawn-unglow {
+  to {
+    filter: drop-shadow(0 0 0 rgba(255, 221, 181, 0));
+  }
+}
+
 /* ─────────────────────────────  living background  ───────────────────────── */
 .ambient {
   position: fixed;
@@ -372,6 +516,17 @@ body {
   .breathe,
   .idle-float,
   .ping::after {
+    animation: none !important;
+  }
+  /* The dawn has to be removed outright rather than sped up. The blanket rule
+     below collapses durations but leaves animation-delay alone, so a `both`
+     fill would hold the dark field on screen for the full delay and then snap
+     open — the worst possible version of it for someone who asked for calm. */
+  .dawn {
+    display: none;
+  }
+  .dawn-lights {
+    filter: none !important;
     animation: none !important;
   }
   *,

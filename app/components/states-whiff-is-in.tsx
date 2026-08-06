@@ -3,10 +3,14 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
-import { CONTACT_EMAIL } from "../config/site";
+import { CONTACT_EMAIL, LIVE_STATES } from "../config/site";
 
 const STATE_EMAIL_SUBJECT = encodeURIComponent("Bring whiff to my state");
-const LIVE_STATES = ["Minnesota"];
+
+// LIVE_STATES is derived from MARKETS in config/site.ts rather than listed
+// here. It used to be a hardcoded ["Minnesota"], which meant opening a market
+// in a new state would have left this dialog quietly wrong — the exact kind of
+// drift between two surfaces that makes an answer engine hedge on a fact.
 
 // Header dialog showing where whiff is live. Deliberately three elements and
 // nothing else: no progress framing (that implies a roadmap we haven't

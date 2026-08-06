@@ -1,31 +1,47 @@
-// Minimal, out of the way — the whole page is one screen, so the footer just
-// anchors the legal links and the copyright. Links draw an espresso underline on hover.
-export function Footer() {
+import Link from "next/link";
+import { INSTAGRAM_URL, SITE_NAME } from "../config/site";
+
+/* The home page cannot scroll, so it cannot afford a footer — a block of links
+ * under the hero is exactly the thing that would create the scrollbar the page
+ * is built to avoid.
+ *
+ * What is left is a single hairline of text pinned to the bottom of the one
+ * screen: the legal links that have to be reachable, and nothing else. It is
+ * sized in the same fluid clamps as the hero so it shrinks with everything else
+ * rather than being the one fixed-height element that forces an overflow. */
+export function HomeFootline() {
   return (
-    <footer className="fixed inset-x-0 bottom-0 z-40 flex flex-col items-center gap-1 px-6 py-3 text-center text-xs text-ink-soft">
-      <div className="flex items-center justify-center gap-3">
-        <FooterLink href="/privacy">privacy</FooterLink>
+    <footer className="shrink-0 px-6 pb-[calc(env(safe-area-inset-bottom)+clamp(0.6rem,1.8vh,1.1rem))] pt-[clamp(0.3rem,1vh,0.6rem)]">
+      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[clamp(0.62rem,1.6vw,0.72rem)] text-ink-soft/70">
+        <span>© 2026 {SITE_NAME}</span>
         <Dot />
-        <FooterLink href="/terms">terms</FooterLink>
+        <FootLink href="/blog">blog</FootLink>
         <Dot />
-        <FooterLink href="https://www.instagram.com/discover_whiff/">
+        <FootLink href="/privacy">privacy</FootLink>
+        <Dot />
+        <FootLink href="/terms">terms</FootLink>
+        <Dot />
+        <a
+          href={INSTAGRAM_URL}
+          rel="me noopener"
+          className="transition-colors hover:text-espresso"
+        >
           instagram
-        </FooterLink>
+        </a>
       </div>
-      <p className="text-ink-soft/70">© 2026 whiff. All rights reserved.</p>
     </footer>
   );
 }
 
 function Dot() {
   return (
-    <span aria-hidden="true" className="text-ink-soft/40">
+    <span aria-hidden="true" className="text-ink-soft/35">
       ·
     </span>
   );
 }
 
-function FooterLink({
+function FootLink({
   href,
   children,
 }: {
@@ -33,9 +49,8 @@ function FooterLink({
   children: React.ReactNode;
 }) {
   return (
-    <a href={href} className="group relative transition-colors hover:text-ink">
+    <Link href={href} className="transition-colors hover:text-espresso">
       {children}
-      <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-espresso transition-transform duration-300 ease-out group-hover:scale-x-100" />
-    </a>
+    </Link>
   );
 }

@@ -1,6 +1,11 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "whiff — activities first, people second";
+// The alt text is the card's accessible name wherever a share is read aloud,
+// so it states the proposition rather than a slogan. It used to read
+// "activities first, people second", which inverts the point: the activities
+// are the means, the people are the product.
+export const alt =
+  "whiff — activity-first friend circles of six. Not a dating app.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -40,8 +45,11 @@ export default function Image() {
           />
         </div>
 
+        {/* Matches the H1 exactly. It previously dropped the word "same",
+            which is the entire argument against every service that hands you a
+            fresh set of strangers each time. */}
         <div style={{ fontSize: 58, fontWeight: 700, marginTop: 48, letterSpacing: "-1px" }}>
-          Six people. One night a week.
+          Six activities. Twelve weeks. Same six people.
         </div>
 
         <div style={{ fontSize: 30, color: "#6B6B70", marginTop: 24, fontStyle: "italic" }}>

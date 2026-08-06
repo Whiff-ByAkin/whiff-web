@@ -10,14 +10,30 @@ import {
   useReducedMotion,
   useSpring,
 } from "motion/react";
+import {
+  trackCtaOpened,
+  trackSignupFailed,
+  trackSignupSubmitted,
+  trackSignupSucceeded,
+} from "@/app/lib/analytics";
 
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mlgovgdp";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-export function ApplyCTA() {
+export function ApplyCTA({
+  // fires when the cursor arrives at / leaves the button, so the hero can
+  // close the empty place in the ring above it
+  onReachChange,
+}: {
+  onReachChange?: (reaching: boolean) => void;
+} = {}) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
+  // Optional, and the only reason the field exists: whiff opens one city at a
+  // time and picks the next one from where people ask. Without this the demand
+  // signal is a mailto link nobody can count.
+  const [city, setCity] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
   // The dialog is portaled to <body>: the CTA sits inside a reveal wrapper that
@@ -46,6 +62,7 @@ export function ApplyCTA() {
   function resetMagnet() {
     mx.set(0);
     my.set(0);
+    onReachChange?.(false);
   }
 
   function close() {
@@ -64,27 +81,60 @@ export function ApplyCTA() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  // The one flourish on the whole site, and it is deliberately unreachable
+  // until somebody has actually converted — so it costs a first-time visitor
+  // nothing in attention and pays the one moment worth paying for. Brand
+  // colours only, one burst, and nothing at all under reduced-motion.
+  useEffect(() => {
+    if (status !== "success" || reduce) return;
+    let cancelled = false;
+    import("canvas-confetti").then(({ default: confetti }) => {
+      if (cancelled) return;
+      confetti({
+        particleCount: 90,
+        spread: 68,
+        startVelocity: 34,
+        gravity: 0.9,
+        scalar: 0.9,
+        ticks: 160,
+        origin: { y: 0.45 },
+        colors: ["#d8b9a3", "#f0d8b4", "#a76642", "#6b4a38"],
+        // above the dialog overlay (z-100), or the backdrop greys it out
+        zIndex: 200,
+        disableForReducedMotion: true,
+      });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [status, reduce]);
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!email) return;
     setStatus("submitting");
     setError(null);
+    trackSignupSubmitted();
     try {
       const res = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
         headers: { Accept: "application/json", "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, city: city.trim() || "(not given)" }),
       });
       if (res.ok) {
         setStatus("success");
+        trackSignupSucceeded(city);
         setEmail("");
+        setCity("");
       } else {
         setError("Something went wrong. Please try again.");
         setStatus("error");
+        trackSignupFailed("rejected");
       }
     } catch {
       setError("Network error. Please try again.");
       setStatus("error");
+      trackSignupFailed("network");
     }
   }
 
@@ -92,9 +142,15 @@ export function ApplyCTA() {
     <>
       <motion.button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setOpen(true);
+          trackCtaOpened();
+        }}
         onMouseMove={handleMagnet}
+        onMouseEnter={() => onReachChange?.(true)}
         onMouseLeave={resetMagnet}
+        onFocus={() => onReachChange?.(true)}
+        onBlur={() => onReachChange?.(false)}
         style={{ x, y }}
         whileHover={{ scale: 1.04 }}
         whileTap={{ scale: 0.97 }}
@@ -111,7 +167,13 @@ export function ApplyCTA() {
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/55 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
         />
-        <span className="relative text-[clamp(0.7rem,2.5vw,1rem)]">Apply to join</span>
+        {/* "Apply to join" was paperwork and "I'm the sixth" claimed a chair
+            we can't prove exists on day one. This asks for a start, not a
+            seat — and it's the only capitalised line on the page, which is
+            what makes a lowercase brand's one button read as a threshold. */}
+        <span className="relative text-[clamp(0.7rem,2.5vw,1rem)]">
+          Begin the Experience
+        </span>
         <span
           aria-hidden="true"
           className="relative transition-transform duration-200 group-hover:translate-x-1"
@@ -168,10 +230,11 @@ export function ApplyCTA() {
                     draggable={false}
                   />
                   <p className="font-display text-xl font-semibold text-ink">
-                    you&rsquo;re on the list.
+                    good. it&rsquo;s started.
                   </p>
                   <p className="mt-2 text-ink-soft">
-                    we&rsquo;ll reach out when your city opens.
+                    we&rsquo;ll write the moment your five are found — and
+                    other circles may reach you before that.
                   </p>
                   <button
                     type="button"
@@ -184,23 +247,62 @@ export function ApplyCTA() {
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4" noValidate>
                   <h2 className="font-display text-2xl font-semibold text-ink">
-                    apply to join
+                    good. we&rsquo;ll find your five.
                   </h2>
                   <p className="text-[15px] leading-relaxed text-ink-soft">
-                    whiff is launching in one city, invite-only. leave your
-                    email to apply for one of the first spots.
+                    we look for the five who bring out your best — then twelve
+                    weeks of things you&rsquo;d actually choose to do, and a
+                    few you&rsquo;ve never tried. while yours comes together,
+                    other circles invite you along to what you already love.
                   </p>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    autoComplete="email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={status === "submitting"}
-                    className="w-full rounded-full border border-line bg-page px-5 py-3 text-ink placeholder:text-ink-soft/60 transition-shadow focus:border-espresso focus:outline-none focus:ring-2 focus:ring-espresso/30 disabled:opacity-60"
-                  />
+                  <p className="text-[15px] leading-relaxed text-ink-soft">
+                    whiff opens one city at a time. leave your email and
+                    we&rsquo;ll come back when yours is ready.
+                  </p>
+                  <div className="space-y-1.5">
+                    <label
+                      htmlFor="whiff-email"
+                      className="block pl-5 text-[13px] font-medium text-ink-soft"
+                    >
+                      your email
+                    </label>
+                    <input
+                      id="whiff-email"
+                      type="email"
+                      name="email"
+                      required
+                      autoComplete="email"
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={status === "submitting"}
+                      className="w-full rounded-full border border-line bg-page px-5 py-3 text-ink placeholder:text-ink-soft/60 transition-shadow focus:border-espresso focus:outline-none focus:ring-2 focus:ring-espresso/30 disabled:opacity-60"
+                    />
+                  </div>
+                  {/* Optional on purpose — a second required field is the
+                      cheapest way to lose a signup. Unlabelled inputs are a
+                      real accessibility failure though, so the label is
+                      visible rather than a placeholder doing double duty. */}
+                  <div className="space-y-1.5">
+                    <label
+                      htmlFor="whiff-city"
+                      className="block pl-5 text-[13px] font-medium text-ink-soft"
+                    >
+                      which city are you in?{" "}
+                      <span className="text-ink-soft/60">(optional)</span>
+                    </label>
+                    <input
+                      id="whiff-city"
+                      type="text"
+                      name="city"
+                      autoComplete="address-level2"
+                      placeholder="Minneapolis"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      disabled={status === "submitting"}
+                      className="w-full rounded-full border border-line bg-page px-5 py-3 text-ink placeholder:text-ink-soft/60 transition-shadow focus:border-espresso focus:outline-none focus:ring-2 focus:ring-espresso/30 disabled:opacity-60"
+                    />
+                  </div>
                   {error && (
                     <p role="alert" className="text-sm text-crimson">
                       {error}
@@ -216,7 +318,7 @@ export function ApplyCTA() {
                         <span className="spinner" /> sending…
                       </>
                     ) : (
-                      "apply"
+                      "count me in"
                     )}
                   </button>
                 </form>

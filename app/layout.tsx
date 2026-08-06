@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Fredoka, Nunito } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { AmbientBackground } from "./components/ambient-background";
-import { CONTACT_EMAIL, SITE_URL } from "./config/site";
+import { SITE_NAME, SITE_URL } from "./config/site";
 
 // Fredoka — the display face: wordmark, headings, the emotional lines.
 const fredoka = Fredoka({
@@ -21,16 +23,24 @@ const nunito = Nunito({
   display: "swap",
 });
 
-const SITE_NAME = "whiff";
-const TITLE = "whiff — six people, one night a week";
+// The home page's own <title>. Leads with the job the searcher is trying to do
+// ("make friends") rather than the brand, because nobody searches for a brand
+// they have never heard of — then the differentiator, then the disqualifier.
+const TITLE = "whiff — make real friends through activities, not profiles";
+
+// Under 160 characters, opens with the promise, closes with the disqualifier so
+// no snippet can imply dating.
 const DESCRIPTION =
-  "whiff puts you in a circle of six who go out the same night every week. No browsing, no swiping, nothing to arrange — the same faces until they're yours. Not a dating app.";
+  "whiff gives you things to do while it finds your people. Activity-first friend circles of six who keep meeting up — no profiles, no swiping. Not a dating app.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    // The browser tab just says "whiff"; sub-pages become "Privacy Policy · whiff".
-    default: SITE_NAME,
+    // The home page needs a descriptive title, not a bare wordmark: "whiff" on
+    // its own gives a search engine nothing to match a query against, and it is
+    // the single highest-weight on-page signal there is. Sub-pages still read
+    // "Privacy Policy · whiff".
+    default: TITLE,
     template: "%s · whiff",
   },
   description: DESCRIPTION,
@@ -42,18 +52,10 @@ export const metadata: Metadata = {
   category: "social",
   referrer: "origin-when-cross-origin",
   formatDetection: { email: false, address: false, telephone: false },
-  keywords: [
-    "whiff",
-    "meet the same people every week",
-    "small group of friends app",
-    "weekly night out with strangers",
-    "meet people without swiping",
-    "alternative to dating apps",
-    "make friends as an adult",
-    "find a friend group",
-    "social club app",
-  ],
-  alternates: { canonical: SITE_URL },
+  // No `keywords`: Google has ignored the meta keywords tag for well over a
+  // decade, and a long list of near-duplicate phrases is the exact pattern that
+  // reads as stuffing. Intent is targeted with titles, headings and body copy.
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     url: SITE_URL,
@@ -86,48 +88,9 @@ export const metadata: Metadata = {
   },
 };
 
-// Structured data so search engines and AI models understand what whiff is.
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": `${SITE_URL}#organization`,
-      name: SITE_NAME,
-      url: SITE_URL,
-      description: DESCRIPTION,
-      slogan: "Six people. One night a week.",
-      sameAs: ["https://www.instagram.com/discover_whiff/"],
-      contactPoint: [
-        {
-          "@type": "ContactPoint",
-          contactType: "customer support",
-          email: CONTACT_EMAIL,
-        },
-      ],
-    },
-    {
-      "@type": "WebSite",
-      "@id": `${SITE_URL}#website`,
-      url: SITE_URL,
-      name: SITE_NAME,
-      description: DESCRIPTION,
-      publisher: { "@id": `${SITE_URL}#organization` },
-      inLanguage: "en-US",
-    },
-    {
-      "@type": "Service",
-      "@id": `${SITE_URL}#service`,
-      name: "whiff",
-      serviceType: "Activity-first platform for meeting people through real-world activities",
-      description:
-        "whiff puts you in a circle of six people who go out the same night every week. No browsing and nothing to arrange — whiff works out who you belong with, and then it's the same faces every week. Not a dating app.",
-      url: SITE_URL,
-      provider: { "@id": `${SITE_URL}#organization` },
-      areaServed: "Worldwide",
-    },
-  ],
-};
+// Structured data now lives per page (app/lib/structured-data.ts), so every URL
+// emits one @graph containing the Organization plus whatever that page is
+// actually about — FAQPage, HowTo, a city Service, and so on.
 
 export const viewport: Viewport = {
   themeColor: "#f2f2f7",
@@ -149,12 +112,18 @@ export default function RootLayout({
           Grammarly, ad blockers) commonly inject nodes/attributes into <body>
           before React hydrates. That mismatch is benign; this quiets it. */}
       <body suppressHydrationWarning className="min-h-[100svh] flex flex-col">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        {/* Keyboard and screen-reader users land on the header's dialog buttons
+            first on every page; this gives them one tab to skip past it. */}
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-card focus:px-5 focus:py-2.5 focus:font-display focus:text-sm focus:font-semibold focus:text-ink focus:shadow-lg"
+        >
+          Skip to content
+        </a>
         <AmbientBackground />
         {children}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
