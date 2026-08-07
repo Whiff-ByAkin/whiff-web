@@ -170,9 +170,11 @@ export function ApplyCTA({
         {/* "Apply to join" was paperwork and "I'm the sixth" claimed a chair
             we can't prove exists on day one. This asks for a start, not a
             seat — and it's the only capitalised line on the page, which is
-            what makes a lowercase brand's one button read as a threshold. */}
+            what makes a lowercase brand's one button read as a threshold.
+            "your", not "the": the experience belongs to the person pressing
+            it, not to us. */}
         <span className="relative text-[clamp(0.7rem,2.5vw,1rem)]">
-          Begin the Experience
+          Begin your experience
         </span>
         <span
           aria-hidden="true"

@@ -157,7 +157,11 @@ export function Hero() {
             display face, so the eye catches them before it reads the sentence. */}
         <motion.div
           {...R(0.36)}
-          className="mt-[clamp(0.1rem,1vh,0.5rem)] flex w-full max-w-[19rem] flex-col items-center gap-[clamp(0.3rem,1.3vw,0.55rem)] sm:max-w-[34rem]"
+          // The top margin is the whole reason this reads as a footnote rather
+          // than a fourth line of the headline: it drops the block clear of the
+          // promise above it, and it scales with the viewport so the gap is
+          // proportional on a phone and on a monitor.
+          className="mt-[clamp(0.55rem,2.6vh,1.6rem)] flex w-full max-w-[19rem] flex-col items-center gap-[clamp(0.3rem,1.3vw,0.55rem)] sm:max-w-[34rem]"
         >
           <div className="flex w-full items-center gap-[0.7em]">
             <span
