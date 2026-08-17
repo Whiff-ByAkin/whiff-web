@@ -48,7 +48,7 @@ export function StatesWhiffIsIn() {
         onClick={() => setOpen(true)}
         whileHover={{ y: -2 }}
         whileTap={{ scale: 0.96 }}
-        className="rounded-full border border-line bg-card px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-espresso hover:text-espresso"
+        className="header-action rounded-full border border-line bg-ground-lift px-2.5 py-1.5 font-display text-xs font-medium text-ink transition-colors hover:border-ink hover:bg-ground min-[360px]:px-4 min-[360px]:py-2 min-[360px]:text-sm"
       >
         States
       </motion.button>
@@ -78,13 +78,13 @@ export function StatesWhiffIsIn() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 8, scale: 0.98 }}
                   transition={{ type: "spring", stiffness: 320, damping: 26 }}
-                  className="relative w-full max-w-[27rem] overflow-hidden rounded-3xl border border-line bg-card shadow-[0_40px_80px_-30px_rgba(24,24,27,0.28)]"
+                  className="relative w-full max-w-[27rem] overflow-hidden rounded-3xl border border-line bg-ground-lift shadow-[0_40px_80px_-30px_rgba(36,26,21,0.28)]"
                 >
                   <button
                     type="button"
                     onClick={() => setOpen(false)}
                     aria-label="Close"
-                    className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-page hover:text-ink"
+                    className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-ground hover:text-ink"
                   >
                     ✕
                   </button>
@@ -92,7 +92,7 @@ export function StatesWhiffIsIn() {
                   <div className="px-7 pb-7 pt-10 text-center">
                     <h2
                       id="states-title"
-                      className="font-display text-sm font-medium text-ink-soft"
+                      className="font-display text-sm font-medium text-ink-muted"
                     >
                       whiff is live in
                     </h2>
@@ -109,7 +109,7 @@ export function StatesWhiffIsIn() {
 
                     <a
                       href={`mailto:${CONTACT_EMAIL}?subject=${STATE_EMAIL_SUBJECT}`}
-                      className="btn-latte mt-8 inline-flex w-full items-center justify-center rounded-full px-5 py-3 font-display text-sm font-semibold tracking-wide"
+                      className="btn-ink mt-8 inline-flex w-full items-center justify-center rounded-full px-5 py-3 font-display text-sm font-semibold tracking-wide"
                     >
                       tell us your state
                     </a>

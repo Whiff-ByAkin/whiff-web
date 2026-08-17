@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { createPortal } from "react-dom";
 import {
@@ -65,13 +65,14 @@ export function ApplyCTA({
     onReachChange?.(false);
   }
 
-  function close() {
+  const close = useCallback(() => {
     setOpen(false);
+    onReachChange?.(false);
     setTimeout(() => {
       setStatus("idle");
       setError(null);
     }, 200);
-  }
+  }, [onReachChange]);
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -79,7 +80,7 @@ export function ApplyCTA({
     }
     if (open) window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  }, [close, open]);
 
   // The one flourish on the whole site, and it is deliberately unreachable
   // until somebody has actually converted — so it costs a first-time visitor
@@ -98,7 +99,7 @@ export function ApplyCTA({
         scalar: 0.9,
         ticks: 160,
         origin: { y: 0.45 },
-        colors: ["#d8b9a3", "#f0d8b4", "#a76642", "#6b4a38"],
+        colors: ["#241a15", "#6b5a50", "#b8adab", "#f4eee9"],
         // above the dialog overlay (z-100), or the backdrop greys it out
         zIndex: 200,
         disableForReducedMotion: true,
@@ -143,9 +144,11 @@ export function ApplyCTA({
       <motion.button
         type="button"
         onClick={() => {
+          onReachChange?.(true);
           setOpen(true);
           trackCtaOpened();
         }}
+        onPointerDown={() => onReachChange?.(true)}
         onMouseMove={handleMagnet}
         onMouseEnter={() => onReachChange?.(true)}
         onMouseLeave={resetMagnet}
@@ -160,15 +163,15 @@ export function ApplyCTA({
         // 1.9rem — under a fluid headline it ends up the largest thing on a small
         // phone, and a button bigger than the sentence it's answering reads as the
         // page shouting.
-        className="btn-latte ping group relative inline-flex items-center gap-2 overflow-hidden rounded-full px-[clamp(1.05rem,4.6vw,2.25rem)] py-[clamp(0.45rem,1.9vw,1rem)] font-display font-semibold tracking-wide"
+        className="hero-primary-cta btn-ink ping group relative inline-flex items-center gap-2 overflow-hidden rounded-full px-[clamp(1.05rem,4.6vw,2.25rem)] py-[clamp(0.45rem,1.9vw,1rem)] font-display font-semibold tracking-wide"
       >
         {/* shine sweep on hover */}
         <span
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/55 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
         />
-        {/* "Apply to join" was paperwork and "I'm the sixth" claimed a chair
-            we can't prove exists on day one. This asks for a start, not a
+        {/* The earlier copy sounded like paperwork and claimed a chair we
+            cannot prove exists on day one. This asks for a start, not a
             seat — and it's the only capitalised line on the page, which is
             what makes a lowercase brand's one button read as a threshold.
             "your", not "the": the experience belongs to the person pressing
@@ -209,13 +212,13 @@ export function ApplyCTA({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.98 }}
               transition={{ type: "spring", stiffness: 320, damping: 26 }}
-              className="relative w-full max-w-sm rounded-3xl border border-line bg-card p-7 shadow-[0_40px_80px_-30px_rgba(24,24,27,0.28)]"
+              className="relative w-full max-w-sm rounded-3xl border border-line bg-ground-lift p-7 shadow-[0_40px_80px_-30px_rgba(36,26,21,0.28)]"
             >
               <button
                 type="button"
                 onClick={close}
                 aria-label="Close"
-                className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-page hover:text-ink"
+                className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-ground hover:text-ink"
               >
                 ✕
               </button>
@@ -224,24 +227,24 @@ export function ApplyCTA({
                 <div className="py-3 text-center">
                   {/* the one celebration moment on the site */}
                   <Image
-                    src="/whiff-mascot-cheer.png"
+                    src="/whiff-mascot-wave.png"
                     alt=""
-                    width={298}
-                    height={380}
-                    className="mx-auto mb-3 h-28 w-auto select-none"
+                    width={397}
+                    height={900}
+                    className="mx-auto mb-3 h-32 w-auto select-none"
                     draggable={false}
                   />
                   <p className="font-display text-xl font-semibold text-ink">
                     good. it&rsquo;s started.
                   </p>
-                  <p className="mt-2 text-ink-soft">
-                    we&rsquo;ll write the moment your five are found — and
+                  <p className="mt-2 text-ink-muted">
+                    we&rsquo;ll write the moment your three are found — and
                     other circles may reach you before that.
                   </p>
                   <button
                     type="button"
                     onClick={close}
-                    className="btn-latte mt-5 inline-flex items-center justify-center rounded-full px-6 py-2.5 font-display font-semibold"
+                    className="btn-ink mt-5 inline-flex items-center justify-center rounded-full px-6 py-2.5 font-display font-semibold"
                   >
                     close
                   </button>
@@ -249,22 +252,22 @@ export function ApplyCTA({
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4" noValidate>
                   <h2 className="font-display text-2xl font-semibold text-ink">
-                    good. we&rsquo;ll find your five.
+                    good. we&rsquo;ll find your three.
                   </h2>
-                  <p className="text-[15px] leading-relaxed text-ink-soft">
-                    we look for the five who bring out your best — then twelve
+                  <p className="text-[15px] leading-relaxed text-ink-muted">
+                    we look for the three who bring out your best — then twelve
                     weeks of things you&rsquo;d actually choose to do, and a
                     few you&rsquo;ve never tried. while yours comes together,
                     other circles invite you along to what you already love.
                   </p>
-                  <p className="text-[15px] leading-relaxed text-ink-soft">
+                  <p className="text-[15px] leading-relaxed text-ink-muted">
                     whiff opens one city at a time. leave your email and
                     we&rsquo;ll come back when yours is ready.
                   </p>
                   <div className="space-y-1.5">
                     <label
                       htmlFor="whiff-email"
-                      className="block pl-5 text-[13px] font-medium text-ink-soft"
+                      className="block pl-5 text-[13px] font-medium text-ink-muted"
                     >
                       your email
                     </label>
@@ -278,7 +281,7 @@ export function ApplyCTA({
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={status === "submitting"}
-                      className="w-full rounded-full border border-line bg-page px-5 py-3 text-ink placeholder:text-ink-soft/60 transition-shadow focus:border-espresso focus:outline-none focus:ring-2 focus:ring-espresso/30 disabled:opacity-60"
+                      className="w-full rounded-full border border-line bg-ground px-5 py-3 text-ink placeholder:text-ink-faint transition-shadow focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink/25 disabled:opacity-60"
                     />
                   </div>
                   {/* Optional on purpose — a second required field is the
@@ -288,10 +291,10 @@ export function ApplyCTA({
                   <div className="space-y-1.5">
                     <label
                       htmlFor="whiff-city"
-                      className="block pl-5 text-[13px] font-medium text-ink-soft"
+                      className="block pl-5 text-[13px] font-medium text-ink-muted"
                     >
                       which city are you in?{" "}
-                      <span className="text-ink-soft/60">(optional)</span>
+                      <span className="text-ink-faint">(optional)</span>
                     </label>
                     <input
                       id="whiff-city"
@@ -302,18 +305,18 @@ export function ApplyCTA({
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
                       disabled={status === "submitting"}
-                      className="w-full rounded-full border border-line bg-page px-5 py-3 text-ink placeholder:text-ink-soft/60 transition-shadow focus:border-espresso focus:outline-none focus:ring-2 focus:ring-espresso/30 disabled:opacity-60"
+                      className="w-full rounded-full border border-line bg-ground px-5 py-3 text-ink placeholder:text-ink-faint transition-shadow focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink/25 disabled:opacity-60"
                     />
                   </div>
                   {error && (
-                    <p role="alert" className="text-sm text-crimson">
+                    <p role="alert" className="text-sm font-semibold text-ink">
                       {error}
                     </p>
                   )}
                   <button
                     type="submit"
                     disabled={status === "submitting" || !email}
-                    className="btn-latte inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3 font-display font-semibold tracking-wide disabled:cursor-not-allowed disabled:opacity-60"
+                    className="btn-ink inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3 font-display font-semibold tracking-wide disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {status === "submitting" ? (
                       <>

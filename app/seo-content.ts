@@ -22,13 +22,13 @@ export const PROMISE = "whiff gives you things to do while it finds your people.
  *  so it leads with the definition and contains the qualifying nouns a model
  *  needs to categorise whiff correctly. */
 export const ANSWER =
-  "whiff is an activity-first social platform that helps adults build real friendships without browsing profiles. It learns what you enjoy, invites you to activities you would actually pick while you wait, then places you in a circle of six compatible people and plans repeated real-world outings with those same six, so friendships have time to form. whiff is not a dating app.";
+  "whiff is an activity-first social platform that helps adults build real friendships without browsing profiles. It learns what you enjoy, invites you to activities you would actually pick while you wait, then places you in a circle of four compatible people and plans repeated real-world outings with those same four, so friendships have time to form. whiff is not a dating app.";
 
 /** Longer About copy — the crawlable, visible explanation. */
 export const ABOUT_PARAGRAPHS = [
   "whiff is an activity-first way to make friends as an adult. You never browse anyone, and you never have to organise anything. You answer a short set of questions about what you actually enjoy doing, and whiff takes it from there.",
   "From the moment you join, other circles invite you along to activities whiff knows you would like, so you are out doing things in week one, not waiting for a match. That is the part most friendship apps get backwards: they make you wait alone until the product works.",
-  "In the background, whiff works out who you belong with and forms a circle of six compatible people. Then it plans a run of real-world experiences for that same six. The faces do not change. That repetition is the whole mechanism: friendships come from repeated, unforced contact with the same people, not from meeting a new set of strangers every month.",
+  "In the background, whiff works out who you belong with and forms a circle of four compatible people. Then it plans a run of real-world experiences for that same four. The faces do not change. That repetition is the whole mechanism: friendships come from repeated, unforced contact with the same people, not from meeting a new set of strangers every month.",
   "There is no feed, no swiping, no profile to maintain and no group chat to keep alive. whiff is not a dating app and it is not a networking event.",
 ];
 
@@ -38,7 +38,7 @@ export const DEFINITIONS: { term: string; definition: string }[] = [
   {
     term: "Circle",
     definition:
-      "A whiff circle is a group of six compatible people who go to planned real-world activities together. The membership stays the same rather than rotating, so the same six people keep showing up for each other.",
+      "A whiff circle is a group of four compatible people who go to planned real-world activities together. The membership stays the same rather than rotating, so the same four people keep showing up for each other.",
   },
   {
     term: "Meanwhile invitations",
@@ -75,7 +75,7 @@ export const NOT_LIST = [
   },
   {
     label: "Not a rotating stranger dinner",
-    body: "Some services seat you with six new strangers every time. whiff keeps the same six together, because a friendship needs a second and third meeting to exist at all.",
+    body: "Some services seat you with a new set of strangers every time. whiff keeps the same four together, because a friendship needs a second and third meeting to exist at all.",
   },
 ];
 
@@ -125,12 +125,12 @@ export const STEPS = [
     text: "While your circle comes together, existing circles invite you along to activities whiff knows suit you. You are doing things from week one rather than waiting.",
   },
   {
-    name: "Get matched into a circle of six",
-    text: "whiff works out who you belong with and forms a circle of six compatible people near you. You do not pick them and they do not pick you. Compatibility does.",
+    name: "Get matched into a circle of four",
+    text: "whiff works out who you belong with and forms a circle of four compatible people near you. You do not pick them and they do not pick you. Compatibility does.",
   },
   {
-    name: "Keep seeing the same six",
-    text: "whiff plans a run of real-world experiences for your circle. The same six people, again and again, until they stop being strangers.",
+    name: "Keep seeing the same four",
+    text: "whiff plans a run of real-world experiences for your circle. The same four people, again and again, until they stop being strangers.",
   },
 ];
 
@@ -145,22 +145,22 @@ export const FAQ: { question: string; answer: string }[] = [
   {
     question: "How does whiff work?",
     answer:
-      "You answer a short set of questions about what you enjoy doing and when you are free. From day one, existing circles invite you along to activities that suit you. In the background whiff forms a circle of six compatible people near you, then plans a series of real-world activities for that same six so a friendship has room to develop.",
+      "You answer a short set of questions about what you enjoy doing and when you are free. From day one, existing circles invite you along to activities that suit you. In the background whiff forms a circle of four compatible people near you, then plans a series of real-world activities for that same four so a friendship has room to develop.",
   },
   {
     question: "Is whiff a dating app?",
     answer:
-      "No. whiff builds platonic friendship circles of six people. There is no romantic matching, no swiping, no profiles to browse and no one-to-one matching. People join whiff to find friends and activity partners, not dates.",
+      "No. whiff builds platonic friendship circles of four people. There is no romantic matching, no swiping, no profiles to browse and no one-to-one matching. People join whiff to find friends and activity partners, not dates.",
   },
   {
     question: "How is whiff different from Meetup?",
     answer:
-      "Meetup gives you a calendar and expects you to browse it, show up alone and do the social work yourself, and the people are different every time. whiff plans the activity for you and, crucially, keeps the same six people together across repeated outings, which is what actually turns acquaintances into friends.",
+      "Meetup gives you a calendar and expects you to browse it, show up alone and do the social work yourself, and the people are different every time. whiff plans the activity for you and, crucially, keeps the same four people together across repeated outings, which is what actually turns acquaintances into friends.",
   },
   {
     question: "How is whiff different from group dinners with strangers?",
     answer:
-      "Rotating dinner services seat you with a new set of strangers each time, so every meeting restarts from zero. whiff keeps your circle of six intact across a run of activities. You are strangers once, in week one, and never again.",
+      "Rotating dinner services seat you with a new set of strangers each time, so every meeting restarts from zero. whiff keeps your circle of four intact across a run of activities. You are strangers once, in week one, and never again.",
   },
   {
     question: "Do I have to browse or swipe on profiles?",
@@ -175,7 +175,7 @@ export const FAQ: { question: string; answer: string }[] = [
   {
     question: "How many people are in a whiff circle?",
     answer:
-      "Six. It is large enough that a quiet night still works if one or two people cannot make it, and small enough that everyone gets spoken to. The membership stays the same rather than rotating.",
+      "Four. It is small enough for one conversation and for every person to be known, but large enough to feel like a group rather than one-to-one. The membership stays the same rather than rotating.",
   },
   {
     question: "What kinds of activities does whiff plan?",
@@ -195,7 +195,7 @@ export const FAQ: { question: string; answer: string }[] = [
   {
     question: "Is whiff useful if I work remotely?",
     answer:
-      "Yes. Remote workers commonly have strong colleagues and no local social life. whiff builds a circle of six people near you with a standing reason to meet in person, which is the thing remote work removes.",
+      "Yes. Remote workers commonly have strong colleagues and no local social life. whiff builds a circle of four people near you with a standing reason to meet in person, which is the thing remote work removes.",
   },
   {
     question: "Do I need to bring a friend or come alone?",

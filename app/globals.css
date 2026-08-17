@@ -1,32 +1,17 @@
 @import "tailwindcss";
 
-/* ─────────────────────────────────────────────────────────────────────────
-   whiff brand — the app palette, on the web.
-   One brand colour: espresso. It sits at 21° on the hue wheel but at 48%
-   saturation, so it reads earthy rather than orange — that distance from the
-   0–30° crowd (Tinder, Reddit, Strava) is the whole point. Never warm it up.
-   Buttons are latte and only latte, everywhere, on purpose.
-   ───────────────────────────────────────────────────────────────────────── */
+/* The mobile app is the source of truth. Token names describe jobs, not hues:
+   warm paper, lifted paper, stone touch surfaces, rules, and one ink voice. */
 @theme inline {
-  --color-espresso: #6b4a38; /* the one brand colour — logo, links, headings, tints */
-  --color-sienna: #a76642; /* gradient partner to espresso — the mark only */
-
-  --color-latte: #d8b9a3; /* every button fill */
-  --color-on-latte: #241812; /* type on those buttons */
-  --color-latte-edge: #b49377; /* the 3D underside of buttons */
-
-  --color-page: #f2f2f7; /* site background */
-  --color-card: #ffffff; /* panels */
-  --color-ink: #18181b; /* body headings */
-  --color-ink-soft: #6b6b70; /* secondary text */
-  --color-line: #e3e3e8; /* hairlines */
-
-  /* accents, sparingly */
-  --color-sand: #f0d8b4;
-  --color-camel: #8a6340;
-  --color-go: #4a6b3a;
-  --color-amber: #8a6414;
-  --color-crimson: #a8180c;
+  --color-ground: #fbf8f5;
+  --color-ground-lift: #f4eee9;
+  --color-stone: #b8adab;
+  --color-line: #e5dcd6;
+  --color-ink: #241a15;
+  --color-ink-muted: #6b5a50;
+  --color-ink-faint: #9a8b81;
+  --color-on-ink: #fbf8f5;
+  --color-on-stone: #241a15;
 
   --font-display: var(--font-fredoka);
   --font-body: var(--font-nunito);
@@ -38,22 +23,77 @@ html {
 
 html,
 body {
-  background: var(--color-page);
+  background: var(--color-ground);
   color: var(--color-ink);
   overflow-x: hidden;
 }
 
-/* A soft wash beneath the animated orbs — lifted to near-white at the top,
-   settling into a whisper of espresso at the bottom edge. Never flat. */
+.hero-ornament {
+  padding-bottom: clamp(1.2rem, 5vh, 3.5rem);
+}
+
+.hero-mascot-media {
+  position: relative;
+  isolation: isolate;
+  aspect-ratio: 1;
+  height: min(clamp(5rem, 22vh, 14.5rem), 45vw);
+  width: auto;
+  background: var(--color-ground);
+}
+
+.hero-mascot-still,
+.hero-mascot-video {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.hero-mascot-still {
+  padding-inline: 28%;
+  opacity: 1;
+  transition: opacity 120ms ease-out;
+}
+
+.hero-mascot-still[data-video-ready="true"] {
+  opacity: 0;
+}
+
+.hero-mascot-video {
+  opacity: 0;
+  mix-blend-mode: multiply;
+  -webkit-mask-image: radial-gradient(
+    ellipse 50% 50% at center,
+    #000 84%,
+    rgb(0 0 0 / 92%) 94%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 50% 50% at center,
+    #000 84%,
+    rgb(0 0 0 / 92%) 94%,
+    transparent 100%
+  );
+  transition: opacity 180ms ease-out;
+}
+
+.hero-mascot-video[data-ready="true"] {
+  opacity: 1;
+}
+
+.hero-mascot-video[data-variant="wave"] {
+  filter: brightness(1.025);
+}
+
+.hero-mascot-video[data-variant="pebble"] {
+  transform: scale(1.06);
+  mix-blend-mode: normal;
+}
+
 body {
   min-height: 100svh;
-  background:
-    radial-gradient(
-      130% 115% at 50% -20%,
-      #ffffff 0%,
-      var(--color-page) 58%,
-      color-mix(in srgb, var(--color-page) 93%, var(--color-espresso)) 100%
-    );
   font-family: var(--font-body), system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.6;
@@ -62,473 +102,283 @@ body {
 }
 
 ::selection {
-  background: var(--color-espresso);
-  color: #fff;
+  background: var(--color-ink);
+  color: var(--color-on-ink);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-espresso);
+  outline: 2px solid var(--color-ink);
   outline-offset: 3px;
   border-radius: 6px;
 }
 
-/* ── the mark: espresso → sienna, top-left to bottom-right. This gradient is
-   the most recognisable asset we have, so it touches the mark and celebration
-   moments only — never a button, never a link, never small type. ── */
+/* The wordmark dot uses the same ink as every other mark. There is no general
+   interface accent or logo-only gradient in the current brand. */
 .brand-gradient {
-  background-image: linear-gradient(
-    135deg,
-    var(--color-espresso),
-    var(--color-sienna)
-  );
+  background: var(--color-ink);
 }
 
-/* ── buttons don't follow the theme. One latte everywhere, with the edge as a
-   real 3D underside so the press has somewhere to go. ── */
-.btn-latte {
-  background-color: var(--color-latte);
-  color: var(--color-on-latte);
-  box-shadow: 0 4px 0 var(--color-latte-edge);
+.btn-ink {
+  background: var(--color-ink);
+  color: var(--color-on-ink);
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--color-ink) 72%, black);
   transition:
-    background-color 200ms ease,
+    background-color 180ms ease,
     box-shadow 120ms ease,
     transform 120ms ease;
 }
-.btn-latte:hover {
-  background-color: color-mix(in srgb, var(--color-latte) 90%, #fff);
-}
-.btn-latte:active:not(:disabled) {
-  transform: translateY(3px);
-  box-shadow: 0 1px 0 var(--color-latte-edge);
+
+.btn-ink:hover {
+  background: color-mix(in srgb, var(--color-ink) 90%, var(--color-stone));
 }
 
-/* ── entrance: a soft blur-up, used sparingly for chrome (header/footer) ── */
+.btn-ink:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-ink) 72%, black);
+}
+
 @keyframes fade-up {
   from {
     opacity: 0;
-    transform: translateY(10px);
-    filter: blur(4px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
-    filter: blur(0);
   }
 }
+
 .fade-up {
-  animation: fade-up 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: fade-up 550ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-/* ── spin (inline submit spinner) ── */
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
+
 .spinner {
   display: inline-block;
   width: 15px;
   height: 15px;
-  border-radius: 9999px;
-  /* currentColor so it reads on the latte button's dark type, not just on white */
   border: 2px solid color-mix(in srgb, currentColor 30%, transparent);
   border-top-color: currentColor;
+  border-radius: 9999px;
   animation: spin 0.7s linear infinite;
 }
 
-/* ── dialog choreography ── */
-@keyframes overlay-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-@keyframes modal-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-.overlay-in {
-  animation: overlay-in 200ms ease-out both;
-}
-.modal-in {
-  animation: modal-in 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-/* ── the invite pill's always-on radar ping — reads as "interactive" ── */
+/* A restrained signal that the primary invitation is alive. */
 @keyframes ping-ring {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-espresso) 35%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-ink) 24%, transparent);
   }
-  70% {
-    box-shadow: 0 0 0 12px color-mix(in srgb, var(--color-espresso) 0%, transparent);
+  72% {
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-ink) 0%, transparent);
   }
   100% {
     box-shadow: 0 0 0 0 transparent;
   }
 }
+
 .ping::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  animation: ping-ring 2.8s ease-out infinite;
+  animation: ping-ring 3.2s ease-out infinite;
 }
 
-/* ── the brand dot in the wordmark: a slow, calm breath ── */
-@keyframes breathe {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.28);
-    opacity: 0.85;
-  }
-}
-.breathe {
-  animation: breathe 3.4s ease-in-out infinite;
-  transform-origin: center;
-}
-
-/* ── the hand-underline under a key line: a quick brush draw-in ── */
-@keyframes underline-draw {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
-.underline-draw {
-  transform-origin: left center;
-  animation: underline-draw 700ms cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
-}
-
-/* ── step icons: draw the stroke on, then a gentle idle float ── */
-@keyframes draw-on {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes idle-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-}
-.idle-float {
-  animation: idle-float 4.5s ease-in-out infinite;
-}
-
-/* ── connection arc: a light traveling along the drawn path ── */
-@keyframes arc-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-@keyframes travel {
+/* The circle's confirmation lives entirely inside the ornament. It replaces
+   the old 300vmax painted veil, so phones start on paper and never render a
+   black loading-like screen. */
+@keyframes circle-bloom {
   0% {
-    offset-distance: 0%;
     opacity: 0;
+    transform: scale(0.72);
   }
-  12% {
-    opacity: 1;
-  }
-  88% {
-    opacity: 1;
+  38% {
+    opacity: 0.72;
   }
   100% {
-    offset-distance: 100%;
     opacity: 0;
+    transform: scale(1.14);
   }
 }
 
-/* ─────────────────────────────────  the dawn  ─────────────────────────────
-   The page opens dark. Six lights travel in, take their places, and the moment
-   the circle closes it releases — light spreads out from the ring and the real
-   page is underneath it. The circle is the light source; that is the whole
-   idea, so nothing else on the page is allowed to be the thing that arrives.
-
-   Deliberately pure CSS rather than another motion timeline:
-
-   1. It is in the first paint. A JS-driven veil would flash the light page for
-      however long hydration takes, which is exactly the frame we are trying to
-      own.
-   2. If the bundle never arrives, a CSS animation still opens. A JS one would
-      leave a visitor staring at a black rectangle forever.
-
-   The reveal is a hole punched in a flat dark field — an animated radius on a
-   radial gradient, not a mask, because the gradient can carry the bright rim at
-   the leading edge in the same paint. `@property` is what makes the length
-   interpolate at all; an unregistered custom property would jump.
-
-   The one number shared with the motion side is the delay, and it comes in as
-   --dawn-delay from CircleHalo, so the moment the last dot lands is defined in
-   exactly one place (circle-halo.tsx) and both timelines read it. ── */
-@property --dawn-r {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0px;
-}
-
-.dawn {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  /* Centred on the ring, and large enough that the dark field still covers the
-     viewport no matter where in it the ring happens to sit. The page root is
-     overflow-hidden, so the overhang is clipped and never rasterised. */
-  width: 300vmax;
-  height: 300vmax;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  /* over the mascot, under the dots — the lights have to stay above the dark */
-  z-index: 1;
-  background: radial-gradient(
-    circle var(--dawn-r) at 50% 50%,
-    rgba(255, 233, 205, 0) 0,
-    rgba(255, 233, 205, 0) 86%,
-    rgba(255, 233, 205, 0.5) 95%,
-    #150e0a 100%
-  );
-  animation:
-    /* Fast off the mark and decelerating, but nothing like an expo curve.
-       The first attempt used cubic-bezier(0.16, 1, 0.3, 1) to 150vmax, and the
-       two compounded: the radius only has to reach ~75vmax to clear the far
-       corner of a viewport, so the visible part of the reveal was over in the
-       first 100ms. It read as the lights being switched on, not as light
-       travelling. The radius now stops just past what is needed and the curve
-       spends its time in the range you can actually see. */
-    dawn-open 1.3s cubic-bezier(0.3, 0.7, 0.3, 1) var(--dawn-delay, 1.8s) both,
-    /* Anything still dark in a corner leaves on a fade rather than a cut —
-       which is also what lets the radius stop at a sane number. */
-      dawn-fade 500ms ease-out calc(var(--dawn-delay, 1.8s) + 0.95s) forwards;
-}
-
-/* The charge: a warm haze gathering under the dots while they travel, so the
-   dark is doing something before it opens. It blooms outward on release. */
-.dawn::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 62vmax;
-  height: 62vmax;
-  border-radius: 9999px;
+.circle-bloom {
   background: radial-gradient(
     circle,
-    rgba(255, 226, 190, 0.17),
-    transparent 62%
+    color-mix(in srgb, var(--color-stone) 44%, transparent) 0,
+    color-mix(in srgb, var(--color-ink) 7%, transparent) 34%,
+    transparent 68%
   );
-  animation:
-    dawn-charge var(--dawn-delay, 1.8s) ease-in both,
-    /* `forwards`, not `both`: a backwards fill would apply this keyframe's
-       start values during its delay and overwrite the charge entirely */
-      dawn-flash 900ms ease-out var(--dawn-delay, 1.8s) forwards;
+  opacity: 0;
+  transform: scale(0.72);
+  animation: circle-bloom 560ms ease-out var(--circle-settled, 1.15s) both;
+  will-change: opacity, transform;
 }
 
-@keyframes dawn-open {
-  from {
-    --dawn-r: 0px;
-  }
-  to {
-    /* Comfortably past the far corner of any real viewport measured from the
-       ring, without the huge dead range that made the sweep invisible. */
-    --dawn-r: 105vmax;
-  }
-}
-@keyframes dawn-fade {
-  from {
-    opacity: 1;
-  }
-  /* visibility flips discretely at the midpoint of whatever range it spans, so
-     it gets its own sliver at the very end — otherwise the field would vanish
-     halfway through its own fade. */
-  99% {
+@keyframes seat-search {
+  0%,
+  32% {
     opacity: 0;
-    visibility: visible;
+    transform: scale(1);
   }
-  to {
+  40% {
+    opacity: 0.52;
+  }
+  78%,
+  100% {
     opacity: 0;
-    visibility: hidden;
-  }
-}
-@keyframes dawn-charge {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.35);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
-@keyframes dawn-flash {
-  from {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(2.4);
+    transform: scale(1.8);
   }
 }
 
-/* The dots are the light source, so they carry a glow for as long as there is
-   dark to cast it into, and lose it once the page is lit. */
-.dawn-lights {
-  filter: drop-shadow(0 0 11px rgba(255, 221, 181, 0.6));
-  animation: dawn-unglow 800ms ease-out calc(var(--dawn-delay, 1.8s) + 0.2s)
-    forwards;
-}
-@keyframes dawn-unglow {
-  to {
-    filter: drop-shadow(0 0 0 rgba(255, 221, 181, 0));
-  }
+.seat-searching::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 1px solid var(--color-ink-faint);
+  border-radius: inherit;
+  animation: seat-search 3.2s ease-out calc(var(--circle-settled, 1.15s) + 0.2s)
+    infinite;
 }
 
-/* ─────────────────────────────  living background  ───────────────────────── */
-.ambient {
+/* Quiet paper depth: tonal only, with no colored ambient orbs. */
+.paper-atmosphere {
   position: fixed;
   inset: 0;
   z-index: -2;
-  overflow: hidden;
   pointer-events: none;
-}
-.orb {
-  position: absolute;
-  border-radius: 9999px;
-  filter: blur(85px);
-  will-change: transform;
-}
-.orb-1 {
-  width: 48vmax;
-  height: 48vmax;
-  top: -16vmax;
-  left: -12vmax;
-  /* espresso over a cool page goes muddy fast, so the orbs sit low enough to
-     read as warmth in the paper rather than as a colour. */
-  opacity: 0.16;
-  background: radial-gradient(
-    circle at 30% 30%,
-    color-mix(in srgb, var(--color-espresso) 55%, transparent),
-    transparent 70%
-  );
-  animation: drift-1 28s ease-in-out infinite;
-}
-.orb-2 {
-  width: 42vmax;
-  height: 42vmax;
-  bottom: -18vmax;
-  right: -10vmax;
-  opacity: 0.14;
-  background: radial-gradient(
-    circle at 70% 70%,
-    color-mix(in srgb, var(--color-sienna) 45%, transparent),
-    transparent 70%
-  );
-  animation: drift-2 34s ease-in-out infinite;
-}
-.orb-3 {
-  width: 32vmax;
-  height: 32vmax;
-  top: 34%;
-  left: 54%;
-  opacity: 0.22;
-  background: radial-gradient(
-    circle at 50% 50%,
-    color-mix(in srgb, var(--color-sand) 70%, transparent),
-    transparent 70%
-  );
-  animation: drift-3 24s ease-in-out infinite;
-}
-@keyframes drift-1 {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(8vmax, 6vmax, 0) scale(1.12);
-  }
-}
-@keyframes drift-2 {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0) scale(1.05);
-  }
-  50% {
-    transform: translate3d(-7vmax, -5vmax, 0) scale(1);
-  }
-}
-@keyframes drift-3 {
-  0%,
-  100% {
-    transform: translate3d(-50%, 0, 0) scale(1);
-  }
-  50% {
-    transform: translate3d(-58%, -8vmax, 0) scale(1.16);
-  }
+  background:
+    radial-gradient(
+      85% 62% at 50% 10%,
+      color-mix(in srgb, var(--color-ground) 72%, white),
+      transparent 72%
+    ),
+    linear-gradient(
+      180deg,
+      var(--color-ground) 0%,
+      color-mix(in srgb, var(--color-ground) 84%, var(--color-ground-lift)) 100%
+    );
 }
 
-/* fine film grain — an editorial, printed-paper tactility */
 .grain {
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.04;
+  opacity: 0.026;
   mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* soft vignette to pull focus to the center of the screen */
-.vignette {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(
-    100% 88% at 50% 44%,
-    transparent 66%,
-    color-mix(in srgb, var(--color-espresso) 6%, transparent) 100%
-  );
+@media (max-height: 620px) {
+  .hero-shell {
+    padding-bottom: 0.15rem;
+    padding-top: 2.75rem;
+  }
+
+  .hero-story {
+    gap: 0.38rem;
+  }
+
+  .hero-ornament {
+    padding-bottom: 1rem;
+  }
+
+  .hero-mascot-media {
+    height: min(clamp(4rem, 19vh, 10rem), 38vw);
+  }
+
+  .hero-aside {
+    gap: 0.18rem;
+    margin-top: 0.25rem;
+  }
+
+  .hero-ask {
+    gap: 0.25rem;
+    padding-top: 0.3rem;
+  }
 }
 
-/* ── respect the user who asked for stillness ── */
+@media (max-height: 420px) and (min-width: 500px) {
+  .site-header {
+    padding: 0.6rem 0.9rem;
+  }
+
+  .site-wordmark {
+    font-size: 1.25rem;
+  }
+
+  .header-action {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+  }
+
+  .hero-shell {
+    padding-top: 1.85rem;
+  }
+
+  .hero-story {
+    gap: 0.16rem;
+  }
+
+  .hero-ornament {
+    padding-bottom: 1.25rem;
+  }
+
+  .hero-mascot-media {
+    height: 5rem;
+  }
+
+  .hero-kicker {
+    font-size: 0.65rem;
+    line-height: 1.2;
+  }
+
+  .hero-headline {
+    font-size: 1.18rem;
+    line-height: 1.05;
+  }
+
+  .hero-subhead {
+    font-size: 0.86rem;
+    line-height: 1.1;
+  }
+
+  .hero-aside {
+    display: none;
+  }
+
+  .hero-primary-cta {
+    padding: 0.38rem 1.2rem;
+  }
+
+  .hero-disclaimer {
+    font-size: 0.72rem;
+    line-height: 1.1;
+  }
+
+  .home-footline {
+    padding-bottom: 0.2rem;
+    padding-top: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
-  .orb,
-  .breathe,
-  .idle-float,
+
+  .circle-bloom,
+  .seat-searching::after,
   .ping::after {
-    animation: none !important;
-  }
-  /* The dawn has to be removed outright rather than sped up. The blanket rule
-     below collapses durations but leaves animation-delay alone, so a `both`
-     fill would hold the dark field on screen for the full delay and then snap
-     open — the worst possible version of it for someone who asked for calm. */
-  .dawn {
     display: none;
   }
-  .dawn-lights {
-    filter: none !important;
-    animation: none !important;
-  }
+
   *,
   *::before,
   *::after {

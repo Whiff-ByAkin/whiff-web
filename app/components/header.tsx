@@ -4,17 +4,16 @@ import { StatesWhiffIsIn } from "./states-whiff-is-in";
 
 // The wordmark is set in Fredoka, not an image — so it's crisp at any size and
 // carries the brand font. The dot over the "i" is a fixed brand detail (no
-// pulsing) and is the one place the espresso→sienna gradient is allowed on this
-// page — it's the mark. "whiff" stays lowercase, the way the app writes it.
+// pulsing). The current brand uses one ink voice, including the mark.
 export function Header() {
   return (
-    <header className="fade-up fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-5 md:px-10">
+    <header className="site-header fade-up fixed inset-x-0 top-0 z-50 flex items-center justify-between px-3 py-3 min-[360px]:px-6 min-[360px]:py-5 md:px-10">
       <Link
         href="/"
         aria-label="whiff home"
         className="group inline-flex items-end"
       >
-        <span className="relative font-display text-2xl font-semibold lowercase tracking-tight text-ink transition-transform duration-200 group-hover:-translate-y-0.5 md:text-3xl">
+        <span className="site-wordmark relative font-display text-xl font-semibold lowercase tracking-tight text-ink transition-transform duration-200 group-hover:-translate-y-0.5 min-[360px]:text-2xl md:text-3xl">
           wh
           {/* the dotless i + a static dot carrying the brand gradient */}
           <span className="relative">
@@ -32,10 +31,10 @@ export function Header() {
           explanatory content. It is a real link rather than a dialog because
           it is also the one internal edge a crawler can follow off the home
           page. */}
-      <nav aria-label="Primary" className="flex items-center gap-2">
+      <nav aria-label="Primary" className="flex items-center gap-1 min-[360px]:gap-2">
         <Link
           href="/blog"
-          className="rounded-full border border-line bg-card px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-espresso hover:text-espresso"
+          className="header-action rounded-full border border-line bg-ground-lift px-2.5 py-1.5 font-display text-xs font-medium text-ink transition-colors hover:border-ink hover:bg-ground min-[360px]:px-4 min-[360px]:py-2 min-[360px]:text-sm"
         >
           Blog
         </Link>

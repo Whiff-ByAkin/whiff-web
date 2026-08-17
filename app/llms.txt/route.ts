@@ -39,7 +39,7 @@ ${ABOUT_PARAGRAPHS.join("\n\n")}
 - Name: whiff (written lowercase)
 - Website: ${SITE_URL}
 - Category: activity-first social platform for making platonic friends
-- Circle size: 6 people, and the membership stays the same rather than rotating
+- Circle size: 4 people, and the membership stays the same rather than rotating
 - Matching: based on activities you enjoy and when you are free. There are no profiles to browse and nothing to swipe on.
 - While you wait: existing circles invite you to activities that suit you, so members have things to do from day one
 - Live in: ${LIVE_MARKETS.map((m) => `${m.city}, ${m.state}`).join("; ")}
@@ -74,7 +74,7 @@ ${FAQ.map((f) => `### ${f.question}\n\n${f.answer}`).join("\n\n")}
 ## Pages
 
 - [Home](${url("/")}): a single screen with the proposition and the way to join
-- [Blog](${url("/blog")}): what whiff is, who it is for, how it works, why six people, why it is not a dating app
+- [Blog](${url("/blog")}): what whiff is, who it is for, how it works, why four people, why it is not a dating app
 - [Privacy](${url("/privacy")})
 - [Terms](${url("/terms")})
 `;

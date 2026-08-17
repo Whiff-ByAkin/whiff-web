@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
 import { CircleHalo } from "./circle-halo";
+import { MascotMedia } from "./mascot-media";
 import { ApplyCTA } from "@/app/components/invite-cta";
 import { PROMISE } from "@/app/seo-content";
 
@@ -15,18 +15,16 @@ const reveal = (delay = 0) => ({
   transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const, delay },
 });
 
-// Reduced motion gets the same choreography with the travel and the blur taken
-// out — a plain, quick crossfade.
+// Reduced motion keeps the server's initial frame so hydration is deterministic,
+// then clears it immediately instead of travelling or blurring on screen.
 //
-// It has to stay an animation rather than become nothing at all: the server
-// renders these elements at opacity 0, so handing motion no animation left the
-// hero permanently invisible to anyone browsing with "reduce motion" on. The
-// neutral y and filter values are here on purpose, so those properties are
-// explicitly cleared rather than inherited from the server's markup.
+// The initial values deliberately match `reveal`: reduced-motion preference is
+// only known in the browser, and changing this frame during the first client
+// render would produce a hydration mismatch.
 const fade = (delay = 0) => ({
-  initial: { opacity: 0, y: 0, filter: "blur(0px)" },
+  initial: { opacity: 0, y: 16, filter: "blur(6px)" },
   animate: { opacity: 1, y: 0, filter: "blur(0px)" },
-  transition: { duration: 0.35, ease: "linear" as const, delay: delay * 0.5 },
+  transition: { duration: 0, ease: "linear" as const, delay: delay * 0 },
 });
 
 export function Hero() {
@@ -44,7 +42,7 @@ export function Hero() {
       // min-h-0 is required on a flex child that must be allowed to shrink;
       // without it this would refuse to go below its content height and push
       // the footline off the bottom of a short window.
-      className="relative flex min-h-0 flex-1 flex-col items-center px-6 pb-[clamp(0.5rem,2vh,1.25rem)] pt-[clamp(3.5rem,9vh,5rem)] text-center md:px-10"
+      className="hero-shell relative flex min-h-0 flex-1 flex-col items-center px-6 pb-[clamp(0.5rem,2vh,1.25rem)] pt-[clamp(3.5rem,9vh,5rem)] text-center md:px-10"
     >
       {/* Two stacks, not one centred block.
 
@@ -61,9 +59,9 @@ export function Hero() {
           min-height:auto that stops a flex item shrinking past its content.
           With basis auto and that floor restored, the section grows on a short
           window and is unchanged on a tall one. */}
-      <div className="flex flex-auto flex-col items-center justify-center gap-[clamp(0.6rem,2.6vw,1.25rem)]">
-        {/* Five filled places and one still open, orbiting the mascot. It says
-            "six" without the page spending a word on it.
+      <div className="hero-story flex flex-auto flex-col items-center justify-center gap-[clamp(0.6rem,2.6vw,1.25rem)]">
+        {/* Three filled places and one still open, orbiting the mascot. It says
+            "four" without the page spending a word on it.
 
             The ring is drawn at 144% of the mascot and sits outside the flow,
             so it used to hang over the kicker and put a dot through the middle
@@ -79,22 +77,10 @@ export function Hero() {
             Deliberately no z-index here: the lift the dark needs is temporary
             and CircleHalo owns it. This must stay a plain, unpositioned box so
             that lift reaches the root stacking context. */}
-        <div
-          style={{ "--mascot": "min(clamp(4.5rem,17vh,13rem),29vw)" } as React.CSSProperties}
-          className="pb-[calc(var(--mascot)*0.22)]"
-        >
+        <div className="hero-ornament">
           <CircleHalo filled={reaching}>
             <motion.div {...R(0)}>
-              <Image
-                src="/whiff-mascot.png"
-                alt=""
-                width={515}
-                height={560}
-                loading="eager"
-                fetchPriority="high"
-                className="h-[var(--mascot)] w-auto select-none"
-                draggable={false}
-              />
+              <MascotMedia />
             </motion.div>
           </CircleHalo>
         </div>
@@ -110,36 +96,36 @@ export function Hero() {
             micro-caps because it is meant to be read, not decorated. */}
         <motion.p
           {...R(0.1)}
-          className="max-w-[24rem] text-balance font-body text-[clamp(0.72rem,2.9vw,0.95rem)] font-semibold text-espresso/85 sm:max-w-none"
+          className="hero-kicker max-w-[24rem] text-balance font-body text-[clamp(0.72rem,2.9vw,0.95rem)] font-semibold text-ink/85 sm:max-w-none"
         >
           {PROMISE}
         </motion.p>
 
         {/* **The headline stopped making a promise it can't keep.**
 
-            "Five people are waiting on the sixth" implied a group already
-            assembled and holding a chair — so anyone who joined and waited
+            The previous line implied a group already assembled and holding a
+            chair — so anyone who joined and waited
             would feel lied to on day one. This describes what whiff does
             instead of what it has in stock, and it's a claim that stays true
             from the very first signup.
 
             It also avoids the word "friends". They aren't yet; that's the point
             of the twelve weeks, and the signature by the wordmark is where the
-            friendship gets promised. "Same six people" is honest, and "same" is
+            friendship gets promised. "Same four people" is honest, and "same" is
             the entire argument against every rival app that hands you new
             strangers on a loop — and "strangers only on week one" is the answer
             to it, because "same" alone would sound like you're being handed
             people you already know. */}
         <motion.h1
           {...R(0.18)}
-          className="max-w-[20rem] text-balance font-display text-[clamp(1.2rem,6vw,2.6rem)] font-semibold leading-[1.15] tracking-tight text-ink sm:max-w-none sm:whitespace-nowrap sm:text-[clamp(1.1rem,3.7vw,2.6rem)]"
+          className="hero-headline max-w-[20rem] text-balance font-display text-[clamp(1.2rem,6vw,2.6rem)] font-semibold leading-[1.15] tracking-tight text-ink sm:max-w-none sm:whitespace-nowrap sm:text-[clamp(1.1rem,3.7vw,2.6rem)]"
         >
-          Six activities. Twelve weeks. Same six people.
+          Six activities. Twelve weeks. Same four people.
         </motion.h1>
 
         <motion.p
           {...R(0.28)}
-          className="max-w-[22rem] text-balance font-display text-[clamp(0.95rem,4.2vw,1.2rem)] font-semibold text-espresso sm:max-w-none sm:whitespace-nowrap sm:text-[clamp(0.9rem,2.7vw,1.2rem)]"
+          className="hero-subhead max-w-[22rem] text-balance font-display text-[clamp(0.95rem,4.2vw,1.2rem)] font-semibold text-ink sm:max-w-none sm:whitespace-nowrap sm:text-[clamp(0.9rem,2.7vw,1.2rem)]"
         >
           Strangers only on week one.
         </motion.p>
@@ -161,32 +147,32 @@ export function Hero() {
           // than a fourth line of the headline: it drops the block clear of the
           // promise above it, and it scales with the viewport so the gap is
           // proportional on a phone and on a monitor.
-          className="mt-[clamp(0.55rem,2.6vh,1.6rem)] flex w-full max-w-[19rem] flex-col items-center gap-[clamp(0.3rem,1.3vw,0.55rem)] sm:max-w-[34rem]"
+          className="hero-aside mt-[clamp(0.55rem,2.6vh,1.6rem)] flex w-full max-w-[19rem] flex-col items-center gap-[clamp(0.3rem,1.3vw,0.55rem)] sm:max-w-[34rem]"
         >
           <div className="flex w-full items-center gap-[0.7em]">
             <span
               aria-hidden
-              className="h-px flex-1 bg-gradient-to-r from-transparent to-espresso/20"
+              className="h-px flex-1 bg-gradient-to-r from-transparent to-line"
             />
-            <span className="font-body text-[clamp(0.52rem,2.1vw,0.63rem)] font-bold uppercase tracking-[0.2em] text-espresso/55">
+            <span className="font-body text-[clamp(0.52rem,2.1vw,0.63rem)] font-bold uppercase tracking-[0.2em] text-ink-muted">
               meanwhile
             </span>
             <span
               aria-hidden
-              className="h-px flex-1 bg-gradient-to-l from-transparent to-espresso/20"
+              className="h-px flex-1 bg-gradient-to-l from-transparent to-line"
             />
           </div>
 
-          <p className="text-balance font-body text-[clamp(0.72rem,3.1vw,0.95rem)] leading-relaxed text-ink-soft/75 sm:text-[clamp(0.8rem,2.2vw,0.95rem)]">
+          <p className="text-balance font-body text-[clamp(0.72rem,3.1vw,0.95rem)] leading-relaxed text-ink-muted sm:text-[clamp(0.8rem,2.2vw,0.95rem)]">
             While we find the people who{" "}
-            <span className="font-display font-semibold text-espresso/90">
+            <span className="font-display font-semibold text-ink">
               bring out your best
             </span>
             ,{/* the clause break is the rhythm of the line, so on anything
                   wider than a phone it becomes a real break rather than
                   wherever the text happens to run out of room */}
             <br className="hidden sm:inline" /> other circles{" "}
-            <span className="font-display font-semibold text-espresso/90">
+            <span className="font-display font-semibold text-ink">
               invite you along
             </span>{" "}
             to activities whiff knows you love.
@@ -197,14 +183,14 @@ export function Hero() {
       {/* The ask. It sits at the bottom of the screen rather than in the middle
           of the stack, so the gap between the button and the legal links stays
           the same at every height — both are measured from the same edge. */}
-      <div className="flex shrink-0 flex-col items-center gap-[clamp(0.5rem,2vw,0.95rem)] pt-[clamp(0.9rem,3.5vh,2rem)]">
+      <div className="hero-ask flex shrink-0 flex-col items-center gap-[clamp(0.5rem,2vw,0.95rem)] pt-[clamp(0.9rem,3.5vh,2rem)]">
         <motion.div {...R(0.46)}>
           <ApplyCTA onReachChange={setReaching} />
         </motion.div>
 
         <motion.p
           {...R(0.56)}
-          className="font-body text-[clamp(0.78rem,3.4vw,1.25rem)] italic text-ink-soft sm:text-[clamp(0.85rem,2.9vw,1.25rem)]"
+          className="hero-disclaimer font-body text-[clamp(0.78rem,3.4vw,1.25rem)] italic text-ink-muted sm:text-[clamp(0.85rem,2.9vw,1.25rem)]"
           style={{ transform: "rotate(-2deg)" }}
         >
           this is not a dating app.

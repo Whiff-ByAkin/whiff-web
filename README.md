@@ -2,8 +2,8 @@
 
 Marketing site for **whiff** — an activity-first social platform for building
 real friendships without browsing profiles. whiff learns what you enjoy, invites
-you out while you wait, forms a circle of six compatible people, and plans
-repeated real-world activities for that same six.
+you out while you wait, forms a circle of four compatible people, and plans
+repeated real-world activities for that same four.
 
 > whiff gives you things to do while it finds your people.
 
@@ -43,9 +43,9 @@ fit rather than overflowing. Everything the hero cannot say lives on `/blog`.
 app/
   layout.tsx                 root metadata, fonts, analytics
   page.tsx                   the one screen: header, hero, legal hairline
-  blog/                      the interactive Q&A explorer
-    entries.ts               the questions, built from seo-content.ts
-    blog-explorer.tsx        the tablist + the animation
+  blog/                      the interactive editorial explorer
+    posts.ts                 the three articles
+    blog-explorer.tsx        the accessible tablist + the animation
   privacy/ terms/            legal (kept deliberately — see below)
   seo-content.ts             SINGLE SOURCE OF TRUTH for every factual claim
   config/site.ts             origin, contact, and the live market list
@@ -76,11 +76,11 @@ derive from it.
 
 ## The blog
 
-Questions, not articles — that is the shape people arrive in and the shape an
-answer engine can lift whole. It is a tab interface, so one rule matters:
+The blog is three editorial pieces presented in an accessible tab interface,
+so one rule matters:
 
 **Every answer stays in the DOM at all times.** Inactive panels carry `hidden`
-rather than being unmounted, so the initial HTML contains all six answers. The
+rather than being unmounted, so the initial HTML contains all three pieces. The
 obvious AnimatePresence build would ship a page containing exactly one, which
 defeats the point of the page. That rules out mount-driven animation, so the
 stagger is variant-driven instead.

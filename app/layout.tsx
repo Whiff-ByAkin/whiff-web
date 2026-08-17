@@ -31,7 +31,7 @@ const TITLE = "whiff — make real friends through activities, not profiles";
 // Under 160 characters, opens with the promise, closes with the disqualifier so
 // no snippet can imply dating.
 const DESCRIPTION =
-  "whiff gives you things to do while it finds your people. Activity-first friend circles of six who keep meeting up — no profiles, no swiping. Not a dating app.";
+  "whiff gives you things to do while it finds your people. Activity-first friend circles of four who keep meeting up — no profiles, no swiping. Not a dating app.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -93,7 +93,7 @@ export const metadata: Metadata = {
 // actually about — FAQPage, HowTo, a city Service, and so on.
 
 export const viewport: Viewport = {
-  themeColor: "#f2f2f7",
+  themeColor: "#fbf8f5",
   width: "device-width",
   initialScale: 1,
   colorScheme: "light",
@@ -105,6 +105,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
       className={`${fredoka.variable} ${nunito.variable} h-full antialiased`}
     >
@@ -116,7 +117,7 @@ export default function RootLayout({
             first on every page; this gives them one tab to skip past it. */}
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-card focus:px-5 focus:py-2.5 focus:font-display focus:text-sm focus:font-semibold focus:text-ink focus:shadow-lg"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-ground-lift focus:px-5 focus:py-2.5 focus:font-display focus:text-sm focus:font-semibold focus:text-ink focus:shadow-lg"
         >
           Skip to content
         </a>

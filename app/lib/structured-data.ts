@@ -38,9 +38,9 @@ export const organization: Node = {
   foundingDate: FOUNDED_YEAR,
   logo: {
     "@type": "ImageObject",
-    url: abs("/whiff-mascot.png"),
-    width: 515,
-    height: 560,
+    url: abs("/whiff-mascot-wave.png"),
+    width: 397,
+    height: 900,
   },
   image: abs("/opengraph-image"),
   sameAs: [INSTAGRAM_URL],

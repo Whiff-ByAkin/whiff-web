@@ -19,12 +19,12 @@ const H1 = "The long version";
    the result, which threw away the disqualifier at the end. */
 const TITLE = "What whiff is, and why it is not a dating app";
 const DESCRIPTION =
-  "How whiff works: activity-first friend circles of six adults who keep meeting up, no profiles and no swiping. Three pieces on what it is, how friendships actually form, and who it is not for.";
+  "How whiff works: activity-first friend circles of four adults who keep meeting up, no profiles and no swiping. Three pieces on what it is, how friendships actually form, and who it is not for.";
 
 /* BlogPosting wants dates. Without them a crawler has no freshness signal for
    the page at all, so this is the date the pieces were last rewritten — bump
    it with the sitemap's CONTENT_UPDATED when the copy changes. */
-const UPDATED = "2026-08-06";
+const UPDATED = "2026-08-15";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -119,14 +119,14 @@ export default function BlogPage() {
           <header className="mx-auto mb-12 w-full max-w-[92rem] text-center sm:text-left">
             <Link
               href="/"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-soft transition-colors hover:text-espresso"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-muted transition-colors hover:text-ink"
             >
               <span aria-hidden="true">←</span> back home
             </Link>
             <h1 className="mt-5 text-balance font-display text-[clamp(2rem,5vw,3.4rem)] font-semibold leading-[1.08] tracking-tight text-ink">
               {H1}
             </h1>
-            <p className="mx-auto mt-4 max-w-[58ch] text-[1.05rem] leading-relaxed text-ink-soft sm:mx-0">
+            <p className="mx-auto mt-4 max-w-[58ch] text-[1.05rem] leading-relaxed text-ink-muted sm:mx-0">
               The home page is one screen and says one thing. This is
               everything it left out, in three pieces, in order. {PROMISE}
             </p>
@@ -138,29 +138,29 @@ export default function BlogPage() {
               The pieces are all in the HTML, but this one paragraph is the one
               a model should lift, so it is not behind a tab. */}
           <section className="mx-auto mt-20 w-full max-w-[92rem]">
-            <h2 className="font-display text-sm font-semibold uppercase tracking-[0.14em] text-ink-soft">
+            <h2 className="font-display text-sm font-semibold uppercase tracking-[0.14em] text-ink-muted">
               If you only read one paragraph
             </h2>
             <p className="mt-4 max-w-[72ch] text-[1.1rem] leading-relaxed text-ink/90">
               {ANSWER}
             </p>
-            <p className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-ink-soft">
+            <p className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-ink-muted">
               <a
                 href={`mailto:${CONTACT_EMAIL}`}
-                className="font-medium text-espresso underline underline-offset-2"
+                className="font-medium text-ink underline underline-offset-2"
               >
                 {CONTACT_EMAIL}
               </a>
               <a
                 href={INSTAGRAM_URL}
                 rel="me noopener"
-                className="font-medium text-espresso underline underline-offset-2"
+                className="font-medium text-ink underline underline-offset-2"
               >
                 instagram
               </a>
               <Link
                 href="/"
-                className="font-medium text-espresso underline underline-offset-2"
+                className="font-medium text-ink underline underline-offset-2"
               >
                 join whiff
               </Link>

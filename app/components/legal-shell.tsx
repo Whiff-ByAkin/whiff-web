@@ -20,34 +20,34 @@ export function LegalShell({
       <main className="mx-auto w-full max-w-2xl flex-1 px-6 pb-16 pt-28">
         <Link
           href="/"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-soft transition-colors hover:text-espresso"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-muted transition-colors hover:text-ink"
         >
           <span aria-hidden="true">←</span> back home
         </Link>
 
-        <article className="mt-5 rounded-3xl border border-line bg-card p-7 shadow-[0_30px_60px_-40px_rgba(24,24,27,0.25)] sm:p-10">
+        <article className="mt-5 rounded-3xl border border-line bg-ground-lift p-7 shadow-[0_30px_60px_-40px_rgba(36,26,21,0.25)] sm:p-10">
           <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             {title}
           </h1>
-          <p className="mt-2 text-sm text-ink-soft">Last updated: {updated}</p>
+          <p className="mt-2 text-sm text-ink-muted">Last updated: {updated}</p>
 
-          <div className="mt-7 text-[15px] [&_a]:font-medium [&_a]:text-espresso [&_a]:underline [&_h2]:mt-8 [&_h2]:font-display [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-ink [&_li]:text-ink/90 [&_p]:mt-3 [&_p]:leading-relaxed [&_p]:text-ink/90 [&_strong]:font-bold [&_strong]:text-ink [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5">
+          <div className="mt-7 text-[15px] [&_a]:font-medium [&_a]:text-ink [&_a]:underline [&_h2]:mt-8 [&_h2]:font-display [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-ink [&_li]:text-ink/90 [&_p]:mt-3 [&_p]:leading-relaxed [&_p]:text-ink/90 [&_strong]:font-bold [&_strong]:text-ink [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:space-y-1.5 [&_ul]:pl-5">
             {children}
           </div>
         </article>
 
-        <footer className="mt-8 flex flex-col items-center gap-1 text-center text-xs text-ink-soft">
+        <footer className="mt-8 flex flex-col items-center gap-1 text-center text-xs text-ink-muted">
           <div className="flex items-center gap-3">
             <Link href="/privacy" className="transition-colors hover:text-ink">
               privacy
             </Link>
-            <span aria-hidden="true" className="text-ink-soft/40">
+            <span aria-hidden="true" className="text-ink-faint">
               ·
             </span>
             <Link href="/terms" className="transition-colors hover:text-ink">
               terms
             </Link>
-            <span aria-hidden="true" className="text-ink-soft/40">
+            <span aria-hidden="true" className="text-ink-faint">
               ·
             </span>
             <a
@@ -57,7 +57,7 @@ export function LegalShell({
               instagram
             </a>
           </div>
-          <p className="text-ink-soft/70">© 2026 whiff. All rights reserved.</p>
+          <p className="text-ink-muted">© 2026 whiff. All rights reserved.</p>
         </footer>
       </main>
     </div>

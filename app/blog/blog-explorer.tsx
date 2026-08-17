@@ -82,11 +82,9 @@ export function BlogExplorer() {
       <div
         role="tablist"
         aria-label="Pieces to read"
-        aria-orientation="vertical"
-        // Horizontally scrolling chips on a phone, a sticky vertical index from
-        // lg up. Sticky is what lets the titles stay reachable while a long
-        // piece scrolls beside them.
-        className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 pb-2 lg:mx-0 lg:sticky lg:top-28 lg:h-fit lg:flex-col lg:gap-1.5 lg:overflow-visible lg:px-0 lg:pb-0"
+        // All three choices stay visible as a compact index on phones. From lg
+        // up it becomes the sticky vertical rail that follows long prose.
+        className="grid grid-cols-3 gap-1.5 pb-2 lg:sticky lg:top-28 lg:h-fit lg:flex lg:flex-col lg:gap-1.5 lg:pb-0"
       >
         {POSTS.map((post, i) => {
           const isActive = post.id === activeId;
@@ -103,10 +101,10 @@ export function BlogExplorer() {
               tabIndex={isActive ? 0 : -1}
               onClick={() => setActiveId(post.id)}
               onKeyDown={(e) => onKeyDown(e, i)}
-              className={`group flex shrink-0 snap-start items-center gap-3 rounded-full border px-4 py-2.5 text-left font-display text-sm font-semibold transition-colors lg:w-full lg:rounded-2xl lg:px-4 lg:py-3.5 ${
+              className={`group flex min-w-0 flex-col items-start gap-1 rounded-2xl border px-2 py-2.5 text-left font-display text-[0.72rem] font-semibold leading-tight transition-colors sm:flex-row sm:items-center sm:gap-2 sm:px-3 sm:text-sm lg:w-full lg:gap-3 lg:px-4 lg:py-3.5 ${
                 isActive
-                  ? "border-espresso/25 bg-card text-espresso"
-                  : "border-transparent text-ink-soft hover:bg-card/70 hover:text-ink"
+                  ? "border-ink/25 bg-ground-lift text-ink"
+                  : "border-transparent text-ink-muted hover:bg-ground-lift/70 hover:text-ink"
               }`}
             >
               {/* A numeral rather than a bullet: three pieces meant to be read
@@ -115,13 +113,18 @@ export function BlogExplorer() {
                 aria-hidden="true"
                 className={`grid h-5 w-5 shrink-0 place-items-center rounded-full text-[0.68rem] font-bold transition-colors ${
                   isActive
-                    ? "bg-espresso text-page"
-                    : "bg-latte/45 text-on-latte/55 group-hover:bg-latte"
+                    ? "bg-ink text-on-ink"
+                    : "bg-stone/45 text-ink-muted group-hover:bg-stone"
                 }`}
               >
                 {i + 1}
               </span>
-              {post.label}
+              <span className="min-w-0 whitespace-normal sm:hidden">
+                {post.mobileLabel}
+              </span>
+              <span className="hidden min-w-0 whitespace-normal sm:inline">
+                {post.label}
+              </span>
             </button>
           );
         })}
@@ -161,7 +164,7 @@ export function BlogExplorer() {
 
                   <motion.p
                     variants={item}
-                    className="mt-3 max-w-[52ch] font-display text-[1.05rem] font-medium leading-snug text-espresso/85"
+                    className="mt-3 max-w-[52ch] font-display text-[1.05rem] font-medium leading-snug text-ink/85"
                   >
                     {post.standfirst}
                   </motion.p>
@@ -187,7 +190,7 @@ export function BlogExplorer() {
                 <motion.div variants={item} className="min-w-0 space-y-8">
                   {post.asides?.map((aside) => (
                     <aside key={aside.heading}>
-                      <h3 className="font-display text-sm font-semibold uppercase tracking-[0.14em] text-ink-soft">
+                      <h3 className="font-display text-sm font-semibold uppercase tracking-[0.14em] text-ink-muted">
                         {aside.heading}
                       </h3>
                       <dl className="mt-4 space-y-3">
@@ -195,7 +198,7 @@ export function BlogExplorer() {
                           <motion.div
                             key={it.term}
                             variants={item}
-                            className="rounded-2xl border border-line bg-card p-4"
+                            className="rounded-2xl border border-line bg-ground-lift p-4"
                           >
                             <dt className="font-display text-[0.95rem] font-semibold text-ink">
                               {it.term}
@@ -210,7 +213,7 @@ export function BlogExplorer() {
                   ))}
 
                   {post.pullquote && (
-                    <blockquote className="border-l-2 border-latte pl-5 font-display text-[clamp(1.15rem,1.6vw,1.4rem)] font-semibold leading-snug text-espresso xl:mt-12">
+                    <blockquote className="border-l-2 border-stone pl-5 font-display text-[clamp(1.15rem,1.6vw,1.4rem)] font-semibold leading-snug text-ink xl:mt-12">
                       {post.pullquote}
                     </blockquote>
                   )}

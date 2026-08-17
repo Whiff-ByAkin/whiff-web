@@ -11,8 +11,8 @@ import { INSTAGRAM_URL, SITE_NAME } from "../config/site";
  * rather than being the one fixed-height element that forces an overflow. */
 export function HomeFootline() {
   return (
-    <footer className="shrink-0 px-6 pb-[calc(env(safe-area-inset-bottom)+clamp(0.6rem,1.8vh,1.1rem))] pt-[clamp(0.3rem,1vh,0.6rem)]">
-      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[clamp(0.62rem,1.6vw,0.72rem)] text-ink-soft/70">
+    <footer className="home-footline shrink-0 px-3 pb-[calc(env(safe-area-inset-bottom)+clamp(0.45rem,1.8vh,1.1rem))] pt-[clamp(0.2rem,1vh,0.6rem)] min-[360px]:px-6">
+      <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[clamp(0.58rem,1.6vw,0.72rem)] text-ink-muted min-[360px]:gap-x-3">
         <span>© 2026 {SITE_NAME}</span>
         <Dot />
         <FootLink href="/blog">blog</FootLink>
@@ -24,7 +24,7 @@ export function HomeFootline() {
         <a
           href={INSTAGRAM_URL}
           rel="me noopener"
-          className="transition-colors hover:text-espresso"
+          className="transition-colors hover:text-ink"
         >
           instagram
         </a>
@@ -35,7 +35,7 @@ export function HomeFootline() {
 
 function Dot() {
   return (
-    <span aria-hidden="true" className="text-ink-soft/35">
+    <span aria-hidden="true" className="text-ink-faint">
       ·
     </span>
   );
@@ -49,7 +49,7 @@ function FootLink({
   children: React.ReactNode;
 }) {
   return (
-    <Link href={href} className="transition-colors hover:text-espresso">
+    <Link href={href} className="transition-colors hover:text-ink">
       {children}
     </Link>
   );
