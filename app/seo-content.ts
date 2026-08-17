@@ -16,7 +16,7 @@
    ───────────────────────────────────────────────────────────────────────── */
 
 /** The one line the whole site has to land. */
-export const PROMISE = "whiff gives you things to do while it finds your people.";
+export const PROMISE = "Strangers only on week one.";
 
 /** The 40–80 word extractable answer. Answer engines lift this near-verbatim,
  *  so it leads with the definition and contains the qualifying nouns a model

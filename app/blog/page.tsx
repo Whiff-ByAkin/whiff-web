@@ -127,8 +127,8 @@ export default function BlogPage() {
               {H1}
             </h1>
             <p className="mx-auto mt-4 max-w-[58ch] text-[1.05rem] leading-relaxed text-ink-muted sm:mx-0">
-              The home page is one screen and says one thing. This is
-              everything it left out, in three pieces, in order. {PROMISE}
+              The home page is one screen: {PROMISE} This is everything it
+              left out, in three pieces, in order.
             </p>
           </header>
 

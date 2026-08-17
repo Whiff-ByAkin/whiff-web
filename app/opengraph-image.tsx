@@ -22,7 +22,7 @@ export default function Image() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#FBF8F5",
+          backgroundColor: "#FFFFFF",
           color: "#241A15",
           padding: "80px",
           textAlign: "center",
@@ -49,7 +49,7 @@ export default function Image() {
                   width: 12,
                   height: 12,
                   borderRadius: 9999,
-                  backgroundColor: seat.open ? "#FBF8F5" : "#241A15",
+                  backgroundColor: seat.open ? "#FFFFFF" : "#241A15",
                   border: seat.open ? "2px solid #9A8B81" : "none",
                 }}
               />

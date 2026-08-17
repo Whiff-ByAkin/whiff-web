@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 /* The mobile app is the source of truth. Token names describe jobs, not hues:
-   warm paper, lifted paper, stone touch surfaces, rules, and one ink voice. */
+   neutral ground, lifted paper, stone touch surfaces, rules, and one ink voice. */
 @theme inline {
-  --color-ground: #fbf8f5;
+  --color-ground: #ffffff;
   --color-ground-lift: #f4eee9;
   --color-stone: #b8adab;
   --color-line: #e5dcd6;
@@ -22,7 +22,8 @@ html {
 }
 
 html,
-body {
+body,
+main {
   background: var(--color-ground);
   color: var(--color-ink);
   overflow-x: hidden;
@@ -52,8 +53,21 @@ body {
 }
 
 .hero-mascot-still {
-  padding-inline: 28%;
+  padding-inline: 24%;
   opacity: 1;
+  mix-blend-mode: multiply;
+  -webkit-mask-image: radial-gradient(
+    ellipse 50% 50% at center,
+    #000 84%,
+    rgb(0 0 0 / 92%) 94%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 50% 50% at center,
+    #000 84%,
+    rgb(0 0 0 / 92%) 94%,
+    transparent 100%
+  );
   transition: opacity 120ms ease-out;
 }
 
@@ -246,23 +260,14 @@ body {
     infinite;
 }
 
-/* Quiet paper depth: tonal only, with no colored ambient orbs. */
+/* Keep the fixed canvas neutral so the mascot's white field disappears into
+   the page. The separate grain layer retains the tactile paper character. */
 .paper-atmosphere {
   position: fixed;
   inset: 0;
   z-index: -2;
   pointer-events: none;
-  background:
-    radial-gradient(
-      85% 62% at 50% 10%,
-      color-mix(in srgb, var(--color-ground) 72%, white),
-      transparent 72%
-    ),
-    linear-gradient(
-      180deg,
-      var(--color-ground) 0%,
-      color-mix(in srgb, var(--color-ground) 84%, var(--color-ground-lift)) 100%
-    );
+  background: var(--color-ground);
 }
 
 .grain {
@@ -304,6 +309,15 @@ body {
   }
 }
 
+/* On compact portrait phones the 142% halo overhang is slightly deeper than
+   the short-screen ornament reservation. Give its bottom seat a clear landing
+   before the kicker without shrinking the mascot or affecting 390px phones. */
+@media (max-width: 360px) and (max-height: 620px) {
+  .hero-ornament {
+    padding-bottom: 2.125rem;
+  }
+}
+
 @media (max-height: 420px) and (min-width: 500px) {
   .site-header {
     padding: 0.6rem 0.9rem;
@@ -342,11 +356,6 @@ body {
   .hero-headline {
     font-size: 1.18rem;
     line-height: 1.05;
-  }
-
-  .hero-subhead {
-    font-size: 0.86rem;
-    line-height: 1.1;
   }
 
   .hero-aside {

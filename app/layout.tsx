@@ -5,6 +5,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { AmbientBackground } from "./components/ambient-background";
 import { SITE_NAME, SITE_URL } from "./config/site";
+import { PROMISE } from "./seo-content";
 
 // Fredoka — the display face: wordmark, headings, the emotional lines.
 const fredoka = Fredoka({
@@ -31,7 +32,7 @@ const TITLE = "whiff — make real friends through activities, not profiles";
 // Under 160 characters, opens with the promise, closes with the disqualifier so
 // no snippet can imply dating.
 const DESCRIPTION =
-  "whiff gives you things to do while it finds your people. Activity-first friend circles of four who keep meeting up — no profiles, no swiping. Not a dating app.";
+  `${PROMISE} Activity-first friend circles of four who keep meeting up — no profiles, no swiping. Not a dating app.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -93,7 +94,7 @@ export const metadata: Metadata = {
 // actually about — FAQPage, HowTo, a city Service, and so on.
 
 export const viewport: Viewport = {
-  themeColor: "#fbf8f5",
+  themeColor: "#ffffff",
   width: "device-width",
   initialScale: 1,
   colorScheme: "light",

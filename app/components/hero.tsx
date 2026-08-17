@@ -123,13 +123,6 @@ export function Hero() {
           Six activities. Twelve weeks. Same four people.
         </motion.h1>
 
-        <motion.p
-          {...R(0.28)}
-          className="hero-subhead max-w-[22rem] text-balance font-display text-[clamp(0.95rem,4.2vw,1.2rem)] font-semibold text-ink sm:max-w-none sm:whitespace-nowrap sm:text-[clamp(0.9rem,2.7vw,1.2rem)]"
-        >
-          Strangers only on week one.
-        </motion.p>
-
         {/* What happens before your circle exists — framed as being wanted
             rather than parked. "Bring out your best" is the promise of the
             matching; "invite you along" is the promise of the waiting.

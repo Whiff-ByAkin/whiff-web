@@ -5,7 +5,7 @@ real friendships without browsing profiles. whiff learns what you enjoy, invites
 you out while you wait, forms a circle of four compatible people, and plans
 repeated real-world activities for that same four.
 
-> whiff gives you things to do while it finds your people.
+> Strangers only on week one.
 
 whiff is **not** a dating app. That distinction is load-bearing throughout the
 copy and the structured data — see `app/seo-content.ts`.
