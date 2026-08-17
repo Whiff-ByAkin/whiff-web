@@ -4,8 +4,8 @@ import { Header } from "../components/header";
 import { JsonLd } from "../components/json-ld";
 import { BlogExplorer } from "./blog-explorer";
 import { POSTS } from "./posts";
-import { ANSWER, PROMISE } from "../seo-content";
-import { CONTACT_EMAIL, INSTAGRAM_URL, SITE_NAME, SITE_URL } from "../config/site";
+import { PROMISE } from "../seo-content";
+import { SITE_NAME, SITE_URL } from "../config/site";
 import { ORG_ID, abs, organization, service, website } from "../lib/structured-data";
 
 /* The visible title is a title. The <title> tag is where the searchable words
@@ -107,7 +107,7 @@ export default function BlogPage() {
       />
 
       <div className="relative flex min-h-[100svh] flex-col">
-        <Header />
+        <Header hideBlog mobileSurface />
 
         <main
           id="main"
@@ -133,39 +133,6 @@ export default function BlogPage() {
           </header>
 
           <BlogExplorer />
-
-          {/* The extractable definition, rendered plainly and unconditionally.
-              The pieces are all in the HTML, but this one paragraph is the one
-              a model should lift, so it is not behind a tab. */}
-          <section className="mx-auto mt-20 w-full max-w-[92rem]">
-            <h2 className="font-display text-sm font-semibold uppercase tracking-[0.14em] text-ink-muted">
-              If you only read one paragraph
-            </h2>
-            <p className="mt-4 max-w-[72ch] text-[1.1rem] leading-relaxed text-ink/90">
-              {ANSWER}
-            </p>
-            <p className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-ink-muted">
-              <a
-                href={`mailto:${CONTACT_EMAIL}`}
-                className="font-medium text-ink underline underline-offset-2"
-              >
-                {CONTACT_EMAIL}
-              </a>
-              <a
-                href={INSTAGRAM_URL}
-                rel="me noopener"
-                className="font-medium text-ink underline underline-offset-2"
-              >
-                instagram
-              </a>
-              <Link
-                href="/"
-                className="font-medium text-ink underline underline-offset-2"
-              >
-                join whiff
-              </Link>
-            </p>
-          </section>
         </main>
       </div>
     </>

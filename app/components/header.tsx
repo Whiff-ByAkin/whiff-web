@@ -1,13 +1,26 @@
 import Link from "next/link";
 import { Contact } from "./contact";
+import { MobileNav } from "./mobile-nav";
 import { StatesWhiffIsIn } from "./states-whiff-is-in";
 
 // The wordmark is set in Fredoka, not an image — so it's crisp at any size and
 // carries the brand font. The dot over the "i" is a fixed brand detail (no
 // pulsing). The current brand uses one ink voice, including the mark.
-export function Header() {
+export function Header({
+  hideBlog = false,
+  mobileSurface = false,
+}: {
+  hideBlog?: boolean;
+  mobileSurface?: boolean;
+}) {
   return (
-    <header className="site-header fade-up fixed inset-x-0 top-0 z-50 flex items-center justify-between px-3 py-3 min-[360px]:px-6 min-[360px]:py-5 md:px-10">
+    <header
+      className={`site-header fade-up fixed inset-x-0 top-0 z-50 flex items-center justify-between px-3 py-3 min-[360px]:px-6 min-[360px]:py-5 md:px-10 ${
+        mobileSurface
+          ? "border-b border-line/80 bg-ground md:border-b-0 md:bg-transparent"
+          : ""
+      }`}
+    >
       <Link
         href="/"
         aria-label="whiff home"
@@ -31,15 +44,20 @@ export function Header() {
           explanatory content. It is a real link rather than a dialog because
           it is also the one internal edge a crawler can follow off the home
           page. */}
-      <nav aria-label="Primary" className="flex items-center gap-1 min-[360px]:gap-2">
-        <Link
-          href="/blog"
-          className="header-action rounded-full border border-line bg-ground-lift px-2.5 py-1.5 font-display text-xs font-medium text-ink transition-colors hover:border-ink hover:bg-ground min-[360px]:px-4 min-[360px]:py-2 min-[360px]:text-sm"
-        >
-          Blog
-        </Link>
-        <StatesWhiffIsIn />
-        <Contact />
+      <nav aria-label="Primary">
+        <div className="hidden items-center gap-2 md:flex">
+          {!hideBlog && (
+            <Link
+              href="/blog"
+              className="header-action rounded-full border border-line bg-ground-lift px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-ink hover:bg-ground"
+            >
+              Blog
+            </Link>
+          )}
+          <StatesWhiffIsIn />
+          <Contact />
+        </div>
+        <MobileNav hideBlog={hideBlog} />
       </nav>
     </header>
   );

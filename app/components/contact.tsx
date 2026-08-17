@@ -1,36 +1,79 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { CONTACT_EMAIL } from "../config/site";
 
 const INSTAGRAM = "https://www.instagram.com/discover_whiff/";
+const DEFAULT_TRIGGER_CLASS =
+  "header-action rounded-full border border-line bg-ground-lift px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-ink hover:bg-ground";
 
-export function Contact() {
+export function Contact({ triggerClassName = DEFAULT_TRIGGER_CLASS }: { triggerClassName?: string }) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  const closeDialog = useCallback(() => {
+    setOpen(false);
+    requestAnimationFrame(() => triggerRef.current?.focus());
+  }, []);
+
   useEffect(() => {
     const frame = requestAnimationFrame(() => setMounted(true));
     return () => cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+    if (!open) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const frame = requestAnimationFrame(() => closeRef.current?.focus());
+
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        closeDialog();
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      if (!focusable?.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     }
-    if (open) window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+
+    window.addEventListener("keydown", onKey, true);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("keydown", onKey, true);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [closeDialog, open]);
 
   return (
     <>
       <motion.button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen(true)}
         whileHover={{ y: -2 }}
         whileTap={{ scale: 0.96 }}
-        className="header-action rounded-full border border-line bg-ground-lift px-2.5 py-1.5 font-display text-xs font-medium text-ink transition-colors hover:border-ink hover:bg-ground min-[360px]:px-4 min-[360px]:py-2 min-[360px]:text-sm"
+        className={triggerClassName}
       >
         Contact
       </motion.button>
@@ -49,10 +92,11 @@ export function Contact() {
                 <button
                   type="button"
                   aria-label="Close"
-                  onClick={() => setOpen(false)}
+                  onClick={closeDialog}
                   className="absolute inset-0 bg-ink/35 backdrop-blur-[2px]"
                 />
                 <motion.div
+                  ref={dialogRef}
                   role="dialog"
                   aria-modal="true"
                   aria-label="Contact whiff"
@@ -63,8 +107,9 @@ export function Contact() {
                   className="relative w-full max-w-sm rounded-3xl border border-line bg-ground-lift p-7 text-center shadow-[0_40px_80px_-30px_rgba(36,26,21,0.28)]"
                 >
                   <button
+                    ref={closeRef}
                     type="button"
-                    onClick={() => setOpen(false)}
+                    onClick={closeDialog}
                     aria-label="Close"
                     className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-ground hover:text-ink"
                   >
