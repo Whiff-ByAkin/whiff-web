@@ -42,7 +42,6 @@ main {
   background: var(--color-ground);
 }
 
-.hero-mascot-still,
 .hero-mascot-video {
   position: absolute;
   inset: 0;
@@ -50,11 +49,7 @@ main {
   width: 100%;
   object-fit: contain;
   pointer-events: none;
-}
-
-.hero-mascot-still {
   padding-inline: 24%;
-  opacity: 1;
   mix-blend-mode: multiply;
   -webkit-mask-image: radial-gradient(
     ellipse 50% 50% at center,
@@ -68,42 +63,6 @@ main {
     rgb(0 0 0 / 92%) 94%,
     transparent 100%
   );
-  transition: opacity 120ms ease-out;
-}
-
-.hero-mascot-still[data-video-ready="true"] {
-  opacity: 0;
-}
-
-.hero-mascot-video {
-  opacity: 0;
-  mix-blend-mode: multiply;
-  -webkit-mask-image: radial-gradient(
-    ellipse 50% 50% at center,
-    #000 84%,
-    rgb(0 0 0 / 92%) 94%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(
-    ellipse 50% 50% at center,
-    #000 84%,
-    rgb(0 0 0 / 92%) 94%,
-    transparent 100%
-  );
-  transition: opacity 180ms ease-out;
-}
-
-.hero-mascot-video[data-ready="true"] {
-  opacity: 1;
-}
-
-.hero-mascot-video[data-variant="wave"] {
-  filter: brightness(1.025);
-}
-
-.hero-mascot-video[data-variant="pebble"] {
-  transform: scale(1.06);
-  mix-blend-mode: normal;
 }
 
 body {

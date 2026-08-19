@@ -4,8 +4,8 @@ import { SITE_URL } from "./config/site";
 // A fixed date keeps this sitemap statically generated and deterministic.
 // Bump it when page content meaningfully changes — a lastmod that silently
 // tracks the build date teaches crawlers to ignore the field.
-const CONTENT_UPDATED = new Date("2026-08-15");
-const LEGAL_UPDATED = new Date("2026-07-22");
+const CONTENT_UPDATED = new Date("2026-08-18");
+const LEGAL_UPDATED = new Date("2026-08-18");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const url = (path: string) => new URL(path, SITE_URL).toString();

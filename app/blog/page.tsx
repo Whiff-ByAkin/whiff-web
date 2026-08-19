@@ -4,27 +4,23 @@ import { Header } from "../components/header";
 import { JsonLd } from "../components/json-ld";
 import { BlogExplorer } from "./blog-explorer";
 import { POSTS } from "./posts";
-import { PROMISE } from "../seo-content";
 import { SITE_NAME, SITE_URL } from "../config/site";
 import { ORG_ID, abs, organization, service, website } from "../lib/structured-data";
 
-/* The visible title is a title. The <title> tag is where the searchable words
-   go — "what whiff is", "not a dating app" — because that string is matched
-   against a query and read in a result, and nobody has ever clicked a result
-   because it was called "The long version". The two jobs are different, so
-   they get different strings. */
-const H1 = "The long version";
+/* The visible and metadata titles now use the same plain-language promise, so
+   readers and search results both say exactly what this page explains. */
+const H1 = "How whiff works";
 /* Kept under ~55 characters so the template's " · whiff" still fits inside
    Google's ~600px title budget. The old one ran to 76 and was truncated in
    the result, which threw away the disqualifier at the end. */
-const TITLE = "What whiff is, and why it is not a dating app";
+const TITLE = "How whiff works, and why it is not a dating app";
 const DESCRIPTION =
   "How whiff works: activity-first friend circles of four adults who keep meeting up, no profiles and no swiping. Three pieces on what it is, how friendships actually form, and who it is not for.";
 
 /* BlogPosting wants dates. Without them a crawler has no freshness signal for
    the page at all, so this is the date the pieces were last rewritten — bump
    it with the sitemap's CONTENT_UPDATED when the copy changes. */
-const UPDATED = "2026-08-15";
+const UPDATED = "2026-08-18";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -127,8 +123,9 @@ export default function BlogPage() {
               {H1}
             </h1>
             <p className="mx-auto mt-4 max-w-[58ch] text-[1.05rem] leading-relaxed text-ink-muted sm:mx-0">
-              The home page is one screen: {PROMISE} This is everything it
-              left out, in three pieces, in order.
+              The home page gives you the short version. These three pieces
+              explain how whiff works, why the same four people matter, and why
+              this is not a dating app.
             </p>
           </header>
 

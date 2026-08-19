@@ -227,11 +227,12 @@ export function ApplyCTA({
                 <div className="py-3 text-center">
                   {/* the one celebration moment on the site */}
                   <Image
-                    src="/whiff-mascot-wave.png"
+                    src="/whiff-mascot.png"
                     alt=""
-                    width={397}
-                    height={900}
-                    className="mx-auto mb-3 h-32 w-auto select-none"
+                    width={2160}
+                    height={3870}
+                    sizes="81px"
+                    className="mx-auto mb-3 h-36 w-auto select-none mix-blend-multiply"
                     draggable={false}
                   />
                   <p className="font-display text-xl font-semibold text-ink">

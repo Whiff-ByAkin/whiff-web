@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <LegalShell title="Privacy Policy" updated="July 2026">
+    <LegalShell title="Privacy Policy" updated="August 2026">
       <p>
         This Privacy Policy explains how whiff (&ldquo;whiff,&rdquo;
         &ldquo;we,&rdquo; &ldquo;us&rdquo;) collects, uses, and protects your
@@ -23,6 +23,11 @@ export default function PrivacyPage() {
         <li>
           <strong>Your email address</strong>, when you apply to join or contact
           us. Providing it is voluntary, but it is how we reach you.
+        </li>
+        <li>
+          <strong>Your city or state</strong>, when you provide it so we can
+          understand local interest and tell you when whiff is available near
+          you.
         </li>
         <li>
           <strong>Anything you choose to send us</strong>, such as the contents
@@ -43,6 +48,7 @@ export default function PrivacyPage() {
       <h2>How we use your information</h2>
       <ul>
         <li>To contact you about your application, invites, and our launch.</li>
+        <li>To understand where people want whiff to become available.</li>
         <li>To respond to your questions and requests.</li>
         <li>To operate, secure, and improve the site.</li>
         <li>To comply with legal obligations.</li>
@@ -53,9 +59,10 @@ export default function PrivacyPage() {
         We do not sell your personal information. We share it only with service
         providers who help us run whiff, and only as needed. These currently
         include <a href="https://formspree.io/legal/privacy-policy/">Formspree</a>{" "}
-        (which processes our join and contact form submissions) and our website
-        hosting provider. We may also disclose information if required by law or
-        to protect the rights and safety of whiff and its users.
+        (which processes our join and location-interest form submissions) and
+        our website hosting provider. We may also disclose information if
+        required by law or to protect the rights and safety of whiff and its
+        users.
       </p>
 
       <h2>Cookies</h2>

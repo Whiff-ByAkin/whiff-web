@@ -7,7 +7,7 @@ import { CONTACT_EMAIL } from "../config/site";
 
 const INSTAGRAM = "https://www.instagram.com/discover_whiff/";
 const DEFAULT_TRIGGER_CLASS =
-  "header-action rounded-full border border-line bg-ground-lift px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-ink hover:bg-ground";
+  "header-action rounded-full border border-line bg-transparent px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-ink hover:bg-ground-lift focus-visible:bg-ground-lift";
 
 export function Contact({ triggerClassName = DEFAULT_TRIGGER_CLASS }: { triggerClassName?: string }) {
   const [open, setOpen] = useState(false);

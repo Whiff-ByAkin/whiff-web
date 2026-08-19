@@ -6,7 +6,7 @@ import { Contact } from "./contact";
 import { StatesWhiffIsIn } from "./states-whiff-is-in";
 
 const MENU_ACTION =
-  "flex min-h-11 w-full items-center rounded-xl px-4 py-2.5 text-left font-display text-sm font-semibold text-ink transition-colors hover:bg-ground focus-visible:bg-ground";
+  "flex min-h-11 w-full items-center justify-end rounded-xl border border-transparent px-4 py-2.5 text-right font-display text-sm font-semibold text-ink transition-colors hover:border-line focus-visible:border-ink focus-visible:outline-none";
 
 export function MobileNav({ hideBlog = false }: { hideBlog?: boolean }) {
   const [open, setOpen] = useState(false);
@@ -55,7 +55,7 @@ export function MobileNav({ hideBlog = false }: { hideBlog?: boolean }) {
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen((value) => !value)}
-        className="grid h-11 w-11 place-items-center rounded-full border border-line bg-ground-lift text-ink transition-colors hover:border-ink hover:bg-ground"
+        className="grid h-11 w-11 place-items-center rounded-full border border-line bg-transparent text-ink transition-colors hover:border-ink focus-visible:border-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-ground"
       >
         <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
         <span aria-hidden="true" className="flex w-[1.125rem] flex-col gap-[0.23rem]">
@@ -80,7 +80,7 @@ export function MobileNav({ hideBlog = false }: { hideBlog?: boolean }) {
       <div
         id={panelId}
         hidden={!open}
-        className="absolute right-0 top-[calc(100%+0.5rem)] w-48 rounded-2xl border border-line bg-ground-lift p-1.5 shadow-[0_22px_48px_-24px_rgba(36,26,21,0.38)]"
+        className="absolute right-0 top-[calc(100%+0.5rem)] flex w-40 flex-col gap-1.5 bg-transparent p-0"
       >
         {!hideBlog && (
           <Link href="/blog" onClick={() => closeMenu({ returnFocus: false })} className={MENU_ACTION}>

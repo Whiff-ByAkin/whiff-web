@@ -14,6 +14,7 @@ const START = 0.08;
 const STAGGER = 0.07;
 const TRAVEL = 0.86;
 const SETTLED = START + STAGGER * (COUNT - 1) + TRAVEL;
+const SPIN_DURATION = 12;
 
 const INK = "#241a15";
 const INK_FAINT = "#9a8b81";
@@ -44,59 +45,77 @@ export function CircleHalo({
         className="pointer-events-none absolute z-[2] aspect-square h-[142%]"
         style={{ "--circle-settled": `${SETTLED}s` } as React.CSSProperties}
       >
-        <span className="circle-bloom absolute inset-0 rounded-full" />
-        <motion.span
-          className="absolute inset-0 rounded-full border border-line"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{
-            duration: reduce ? 0 : 0.5,
-            delay: reduce ? 0 : SETTLED - 0.28,
-            ease: "easeOut",
-          }}
-        />
+        {/* The halo owns the orbit, while the mascot remains in the sibling
+            layer below. It makes one measured revolution after assembly and
+            then rests, leaving the hero calm once the entrance is complete. */}
+        <motion.div
+          className="absolute inset-0 [will-change:transform]"
+          initial={{ rotate: 0 }}
+          animate={{ rotate: reduce ? 0 : 360 }}
+          transition={
+            reduce
+              ? { duration: 0 }
+              : {
+                  delay: SETTLED,
+                  duration: SPIN_DURATION,
+                  ease: "linear",
+                }
+          }
+        >
+          <span className="circle-bloom absolute inset-0 rounded-full" />
+          <motion.span
+            className="absolute inset-0 rounded-full border border-line"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: reduce ? 0 : 0.5,
+              delay: reduce ? 0 : SETTLED - 0.28,
+              ease: "easeOut",
+            }}
+          />
 
-        {SEATS.map((seat, index) => {
-          const empty = index === EMPTY;
-          const closed = empty && filled;
+          {SEATS.map((seat, index) => {
+            const empty = index === EMPTY;
+            const closed = empty && filled;
 
-          return (
-            <motion.span
-              key={index}
-              className="absolute inset-0 block"
-              initial={{
-                x: `${seat.fromX}%`,
-                y: `${seat.fromY}%`,
-                opacity: 0,
-              }}
-              animate={{ x: `${seat.x}%`, y: `${seat.y}%`, opacity: 1 }}
-              transition={{
-                delay: reduce ? 0 : START + index * STAGGER,
-                duration: reduce ? 0 : TRAVEL,
-                ease: [0.2, 0.82, 0.24, 1],
-              }}
-            >
+            return (
               <motion.span
-                className={`absolute left-1/2 top-1/2 block h-[8%] w-[8%] -translate-x-1/2 -translate-y-1/2 rounded-full ring-[3px] ring-ground ${
-                  empty && !closed ? "seat-searching" : ""
-                }`}
-                initial={false}
-                animate={{
-                  backgroundColor: empty && !closed ? "transparent" : INK,
-                  borderColor: empty && !closed ? INK_FAINT : INK,
-                  borderWidth: empty && !closed ? 2 : 0,
-                  scale: closed ? 1.18 : 1,
+                key={index}
+                className="absolute inset-0 block"
+                initial={{
+                  x: `${seat.fromX}%`,
+                  y: `${seat.fromY}%`,
+                  opacity: 0,
                 }}
+                animate={{ x: `${seat.x}%`, y: `${seat.y}%`, opacity: 1 }}
                 transition={{
-                  duration: closed ? 0.32 : 0.18,
-                  type: closed ? "spring" : "tween",
-                  stiffness: 360,
-                  damping: 18,
+                  delay: reduce ? 0 : START + index * STAGGER,
+                  duration: reduce ? 0 : TRAVEL,
+                  ease: [0.2, 0.82, 0.24, 1],
                 }}
-              />
-            </motion.span>
-          );
-        })}
+              >
+                <motion.span
+                  className={`absolute left-1/2 top-1/2 block h-[8%] w-[8%] -translate-x-1/2 -translate-y-1/2 rounded-full ring-[3px] ring-ground ${
+                    empty && !closed ? "seat-searching" : ""
+                  }`}
+                  initial={false}
+                  animate={{
+                    backgroundColor: empty && !closed ? "transparent" : INK,
+                    borderColor: empty && !closed ? INK_FAINT : INK,
+                    borderWidth: empty && !closed ? 2 : 0,
+                    scale: closed ? 1.18 : 1,
+                  }}
+                  transition={{
+                    duration: closed ? 0.32 : 0.18,
+                    type: closed ? "spring" : "tween",
+                    stiffness: 360,
+                    damping: 18,
+                  }}
+                />
+              </motion.span>
+            );
+          })}
+        </motion.div>
       </div>
 
       <div className="relative z-[1]">{children}</div>
