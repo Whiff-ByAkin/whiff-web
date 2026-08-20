@@ -29,6 +29,25 @@ main {
   overflow-x: hidden;
 }
 
+/* The header is fixed, and on every page that scrolls the prose used to run
+   straight under the wordmark and the pill buttons. A scrim of the page's own
+   ground, faded out at its lower edge, catches that text without drawing a
+   band: on the home page (which cannot scroll) it is ground over ground and
+   therefore invisible. */
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: -1px 0 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    var(--color-ground) 0%,
+    var(--color-ground) 58%,
+    color-mix(in srgb, var(--color-ground) 0%, transparent) 100%
+  );
+}
+
 .hero-ornament {
   padding-bottom: clamp(1.2rem, 5vh, 3.5rem);
 }

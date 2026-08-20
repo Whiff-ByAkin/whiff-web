@@ -35,7 +35,6 @@ export function BlogExplorer() {
   const [activeId, setActiveId] = useState(OVERVIEW_ID);
   const reduce = useReducedMotion();
   const item = reduce ? lineCalm : line;
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const contentRefs = useRef<Record<string, HTMLHeadingElement | null>>({});
 
   function activate(id: string, focusContent = false) {
@@ -52,31 +51,8 @@ export function BlogExplorer() {
     });
   }
 
-  /** Automatic-activation roving tabs for the desktop editorial rail. */
-  function onKeyDown(event: React.KeyboardEvent, index: number) {
-    const last = OPTIONS.length - 1;
-    const next =
-      event.key === "ArrowDown" || event.key === "ArrowRight"
-        ? index === last
-          ? 0
-          : index + 1
-        : event.key === "ArrowUp" || event.key === "ArrowLeft"
-          ? index === 0
-            ? last
-            : index - 1
-          : event.key === "Home"
-            ? 0
-            : event.key === "End"
-              ? last
-              : null;
-    if (next === null) return;
-    event.preventDefault();
-    activate(OPTIONS[next].id);
-    tabRefs.current[next]?.focus();
-  }
-
   return (
-    <div className="mx-auto grid w-full max-w-[92rem] gap-x-12 gap-y-8 lg:grid-cols-[minmax(13rem,18rem)_minmax(0,1fr)]">
+    <div className="mx-auto w-full max-w-[68rem]">
       {/* A native chooser stays compact at 320px and scales to any number of
           posts without inventing a horizontal scrolling control. */}
       <div className="min-w-0 lg:hidden">
@@ -101,60 +77,14 @@ export function BlogExplorer() {
         </select>
       </div>
 
-      {/* The rail keeps its tab semantics and gains its own bounded scroll
-          area, so adding twenty topics does not push the page index offscreen. */}
-      <div className="hidden self-start lg:sticky lg:top-28 lg:block">
-        <div
-          role="tablist"
-          aria-label="Pieces to read"
-          className="flex max-h-[calc(100svh-8rem)] flex-col gap-1.5 overflow-y-auto overscroll-contain pr-2 [scrollbar-color:var(--color-stone)_transparent] [scrollbar-width:thin]"
-        >
-          {OPTIONS.map((option, index) => {
-            const isActive = option.id === activeId;
-            return (
-              <button
-                key={option.id}
-                ref={(element) => {
-                  tabRefs.current[index] = element;
-                }}
-                role="tab"
-                id={`tab-${option.id}`}
-                aria-selected={isActive}
-                aria-controls={`panel-${option.id}`}
-                tabIndex={isActive ? 0 : -1}
-                onClick={() => activate(option.id)}
-                onKeyDown={(event) => onKeyDown(event, index)}
-                className={`group flex w-full min-w-0 items-center gap-3 rounded-2xl border px-4 py-3.5 text-left font-display text-sm font-semibold leading-tight transition-colors ${
-                  isActive
-                    ? "border-ink/25 bg-ground-lift text-ink"
-                    : "border-transparent text-ink-muted hover:bg-ground-lift/70 hover:text-ink"
-                }`}
-              >
-                <span
-                  aria-hidden="true"
-                  className={`grid h-5 min-w-5 shrink-0 place-items-center rounded-full px-1 text-[0.68rem] font-bold transition-colors ${
-                    isActive
-                      ? "bg-ink text-on-ink"
-                      : "bg-stone/45 text-ink-muted group-hover:bg-stone"
-                  }`}
-                >
-                  {index === 0 ? "¶" : index}
-                </span>
-                <span className="min-w-0 whitespace-normal">{option.label}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className="min-w-0">
+      <div className="mt-8 min-w-0 lg:mt-0">
         <section
-          role="tabpanel"
           id={`panel-${OVERVIEW_ID}`}
-          aria-labelledby={`tab-${OVERVIEW_ID}`}
+          aria-labelledby={`heading-${OVERVIEW_ID}`}
           hidden={activeId !== OVERVIEW_ID}
         >
           <h2
+            id={`heading-${OVERVIEW_ID}`}
             ref={(element) => {
               contentRefs.current[OVERVIEW_ID] = element;
             }}
@@ -167,20 +97,29 @@ export function BlogExplorer() {
           <ol className="mt-7 border-t border-line">
             {POSTS.map((post, index) => (
               <li key={post.id} className="border-b border-line py-6 sm:py-7">
-                <article className="max-w-[68ch]">
-                  <p className="font-display text-xs font-semibold uppercase tracking-[0.13em] text-ink-muted">
+                {/* An index row, not a stacked card. The number, the piece and
+                    the way in each own a column from lg up, so the row reaches
+                    the same right edge as the rule that closes it — the copy
+                    still keeps a reading measure instead of being stretched to
+                    fill the width, which is what the empty column was for. */}
+                <article className="grid items-start gap-x-8 gap-y-4 lg:grid-cols-[7.5rem_minmax(0,1fr)_auto] xl:gap-x-12">
+                  <p className="font-display text-xs font-semibold uppercase tracking-[0.13em] text-ink-muted lg:pt-2">
                     {String(index + 1).padStart(2, "0")} · {post.label}
                   </p>
-                  <h3 className="mt-2 font-display text-[1.35rem] font-semibold leading-tight text-ink sm:text-2xl">
-                    {post.title}
-                  </h3>
-                  <p className="mt-3 leading-relaxed text-ink/85">
-                    {post.paragraphs[0]}
-                  </p>
+
+                  <div className="min-w-0">
+                    <h3 className="font-display text-[1.35rem] font-semibold leading-tight text-ink sm:text-2xl">
+                      {post.title}
+                    </h3>
+                    <p className="mt-3 max-w-[62ch] leading-relaxed text-ink/85">
+                      {post.paragraphs[0]}
+                    </p>
+                  </div>
+
                   <button
                     type="button"
                     onClick={() => activate(post.id, true)}
-                    className="mt-4 inline-flex min-h-11 items-center gap-2 font-display text-sm font-semibold text-ink underline decoration-line decoration-2 underline-offset-4 transition-colors hover:decoration-ink"
+                    className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap font-display text-sm font-semibold text-ink underline decoration-line decoration-2 underline-offset-4 transition-colors hover:decoration-ink lg:justify-self-end lg:pt-1"
                   >
                     Read the full thing <span aria-hidden="true">→</span>
                   </button>
@@ -193,11 +132,10 @@ export function BlogExplorer() {
         {POSTS.map((post) => {
           const isActive = post.id === activeId;
           return (
-            <div
+            <section
               key={post.id}
-              role="tabpanel"
               id={`panel-${post.id}`}
-              aria-labelledby={`tab-${post.id}`}
+              aria-labelledby={`heading-${post.id}`}
               hidden={!isActive}
             >
               <button
@@ -212,10 +150,15 @@ export function BlogExplorer() {
                 variants={list}
                 initial="resting"
                 animate={isActive ? "shown" : "resting"}
-                className="grid gap-x-10 gap-y-8 xl:grid-cols-[minmax(0,1fr)_minmax(0,23rem)]"
+                // The aside column used to wait for xl, which left every
+                // laptop between 1024 and 1280 reading a 64ch column with a
+                // third of the row empty beside it. It splits at lg now, on a
+                // narrower rail that widens once there is room for it.
+                className="grid gap-x-10 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,19rem)] xl:grid-cols-[minmax(0,1fr)_minmax(0,23rem)]"
               >
                 <div>
                   <motion.h2
+                    id={`heading-${post.id}`}
                     ref={(element) => {
                       contentRefs.current[post.id] = element;
                     }}
@@ -274,13 +217,13 @@ export function BlogExplorer() {
                   ))}
 
                   {post.pullquote && (
-                    <blockquote className="border-l-2 border-stone pl-5 font-display text-[clamp(1.15rem,1.6vw,1.4rem)] font-semibold leading-snug text-ink xl:mt-12">
+                    <blockquote className="border-l-2 border-stone pl-5 font-display text-[clamp(1.15rem,1.6vw,1.4rem)] font-semibold leading-snug text-ink lg:mt-12">
                       {post.pullquote}
                     </blockquote>
                   )}
                 </motion.div>
               </motion.div>
-            </div>
+            </section>
           );
         })}
       </div>

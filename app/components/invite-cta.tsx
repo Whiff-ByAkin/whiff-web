@@ -253,17 +253,10 @@ export function ApplyCTA({
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4" noValidate>
                   <h2 className="font-display text-2xl font-semibold text-ink">
-                    good. we&rsquo;ll find your three.
+                    we&rsquo;ll find your three.
                   </h2>
                   <p className="text-[15px] leading-relaxed text-ink-muted">
-                    we look for the three who bring out your best — then twelve
-                    weeks of things you&rsquo;d actually choose to do, and a
-                    few you&rsquo;ve never tried. while yours comes together,
-                    other circles invite you along to what you already love.
-                  </p>
-                  <p className="text-[15px] leading-relaxed text-ink-muted">
-                    whiff opens one city at a time. leave your email and
-                    we&rsquo;ll come back when yours is ready.
+                    we promise: strangers only on week one.
                   </p>
                   <div className="space-y-1.5">
                     <label

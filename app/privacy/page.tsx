@@ -2,111 +2,433 @@ import type { Metadata } from "next";
 import { LegalShell } from "../components/legal-shell";
 import { CONTACT_EMAIL } from "../config/site";
 
+/* The old version of this page described an email waitlist, because that was
+   all the site did. The app collects a name, an email, a birth year, a sex, a
+   city, coordinates, free-text answers about somebody's life, and then runs
+   those answers through a language model to produce a profile that decides who
+   they are seated with. A privacy policy that does not say so is not a
+   privacy policy for this product.
+
+   Guideline 5.1.1(i) requires this document to state what is collected, how,
+   every use, that third parties give equivalent protection, and how somebody
+   revokes consent or gets their data deleted. Section 5 is the one that
+   matters most and the one most likely to be read closely: automated
+   decision-making about a person is a named right under GDPR Article 22 and a
+   disclosure obligation under several US state laws. */
+
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "How whiff collects, uses, and protects your information.",
+  description:
+    "What whiff collects, what it infers about you, who it shares data with, and how to get it deleted.",
   alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {
   return (
-    <LegalShell title="Privacy Policy" updated="August 2026">
+    <LegalShell title="Privacy Policy" updated="August 20, 2026">
       <p>
-        This Privacy Policy explains how whiff (&ldquo;whiff,&rdquo;
-        &ldquo;we,&rdquo; &ldquo;us&rdquo;) collects, uses, and protects your
-        information when you visit our website or ask to join. whiff puts people
-        into small groups that meet in person, the same night every week. By using our site, you agree to this policy.
+        This policy explains what <strong>Whiff LLC</strong> (&ldquo;whiff,&rdquo;
+        &ldquo;we,&rdquo; &ldquo;us&rdquo;) collects about you, what we do with
+        it, who else sees it, and how to get it back or deleted. It covers the
+        whiff website and the whiff mobile app.
+      </p>
+      <p>
+        The short version: whiff needs to know a fair amount about you in order
+        to work, and it forms opinions about you automatically. We do not sell
+        your data and we do not use it for advertising. Section 5 is the part
+        most people will want to read.
       </p>
 
-      <h2>Information we collect</h2>
+      <h2>1. Information you give us</h2>
       <ul>
         <li>
-          <strong>Your email address</strong>, when you apply to join or contact
-          us. Providing it is voluntary, but it is how we reach you.
+          <strong>Account details</strong> — your name, email address, and
+          password. We store passwords only as a salted hash; we never see the
+          password itself.
         </li>
         <li>
-          <strong>Your city or state</strong>, when you provide it so we can
-          understand local interest and tell you when whiff is available near
-          you.
+          <strong>Basic profile</strong> — your birth year and, if you choose to
+          give it, your sex. Sex is optional and{" "}
+          <strong>&ldquo;prefer not to say&rdquo; is a real answer</strong> that
+          costs you nothing in how whiff treats you. Your phone number, if you
+          give one.
         </li>
         <li>
-          <strong>Anything you choose to send us</strong>, such as the contents
-          of a message when you get in touch.
+          <strong>Where you are</strong> — your city and time zone, which are
+          required because circles are local. If you allow it, approximate
+          coordinates, used to judge how far an activity is from you.{" "}
+          <strong>whiff does not track your location in the background</strong>{" "}
+          and does not follow you between activities.
         </li>
         <li>
-          <strong>Basic technical data</strong> that most websites receive
-          automatically, such as your browser type, device, and approximate
-          region, used to keep the site secure and working.
+          <strong>Your onboarding answers</strong> — free-text answers, in your
+          own words, to questions about how you spend your time and what you
+          are like. This is the most personal thing whiff holds, and it is the
+          material section 5 is about.
+        </li>
+        <li>
+          <strong>What happens at activities</strong> — whether you said you
+          would come, whether you came, and the feedback and reflections you
+          write afterward.
+        </li>
+        <li>
+          <strong>Corrections</strong> — when you tell whiff it has got
+          something wrong about you, we keep the correction.
+        </li>
+        <li>
+          <strong>Reports and blocks</strong> — if you report or block another
+          member, we keep a record of it, including who reported whom and why.
+        </li>
+        <li>
+          <strong>Anything else you send us</strong>, such as an email to
+          support.
+        </li>
+      </ul>
+
+      <h2>2. Information we receive from others</h2>
+      <ul>
+        <li>
+          <strong>From Apple</strong> — when you subscribe, Apple gives us a
+          transaction identifier and tells us about renewals, cancellations,
+          refunds, and billing failures.{" "}
+          <strong>
+            whiff never receives your card number, billing address, or Apple
+            Account credentials.
+          </strong>{" "}
+          Payment is handled entirely by Apple.
+        </li>
+        <li>
+          <strong>Technical data</strong> that any app or website receives:
+          device type, operating system version, app version, IP address,
+          approximate region derived from it, and error diagnostics. We use this
+          to keep the service working and secure.
+        </li>
+      </ul>
+
+      <h2>3. What we do with it</h2>
+      <ul>
+        <li>
+          <strong>To place you in a circle</strong> — the core of the service.
+          This is described in section 5.
+        </li>
+        <li>
+          <strong>To plan activities</strong> that suit the four people in your
+          circle, in your city, at a time you can reach.
+        </li>
+        <li>
+          <strong>To run your subscription</strong> — starting your trial,
+          reminding you before the first charge, and knowing whether your access
+          is active.
+        </li>
+        <li>
+          <strong>To email you</strong> about your circle, upcoming activities,
+          your trial, and account and security matters.
+        </li>
+        <li>
+          <strong>To keep people safe</strong> — reviewing reports, enforcing
+          our{" "}
+          <a href="/terms">Terms</a>, and making sure blocked members are never
+          placed together.
+        </li>
+        <li>
+          <strong>To improve whiff</strong> — understanding, in aggregate, what
+          makes circles work.
+        </li>
+        <li>
+          <strong>To meet legal obligations</strong> and to establish, exercise,
+          or defend legal claims.
         </li>
       </ul>
       <p>
-        We do not ask for or intentionally collect sensitive personal
-        information at this stage, and we do not build advertising profiles about
-        you.
+        <strong>
+          We do not sell your personal information, we do not share it for
+          cross-context behavioural advertising, and we do not build advertising
+          profiles.
+        </strong>{" "}
+        We have never done so and have no plans to.
       </p>
 
-      <h2>How we use your information</h2>
+      <h2>4. Our legal bases (if you are in the EEA or UK)</h2>
       <ul>
-        <li>To contact you about your application, invites, and our launch.</li>
-        <li>To understand where people want whiff to become available.</li>
-        <li>To respond to your questions and requests.</li>
-        <li>To operate, secure, and improve the site.</li>
-        <li>To comply with legal obligations.</li>
+        <li>
+          <strong>Performance of a contract</strong> — running your account,
+          your subscription, and your circle.
+        </li>
+        <li>
+          <strong>Legitimate interests</strong> — safety, fraud prevention,
+          security, and improving the service, balanced against your rights.
+        </li>
+        <li>
+          <strong>Consent</strong> — for optional things such as approximate
+          location and any marketing email. You can withdraw consent at any
+          time.
+        </li>
+        <li>
+          <strong>Legal obligation</strong> — where the law requires us to keep
+          or disclose something.
+        </li>
       </ul>
 
-      <h2>How we share it</h2>
+      <h2>5. Automated profiling and how placement decisions are made</h2>
       <p>
-        We do not sell your personal information. We share it only with service
-        providers who help us run whiff, and only as needed. These currently
-        include <a href="https://formspree.io/legal/privacy-policy/">Formspree</a>{" "}
-        (which processes our join and location-interest form submissions) and
-        our website hosting provider. We may also disclose information if
-        required by law or to protect the rights and safety of whiff and its
-        users.
+        <strong>This is how whiff works, so please read it.</strong>
+      </p>
+      <p>
+        When you answer whiff&rsquo;s onboarding questions, your answers are sent
+        to a <strong>third-party large language model provider (Anthropic)</strong>{" "}
+        and read automatically. The result is a structured profile of you:
+        interests, traits, an inferred personality type, and a set of statements
+        whiff holds as beliefs about you, each with a confidence attached. Your
+        attendance and your feedback after activities update those beliefs over
+        time.
+      </p>
+      <p>
+        <strong>
+          That profile drives automated decisions about you.
+        </strong>{" "}
+        It determines which circle you are placed in, which three people are
+        placed with you, how long you wait for a seat, and which activities are
+        planned. These decisions are made by software, without a human reviewing
+        each one.
+      </p>
+      <p>
+        Some things we want to be explicit about:
+      </p>
+      <ul>
+        <li>
+          <strong>Your raw answers are not shown to other members.</strong>{" "}
+          Neither are your beliefs, your confidence scores, or your personality
+          type.
+        </li>
+        <li>
+          <strong>
+            While a circle is forming, the other seats are sealed.
+          </strong>{" "}
+          Names, personality types, shared interests, and identities are not
+          revealed until all four seats are filled.
+        </li>
+        <li>
+          <strong>
+            Anthropic does not train its models on your answers.
+          </strong>{" "}
+          Its Commercial Terms &mdash; the ones that govern our use of it &mdash;
+          state that Anthropic may not train models on customer content. It
+          processes your answers to return a result to us and{" "}
+          <strong>deletes them within 30 days</strong>. If its automated safety
+          systems flag something as violating its usage policy, that content may
+          be reviewed by a person and kept for up to two years.
+        </li>
+        <li>
+          <strong>whiff&rsquo;s inferences are guesses and will sometimes be
+          wrong.</strong>{" "}
+          They are not an assessment of your character, health, or worth.
+        </li>
+      </ul>
+      <p>
+        <strong>Your rights over this.</strong> You can see much of what whiff
+        believes about you in the app, under <strong>You &rarr; What whiff
+        believes</strong>, and correct it there. If you are in a jurisdiction
+        that grants rights over automated decision-making — including{" "}
+        <strong>Article 22 of the UK/EU GDPR</strong> — you have the right to
+        ask for human review of a decision, to express your point of view, and
+        to contest it. Email{" "}
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> and a person will
+        look at it.
       </p>
 
-      <h2>Cookies</h2>
+      <h2>6. What other members can see</h2>
       <p>
-        We keep this minimal. We do not currently use advertising or
-        cross-site tracking cookies. If we add analytics in the future, we will
-        update this policy.
+        Once a circle is complete, the other three people see{" "}
+        <strong>your display name</strong> and whatever you choose to tell them
+        in person. They do not see your email address, your phone number, your
+        exact location, your birth year, your onboarding answers, your feedback,
+        or anything whiff has inferred about you.
+      </p>
+      <p>
+        Feedback you give after an activity is used by whiff and is not shown to
+        the people it is about.
       </p>
 
-      <h2>Data retention and your choices</h2>
+      <h2>7. Who we share it with</h2>
       <p>
-        We keep your information only as long as needed for the purposes above.
-        You can ask us to access, correct, or delete your information, or to stop
-        contacting you, at any time by emailing{" "}
-        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Depending on
-        where you live, you may have additional rights under laws such as the
-        GDPR or CCPA; we honor applicable rights.
+        We share personal information only with service providers who help us
+        run whiff, and only as much as they need.{" "}
+        <strong>
+          Each is contractually required to protect your data to at least the
+          standard set out in this policy and to use it only on our
+          instructions.
+        </strong>{" "}
+        They currently are:
+      </p>
+      <ul>
+        <li>
+          <strong>
+            <a href="https://www.anthropic.com/legal/privacy">Anthropic</a>
+          </strong>{" "}
+          — the language model that reads your onboarding answers (section 5).
+        </li>
+        <li>
+          <strong>
+            <a href="https://railway.com/legal/privacy">Railway</a>
+          </strong>{" "}
+          — application hosting and database infrastructure.
+        </li>
+        <li>
+          <strong>
+            <a href="https://resend.com/legal/privacy-policy">Resend</a>
+          </strong>{" "}
+          — sending transactional email.
+        </li>
+        <li>
+          <strong>
+            <a href="https://www.apple.com/legal/privacy/">Apple</a>
+          </strong>{" "}
+          — subscription billing and App Store distribution.
+        </li>
+        <li>
+          <strong>
+            <a href="https://vercel.com/legal/privacy-policy">Vercel</a>
+          </strong>{" "}
+          — website hosting and privacy-friendly, cookieless analytics.
+        </li>
+        <li>
+          <strong>
+            <a href="https://formspree.io/legal/privacy-policy/">Formspree</a>
+          </strong>{" "}
+          — processing the invite form on this website.
+        </li>
+      </ul>
+      <p>
+        We may also disclose information if the law requires it, in response to
+        a valid legal request, to enforce our <a href="/terms">Terms</a>, or
+        where we believe in good faith that it is necessary to prevent serious
+        harm to someone. If whiff is ever acquired or merged, your information
+        may transfer as part of that, and we will tell you before it becomes
+        subject to a different policy.
       </p>
 
-      <h2>Security</h2>
+      <h2>8. Cookies and tracking</h2>
       <p>
-        We take reasonable measures to protect your information. However, no
-        method of transmission or storage is completely secure, and we cannot
-        guarantee absolute security.
+        The whiff app contains{" "}
+        <strong>no advertising SDKs and no cross-app tracking</strong>, and does
+        not ask for permission to track you, because it does not. The website
+        uses no advertising or cross-site tracking cookies; our analytics are
+        aggregate and cookieless.
       </p>
 
-      <h2>Children</h2>
+      <h2>9. How long we keep it</h2>
       <p>
-        whiff is intended for adults 18 and older. It is not directed to
-        children, and we do not knowingly collect information from anyone under
-        18.
+        We keep your information for as long as your account is open, and after
+        that only as long as we need it for the purposes in this policy —
+        typically to resolve disputes, meet legal and tax obligations, and keep
+        safety records such as blocks and reports.
+      </p>
+      <p>
+        Some records are kept in an internal audit log that we do not rewrite,
+        so that decisions whiff made in the past can be explained. Where we keep
+        such a record after you delete your account, we{" "}
+        <strong>strip or pseudonymise the personal details in it</strong> so
+        that it no longer identifies you.
       </p>
 
-      <h2>Changes to this policy</h2>
+      <h2>10. Deleting your account and your data</h2>
       <p>
-        We may update this policy from time to time. When we do, we will revise
-        the &ldquo;Last updated&rdquo; date above. Continued use of the site
-        after changes means you accept the updated policy.
+        <strong>
+          You can delete your account from inside the app: You &rarr; Account
+          &rarr; Delete account.
+        </strong>{" "}
+        You can also email{" "}
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> and we will do
+        it for you.
+      </p>
+      <p>Deleting your account:</p>
+      <ul>
+        <li>
+          removes you from any circle you are in and stops any future placement;
+        </li>
+        <li>
+          deletes your profile, your onboarding answers, and everything whiff
+          inferred about you, within <strong>30 days</strong>;
+        </li>
+        <li>
+          keeps only what we are required to keep — safety records relating to
+          reports about you, and financial records — for as long as the law
+          requires;
+        </li>
+        <li>
+          <strong>does not cancel your Apple subscription.</strong> You must
+          cancel that separately in{" "}
+          <strong>Settings &rarr; your name &rarr; Subscriptions</strong>, or we
+          will keep charging you.
+        </li>
+      </ul>
+
+      <h2>11. Your rights</h2>
+      <p>
+        Wherever you live, you can ask us to{" "}
+        <strong>access, correct, export, or delete</strong> your personal
+        information, and to stop sending you non-essential email. Email{" "}
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. We answer within
+        30 days and we will not treat you differently for asking.
+      </p>
+      <p>
+        <strong>If you are in the EEA, UK, or Switzerland</strong>, you also have
+        rights to restrict or object to processing, to data portability, to
+        withdraw consent, to the human review described in section 5, and to
+        complain to your local data protection authority.
+      </p>
+      <p>
+        <strong>
+          If you are in California or another US state with a privacy law
+        </strong>{" "}
+        (including Colorado, Connecticut, Virginia, Texas, and others), you have
+        rights to know, delete, correct, and obtain a portable copy of your
+        information, and to opt out of sale or targeted advertising — although{" "}
+        <strong>we do not sell your information or use it for targeted
+        advertising</strong>, so there is nothing to opt out of. You may
+        designate an authorised agent to make a request for you.
       </p>
 
-      <h2>Contact us</h2>
+      <h2>12. Where your data is held</h2>
       <p>
-        Questions about privacy? Email{" "}
-        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+        whiff is operated from the United States and your information is stored
+        and processed there. If you use whiff from outside the US, you
+        understand that your information will be transferred to the US, where
+        privacy laws may differ from those in your country. Where required, we
+        rely on appropriate safeguards such as the European Commission&rsquo;s
+        Standard Contractual Clauses.
+      </p>
+
+      <h2>13. Security</h2>
+      <p>
+        We use encryption in transit, hashed passwords, access controls, and
+        keep credentials on your device in the iOS Keychain, marked so they
+        never leave it in a backup. No system is perfectly secure and we cannot
+        guarantee absolute security. If a breach affects you, we will notify you
+        as the law requires.
+      </p>
+
+      <h2>14. Children</h2>
+      <p>
+        whiff is for adults <strong>18 and over</strong>. It is not directed to
+        children and we do not knowingly collect information from anyone under
+        18. If you believe a minor has given us information, email{" "}
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> and we will
+        delete it.
+      </p>
+
+      <h2>15. Changes to this policy</h2>
+      <p>
+        We may update this policy. When we make a material change we will revise
+        the date at the top and tell you in the app or by email before it takes
+        effect.
+      </p>
+
+      <h2>16. Contact</h2>
+      <p>
+        <strong>Whiff LLC</strong>
+        <br />
+        Email: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
       </p>
     </LegalShell>
   );

@@ -111,8 +111,12 @@ export default function BlogPage() {
         >
           {/* Centred on a phone, hard left from sm up. A page that stays
               centred on a wide screen wastes the width and reads as a poster
-              rather than something written to be read. */}
-          <header className="mx-auto mb-12 w-full max-w-[92rem] text-center sm:text-left">
+              rather than something written to be read.
+
+              The measure matches BlogExplorer's exactly: at 92rem this header
+              outran the content column below it, so the h1 and the list rules
+              started on two different left edges. */}
+          <header className="mx-auto mb-12 w-full max-w-[68rem] text-center sm:text-left">
             <Link
               href="/"
               className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-muted transition-colors hover:text-ink"

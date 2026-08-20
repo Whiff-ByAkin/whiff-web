@@ -18,6 +18,11 @@ const SPIN_DURATION = 12;
 
 const INK = "#241a15";
 const INK_FAINT = "#9a8b81";
+/* The open seat is unpainted, but the keyword `transparent` is not a value
+ * Motion can interpolate — animating to or from it logs a warning and snaps.
+ * Ink at zero alpha is the same pixel and it tweens, so the seat fills from
+ * its own colour instead of fading up through browser-default black. */
+const INK_CLEAR = "rgba(36, 26, 21, 0)";
 
 /* Top, right, bottom, left. The initial positions sit farther out and 52deg
  * behind their seats, matching CircleMark's curved approach. Values are
@@ -100,7 +105,7 @@ export function CircleHalo({
                   }`}
                   initial={false}
                   animate={{
-                    backgroundColor: empty && !closed ? "transparent" : INK,
+                    backgroundColor: empty && !closed ? INK_CLEAR : INK,
                     borderColor: empty && !closed ? INK_FAINT : INK,
                     borderWidth: empty && !closed ? 2 : 0,
                     scale: closed ? 1.18 : 1,
