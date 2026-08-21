@@ -120,7 +120,7 @@ export function Contact({ triggerClassName = DEFAULT_TRIGGER_CLASS }: { triggerC
                     say hello
                   </h2>
                   <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">
-                    questions, press, or partnerships. we&rsquo;d love to hear
+                    questions, press, or partnerships. we’d love to hear
                     from you.
                   </p>
 

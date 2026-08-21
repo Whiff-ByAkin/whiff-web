@@ -206,10 +206,10 @@ export function StatesWhiffIsIn({
                         aria-live="polite"
                       >
                         <p className="font-display text-xl font-semibold text-ink">
-                          got it. we&rsquo;ll keep you posted.
+                          got it. we’ll keep you posted.
                         </p>
                         <p className="mx-auto mt-2 max-w-[30ch] text-sm leading-relaxed text-ink-muted">
-                          when whiff reaches your state, you&rsquo;ll be the first
+                          when whiff reaches your state, you’ll be the first
                           to know.
                         </p>
                         <button

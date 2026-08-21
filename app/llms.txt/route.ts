@@ -75,6 +75,7 @@ ${FAQ.map((f) => `### ${f.question}\n\n${f.answer}`).join("\n\n")}
 
 - [Home](${url("/")}): a single screen with the proposition and the way to join
 - [Blog](${url("/blog")}): what whiff is, who it is for, how it works, why four people, why it is not a dating app
+- [Support](${url("/support")}): how circles form, missing a night, reporting a member, deleting an account, billing
 - [Privacy](${url("/privacy")})
 - [Terms](${url("/terms")})
 `;

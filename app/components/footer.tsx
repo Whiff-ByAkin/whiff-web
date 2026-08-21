@@ -17,6 +17,8 @@ export function HomeFootline() {
         <Dot />
         <FootLink href="/blog">blog</FootLink>
         <Dot />
+        <FootLink href="/support">support</FootLink>
+        <Dot />
         <FootLink href="/privacy">privacy</FootLink>
         <Dot />
         <FootLink href="/terms">terms</FootLink>

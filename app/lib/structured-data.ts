@@ -103,6 +103,31 @@ export const service: Node = {
   category: "Social connection",
 };
 
+/** An FAQPage for a page that really answers those questions on screen.
+ *
+ *  The header of this file warns that structured data for a URL you do not
+ *  serve is worse than none. The same applies within a page: every question
+ *  passed here must be visible in the HTML with the same answer text, which is
+ *  why `/support` builds both from one array rather than writing the schema
+ *  twice. */
+export function faqPage(
+  path: string,
+  items: { question: string; answer: string }[],
+): Node {
+  return {
+    "@type": "FAQPage",
+    "@id": `${abs(path)}#faq`,
+    url: abs(path),
+    isPartOf: { "@id": WEBSITE_ID },
+    publisher: { "@id": ORG_ID },
+    mainEntity: items.map(({ question, answer }) => ({
+      "@type": "Question",
+      name: question,
+      acceptedAnswer: { "@type": "Answer", text: answer },
+    })),
+  };
+}
+
 /** Wraps nodes into a single @graph. One script tag per page keeps the graph
  *  unambiguous rather than making a crawler reconcile several. */
 export function graph(nodes: Node[]) {

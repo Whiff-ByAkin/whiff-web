@@ -236,10 +236,10 @@ export function ApplyCTA({
                     draggable={false}
                   />
                   <p className="font-display text-xl font-semibold text-ink">
-                    good. it&rsquo;s started.
+                    good. it’s started.
                   </p>
                   <p className="mt-2 text-ink-muted">
-                    we&rsquo;ll write the moment your three are found — and
+                    we’ll write the moment your three are found — and
                     other circles may reach you before that.
                   </p>
                   <button
@@ -253,7 +253,7 @@ export function ApplyCTA({
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4" noValidate>
                   <h2 className="font-display text-2xl font-semibold text-ink">
-                    we&rsquo;ll find your three.
+                    we’ll find your three.
                   </h2>
                   <p className="text-[15px] leading-relaxed text-ink-muted">
                     we promise: strangers only on week one.

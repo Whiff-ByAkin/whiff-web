@@ -29,6 +29,21 @@ main {
   overflow-x: hidden;
 }
 
+/* `clip` rather than `hidden` on body and main, and the difference is not
+   cosmetic: an element with `overflow-x: hidden` is a scroll container, and a
+   scroll container is the scrollport its sticky descendants resolve against.
+   Neither of these ever scrolls, so every `position: sticky` inside them was
+   inert — the legal pages' contents rail rendered low and then scrolled away
+   with the prose. `clip` clips the same overflow without creating a scroller.
+
+   `html` deliberately keeps `hidden`: its overflow propagates to the viewport,
+   which IS the scroller, so it costs nothing and still stops a wide child from
+   producing a horizontal scrollbar. */
+body,
+main {
+  overflow-x: clip;
+}
+
 /* The header is fixed, and on every page that scrolls the prose used to run
    straight under the wordmark and the pill buttons. A scrim of the page's own
    ground, faded out at its lower edge, catches that text without drawing a

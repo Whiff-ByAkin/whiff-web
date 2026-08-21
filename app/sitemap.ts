@@ -5,7 +5,7 @@ import { SITE_URL } from "./config/site";
 // Bump it when page content meaningfully changes — a lastmod that silently
 // tracks the build date teaches crawlers to ignore the field.
 const CONTENT_UPDATED = new Date("2026-08-18");
-const LEGAL_UPDATED = new Date("2026-08-18");
+const LEGAL_UPDATED = new Date("2026-08-21");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const url = (path: string) => new URL(path, SITE_URL).toString();
@@ -22,6 +22,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: CONTENT_UPDATED,
       changeFrequency: "monthly",
       priority: 0.9,
+    },
+    {
+      url: url("/support"),
+      lastModified: LEGAL_UPDATED,
+      changeFrequency: "monthly",
+      priority: 0.5,
     },
     {
       url: url("/privacy"),
