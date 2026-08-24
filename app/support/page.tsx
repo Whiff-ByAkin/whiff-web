@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Header } from "../components/header";
 import { PageFootline } from "../components/doc-shell";
 import { JsonLd } from "../components/json-ld";
-import { CONTACT_EMAIL } from "../config/site";
+import { CONTACT_EMAIL, INSTAGRAM_URL } from "../config/site";
 import { faqPage, organization } from "../lib/structured-data";
 
 /* Apple asks for a support URL for every app, and a mailto: on a landing page
@@ -46,7 +46,7 @@ const FAQS: { question: string; answer: string[]; extra?: React.ReactNode }[] =
     {
       question: "How do circles form?",
       answer: [
-        "whiff places you. There is no browsing, no swiping, and no accept or decline. When you join you answer five questions in your own words; whiff reads them and builds a picture of you, and when it finds people in your city who fit you — and fit each other — it seats you together.",
+        "whiff places you. There is no browsing, no swiping, and no accept or decline. When you join you answer five questions in your own words; whiff reads them and builds a picture of you, and when it finds people in your city who fit you, and fit each other, it seats you together.",
         "A circle is four people, and it fills one seat at a time. You watch it happen: seat by seat, with the other seats sealed until the fourth one is taken. No names, no photos, nothing to judge strangers by before you have met them. When the fourth seat fills, the circle starts, and the four of you meet every fortnight for six activities.",
         "How long the wait is depends on how many people are waiting in your city. In a young market it can be weeks. whiff would rather leave a seat open than fill it with somebody who does not belong at that table, so a circle that has not formed yet is usually a circle still short of the right fourth person.",
       ],
@@ -56,13 +56,13 @@ const FAQS: { question: string; answer: string[]; extra?: React.ReactNode }[] =
       answer: [
         "Answer the invitation in the app and say no. It matters more than it looks: an evening needs four people at the table, so if your circle is short, whiff goes looking for a guest to fill the seat. If it cannot find one, the evening is cancelled rather than run with three.",
         "Missing one night costs you nothing. A holiday, a deadline, a bad week is a bad week. What does cost you is silence: go quiet on two activities in a row and your seat is released and you go back into the pool to be placed again. Three people waiting on a fourth who never answers is the one thing a circle cannot survive.",
-        "There is deliberately no way to opt out of an evening because it is not your kind of thing. You say yes or you say nothing, and the reasons the app collects are the ways a night can be impossible — wrong day, wrong time, just busy — never the ways it can be unappealing. If everybody could hold out for the perfect evening, the four of you would never actually meet.",
+        "There is deliberately no way to opt out of an evening because it is not your kind of thing. You say yes or you say nothing, and the reasons the app collects are the ways a night can be impossible (wrong day, wrong time, just busy), never the ways it can be unappealing. If everybody could hold out for the perfect evening, the four of you would never actually meet.",
       ],
     },
     {
       question: "How do I report someone?",
       answer: [
-        "In the app, open your circle, press and hold the person's name, and choose Report or block. You can add a note in your own words. That note is the report: a person at whiff reads it, and it is never scored by software and never shown to the person it is about. The note is optional — you never have to explain yourself to make something stop.",
+        "In the app, open your circle, press and hold the person's name, and choose Report or block. You can add a note in your own words. That note is the report: a person at whiff reads it, and it is never scored by software and never shown to the person it is about. The note is optional. You never have to explain yourself to make something stop.",
         "Blocking is permanent unless you lift it, and whiff will never place you in a circle with somebody you have blocked. Depending on what we find, we may warn a member, remove them from a circle, suspend them, or close their account.",
         "You can also email us, whether or not you have blocked them. Tell us what happened and roughly when.",
         "If you are in immediate danger, contact your local emergency services first. whiff is not an emergency service and cannot intervene in real time.",
@@ -72,7 +72,7 @@ const FAQS: { question: string; answer: string[]; extra?: React.ReactNode }[] =
       question: "How do I delete my account?",
       answer: [
         "In the app: You → Account → Delete account. It signs you out on every device, takes you out of any circle you are in, and stops any future placement.",
-        "Your profile, your onboarding answers, and everything whiff inferred about you are deleted within 30 days. We keep only what we are required to keep — safety records about reports, and financial records — and where an internal audit record has to survive, the personal details in it are stripped so it no longer identifies you.",
+        "Your profile, your onboarding answers, and everything whiff inferred about you are deleted within 30 days. We keep only what we are required to keep (safety records about reports, and financial records), and where an internal audit record has to survive, the personal details in it are stripped so it no longer identifies you.",
         "Deleting your account does not cancel your Apple subscription. Nothing on whiff's side can. Cancel it separately in Settings → your name → Subscriptions, or we will keep being paid for an account that no longer exists.",
         "If you would rather we did it for you, email us from the address on the account and we will.",
       ],
@@ -92,8 +92,8 @@ const FAQS: { question: string; answer: string[]; extra?: React.ReactNode }[] =
     {
       question: "How does billing work, and how do I cancel?",
       answer: [
-        "whiff is $49.99 a month, billed through Apple. New subscribers get a 7-day free trial that includes one real activity, and we email you on day 5 — before anything is charged.",
-        "Cancel any time in Settings → your name → Subscriptions on your device. Cancelling stops the next charge; it does not refund the period you are already in, and you keep your access until that period ends. We do that on purpose — cutting somebody off mid-circle takes three other people's evening with it.",
+        "whiff is $49.99 a month, billed through Apple. New subscribers get a 7-day free trial that includes one real activity, and we email you on day 5, before anything is charged.",
+        "Cancel any time in Settings → your name → Subscriptions on your device. Cancelling stops the next charge; it does not refund the period you are already in, and you keep your access until that period ends. We do that on purpose: cutting somebody off mid-circle takes three other people's evening with it.",
       ],
       extra: (
         <p className="mt-3 leading-relaxed text-ink-muted">
@@ -160,7 +160,7 @@ export default function SupportPage() {
             </h1>
             <p className="mt-4 text-[15px] leading-relaxed text-ink/90 sm:text-base">
               Something wrong, something confusing, or something you want a
-              person to look at — write to us. One of the people who built whiff
+              person to look at? Write to us. One of the people who built whiff
               reads every email, and we answer within two business days.
             </p>
           </div>
@@ -174,8 +174,22 @@ export default function SupportPage() {
             </a>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-ink-muted lg:ml-auto">
               Writing about a specific evening or a specific member? Tell us
-              your city and roughly when it happened — that is enough for us to
+              your city and roughly when it happened. That is enough for us to
               find it.
+            </p>
+            {/* The Contact dialog this page replaced also offered Instagram.
+                It stays a quiet secondary: email is the channel we promise an
+                answer on. */}
+            <p className="mt-2 text-sm text-ink-muted">
+              Or message us{" "}
+              <a
+                href={INSTAGRAM_URL}
+                rel="noopener"
+                className="font-medium text-ink underline"
+              >
+                on Instagram
+              </a>
+              .
             </p>
           </div>
         </div>
@@ -222,8 +236,8 @@ export default function SupportPage() {
               <Link href="/privacy" className="font-medium text-ink underline">
                 Privacy Policy
               </Link>
-              . The rules of the service — community standards, subscriptions,
-              and what happens at real-world activities — are in the{" "}
+              . The rules of the service (community standards, subscriptions,
+              and what happens at real-world activities) are in the{" "}
               <Link href="/terms" className="font-medium text-ink underline">
                 Terms of Service
               </Link>

@@ -69,7 +69,7 @@ export const MARKETS: Market[] = [
       },
     ],
     localTension:
-      "Saint Paul is a city of long-standing circles. A lot of people here met their closest friends in high school or college and never had to make a new friend again — which is fine for them and quietly brutal if you arrived at thirty.",
+      "Saint Paul is a city of long-standing circles. A lot of people here met their closest friends in high school or college and never had to make a new friend again, which is fine for them and quietly brutal if you arrived at thirty.",
     latitude: 44.9537,
     longitude: -93.09,
   },
@@ -106,7 +106,7 @@ export const MARKETS: Market[] = [
       },
     ],
     localTension:
-      "Minneapolis has no shortage of things to do and a well-earned reputation for being hard to break into. People are friendly on the first meeting and busy on the second. The problem was never the events calendar — it is that nothing brings the same people back.",
+      "Minneapolis has no shortage of things to do and a well-earned reputation for being hard to break into. People are friendly on the first meeting and busy on the second. The problem was never the events calendar. It is that nothing brings the same people back.",
     latitude: 44.9778,
     longitude: -93.265,
   },

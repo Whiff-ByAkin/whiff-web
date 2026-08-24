@@ -6,6 +6,7 @@ import { SITE_URL } from "./config/site";
 // tracks the build date teaches crawlers to ignore the field.
 const CONTENT_UPDATED = new Date("2026-08-18");
 const LEGAL_UPDATED = new Date("2026-08-21");
+const STATES_ADDED = new Date("2026-08-24");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const url = (path: string) => new URL(path, SITE_URL).toString();
@@ -22,6 +23,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: CONTENT_UPDATED,
       changeFrequency: "monthly",
       priority: 0.9,
+    },
+    {
+      url: url("/states"),
+      lastModified: STATES_ADDED,
+      changeFrequency: "monthly",
+      priority: 0.7,
     },
     {
       url: url("/support"),

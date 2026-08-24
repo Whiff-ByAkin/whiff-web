@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fredoka, Nunito } from "next/font/google";
+import { Caveat, Fredoka, Nunito } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
@@ -15,6 +15,15 @@ const fredoka = Fredoka({
   display: "swap",
 });
 
+// Caveat — the handwriting. Whiff's voice, and the app's rule travels with it:
+// exactly one handwritten line per screen.
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-caveat",
+  display: "swap",
+});
+
 // Nunito — the body: everything you read at length.
 const nunito = Nunito({
   subsets: ["latin"],
@@ -27,12 +36,12 @@ const nunito = Nunito({
 // The home page's own <title>. Leads with the job the searcher is trying to do
 // ("make friends") rather than the brand, because nobody searches for a brand
 // they have never heard of — then the differentiator, then the disqualifier.
-const TITLE = "whiff — make real friends through activities, not profiles";
+const TITLE = "whiff: make real friends through activities, not profiles";
 
 // Under 160 characters, opens with the promise, closes with the disqualifier so
 // no snippet can imply dating.
 const DESCRIPTION =
-  `${PROMISE} Activity-first friend circles of four who keep meeting up — no profiles, no swiping. Not a dating app.`;
+  `${PROMISE} Activity-first friend circles of four who keep meeting up. No profiles, no swiping. Not a dating app.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -94,7 +103,7 @@ export const metadata: Metadata = {
 // actually about — FAQPage, HowTo, a city Service, and so on.
 
 export const viewport: Viewport = {
-  themeColor: "#ffffff",
+  themeColor: "#FBF8F5",
   width: "device-width",
   initialScale: 1,
   colorScheme: "light",
@@ -108,7 +117,7 @@ export default function RootLayout({
       lang="en"
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={`${fredoka.variable} ${nunito.variable} h-full antialiased`}
+      className={`${fredoka.variable} ${nunito.variable} ${caveat.variable} h-full antialiased`}
     >
       {/* suppressHydrationWarning: browser extensions (password managers,
           Grammarly, ad blockers) commonly inject nodes/attributes into <body>

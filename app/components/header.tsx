@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { Contact } from "./contact";
 import { MobileNav } from "./mobile-nav";
-import { StatesWhiffIsIn } from "./states-whiff-is-in";
+
+const HEADER_ACTION =
+  "header-action rounded-full border border-line bg-transparent px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-ink hover:bg-ground-lift focus-visible:bg-ground-lift";
 
 // The wordmark is set in Fredoka, not an image — so it's crisp at any size and
 // carries the brand font. The dot over the "i" is a fixed brand detail (no
@@ -47,15 +48,19 @@ export function Header({
       <nav aria-label="Primary">
         <div className="hidden items-center gap-2 md:flex">
           {!hideBlog && (
-            <Link
-              href="/blog"
-              className="header-action rounded-full border border-line bg-transparent px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-ink hover:bg-ground-lift focus-visible:bg-ground-lift"
-            >
+            <Link href="/blog" className={HEADER_ACTION}>
               Blog
             </Link>
           )}
-          <StatesWhiffIsIn />
-          <Contact />
+          {/* Both used to be dialogs. States earned a page (the dialog never
+              had room for what the markets data actually says), and Contact
+              was a thinner copy of what /support already is. */}
+          <Link href="/states" className={HEADER_ACTION}>
+            States
+          </Link>
+          <Link href="/support" className={HEADER_ACTION}>
+            Contact
+          </Link>
         </div>
         <MobileNav hideBlog={hideBlog} />
       </nav>

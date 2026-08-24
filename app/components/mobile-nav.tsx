@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
-import { Contact } from "./contact";
-import { StatesWhiffIsIn } from "./states-whiff-is-in";
 
 const MENU_ACTION =
   "flex min-h-11 w-full items-center justify-end rounded-xl border border-transparent px-4 py-2.5 text-right font-display text-sm font-semibold text-ink transition-colors hover:border-line focus-visible:border-ink focus-visible:outline-none";
@@ -26,15 +24,11 @@ export function MobileNav({ hideBlog = false }: { hideBlog?: boolean }) {
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key !== "Escape") return;
-      // A dialog opened from the disclosure owns Escape until it closes. The
-      // menu remains mounted behind it so focus can return to its trigger.
-      if (document.querySelector('[role="dialog"][aria-modal="true"]')) return;
       event.preventDefault();
       closeMenu();
     }
 
     function onPointerDown(event: PointerEvent) {
-      if (document.querySelector('[role="dialog"][aria-modal="true"]')) return;
       if (!rootRef.current?.contains(event.target as Node)) closeMenu();
     }
 
@@ -87,8 +81,20 @@ export function MobileNav({ hideBlog = false }: { hideBlog?: boolean }) {
             Blog
           </Link>
         )}
-        <StatesWhiffIsIn triggerClassName={MENU_ACTION} />
-        <Contact triggerClassName={MENU_ACTION} />
+        <Link
+          href="/states"
+          onClick={() => closeMenu({ returnFocus: false })}
+          className={MENU_ACTION}
+        >
+          States
+        </Link>
+        <Link
+          href="/support"
+          onClick={() => closeMenu({ returnFocus: false })}
+          className={MENU_ACTION}
+        >
+          Contact
+        </Link>
       </div>
     </div>
   );

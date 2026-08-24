@@ -3,7 +3,9 @@
 /* The mobile app is the source of truth. Token names describe jobs, not hues:
    neutral ground, lifted paper, stone touch surfaces, rules, and one ink voice. */
 @theme inline {
-  --color-ground: #ffffff;
+  /* Pure white is a screen; warm white is paper. The app's warm paper is the
+     source of truth for the site's ground now. */
+  --color-ground: #fbf8f5;
   --color-ground-lift: #f4eee9;
   --color-stone: #b8adab;
   --color-line: #e5dcd6;
@@ -13,8 +15,18 @@
   --color-on-ink: #fbf8f5;
   --color-on-stone: #241a15;
 
+  /* Card materials — used ONLY on the personality deck. A hue on a thing that
+     would have one in the world is the thing being itself: the card's face is
+     champagne and its frame is gold foil, and nothing else on the interface
+     gets a hue. Foil is decorative only (2.2:1) — small caps labels use the
+     darker foil-ink, never the foil itself, for anything meant to be read. */
+  --color-card-face: #faf3e4;
+  --color-card-foil: #c8a24a;
+  --color-card-foil-ink: #7a6428;
+
   --font-display: var(--font-fredoka);
   --font-body: var(--font-nunito);
+  --font-hand: var(--font-caveat);
 }
 
 html {
@@ -63,40 +75,253 @@ main {
   );
 }
 
-.hero-ornament {
-  padding-bottom: clamp(1.2rem, 5vh, 3.5rem);
-}
 
-.hero-mascot-media {
+/* ── The deck ──────────────────────────────────────────────────────────────
+   The product's own artifact, rendered as a physical object: champagne face,
+   gold foil frame, serif prose. The frame is a container so every size inside
+   a card is written in cq units and the whole object scales as one piece —
+   the same card on a phone and a monitor, smaller, never rearranged. */
+
+.deck-frame {
   position: relative;
-  isolation: isolate;
-  aspect-ratio: 1;
-  height: min(clamp(5rem, 22vh, 14.5rem), 45vw);
-  width: auto;
-  background: var(--color-ground);
+  container-type: size;
+  height: clamp(11rem, 34vh, 16rem);
+  aspect-ratio: 5 / 7;
 }
 
-.hero-mascot-video {
+@media (min-width: 768px) {
+  .deck-frame {
+    height: min(clamp(16rem, 54vh, 25.5rem), 34vw);
+  }
+}
+
+/* The pile's shared shadow on the paper — the cards sit ON the page, they are
+   not printed into it. */
+.deck-shadow {
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: -7%;
+  height: 12%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgb(36 26 21 / 16%) 0%,
+    transparent 68%
+  );
+  filter: blur(5px);
+  pointer-events: none;
+}
+
+.type-card {
   position: absolute;
   inset: 0;
-  height: 100%;
-  width: 100%;
-  object-fit: contain;
+  border-radius: clamp(10px, 6.5cqw, 18px);
+  background: var(--color-card-face);
+  /* the card face keeps its own faint vertical sheen so it reads as stock,
+     not as a flat fill */
+  background-image: linear-gradient(
+    172deg,
+    rgb(255 255 255 / 45%) 0%,
+    transparent 38%,
+    rgb(122 100 40 / 5%) 100%
+  );
+  box-shadow: 0 18px 40px -18px rgb(36 26 21 / 35%);
+  font-family: ui-serif, "New York", Georgia, serif;
+  color: var(--color-ink);
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* 1px foil frame inset from the edge, like a certificate rule. */
+.type-card::before {
+  content: "";
+  position: absolute;
+  inset: 5.2cqw;
+  border: 1px solid color-mix(in srgb, var(--color-card-foil) 78%, transparent);
+  border-radius: clamp(5px, 3cqw, 9px);
   pointer-events: none;
-  padding-inline: 24%;
-  mix-blend-mode: multiply;
-  -webkit-mask-image: radial-gradient(
-    ellipse 50% 50% at center,
-    #000 84%,
-    rgb(0 0 0 / 92%) 94%,
-    transparent 100%
+}
+
+/* Small corner marks riding the frame's corners. */
+.card-corner {
+  position: absolute;
+  width: 5.4cqw;
+  height: 5.4cqw;
+  pointer-events: none;
+}
+
+.card-corner-tl {
+  top: 3cqw;
+  left: 3cqw;
+  border-top: 1px solid var(--color-card-foil);
+  border-left: 1px solid var(--color-card-foil);
+}
+
+.card-corner-tr {
+  top: 3cqw;
+  right: 3cqw;
+  border-top: 1px solid var(--color-card-foil);
+  border-right: 1px solid var(--color-card-foil);
+}
+
+.card-corner-bl {
+  bottom: 3cqw;
+  left: 3cqw;
+  border-bottom: 1px solid var(--color-card-foil);
+  border-left: 1px solid var(--color-card-foil);
+}
+
+.card-corner-br {
+  bottom: 3cqw;
+  right: 3cqw;
+  border-bottom: 1px solid var(--color-card-foil);
+  border-right: 1px solid var(--color-card-foil);
+}
+
+.card-body {
+  position: absolute;
+  inset: 5.2cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3.4cqh;
+  /* Deeper at the foot than the head: the counter is absolutely positioned in
+     the bottom margin, and the in-flow stack must stop above it. */
+  padding: 8cqw 9cqw 13cqw;
+  text-align: center;
+}
+
+/* Every text role carries a rem floor under its cq size: the card scales as
+   one object until the type would stop being readable, and the smallest lines
+   hold there instead of following the geometry down. On a 375px phone the
+   pure cq sizes put the "in a Circle" line at ~7px — an object, no longer a
+   card. */
+.card-label {
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: max(3.6cqw, 0.56rem);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-card-foil-ink);
+}
+
+.card-name {
+  font-size: max(13.5cqw, 1.3rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+}
+
+.card-tagline {
+  font-style: italic;
+  font-size: max(5.4cqw, 0.72rem);
+  line-height: 1.35;
+  color: var(--color-ink-muted);
+}
+
+/* The foil hairline above the "in a Circle" line. */
+.card-rule {
+  width: 34cqw;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-card-foil) 30%,
+    var(--color-card-foil) 70%,
+    transparent
   );
-  mask-image: radial-gradient(
-    ellipse 50% 50% at center,
-    #000 84%,
-    rgb(0 0 0 / 92%) 94%,
-    transparent 100%
-  );
+}
+
+.card-circle-line {
+  font-size: max(4.5cqw, 0.66rem);
+  line-height: 1.45;
+  color: var(--color-ink-muted);
+}
+
+.card-counter {
+  position: absolute;
+  bottom: 8.4cqw;
+  left: 0;
+  right: 0;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: max(3.3cqw, 0.52rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--color-card-foil-ink);
+}
+
+/* The foot: who the type clicks with. Its own hairline and label so it reads
+   as the card's colophon rather than a fourth line of prose. */
+.card-clicks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6cqh;
+}
+
+.card-clicks-label {
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: max(3.1cqw, 0.5rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-card-foil-ink);
+}
+
+.card-clicks-names {
+  font-size: max(4.2cqw, 0.64rem);
+  line-height: 1.3;
+  color: var(--color-ink-muted);
+}
+
+/* Phone-sized cards restack instead of overflowing. First the counter goes —
+   it is the card's least load-bearing mark, and dropping it releases the foot
+   margin the in-flow stack was clearing — and the gaps tighten so the clicks
+   fact keeps its place at its floored, legible size. Only on a genuinely
+   cramped card (a short small phone) does the fact itself yield. */
+@container (max-width: 200px) {
+  .card-counter {
+    display: none;
+  }
+
+  .card-body {
+    gap: 2.6cqh;
+    padding-bottom: 8.5cqw;
+  }
+}
+
+@container (max-width: 170px) {
+  .card-clicks {
+    display: none;
+  }
+}
+
+.card-hint {
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: max(3.8cqw, 0.6rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-ink-faint);
+}
+
+/* The top card is the touchable object; the ones behind are just paper. */
+.type-card[data-top] {
+  cursor: grab;
+}
+
+.type-card[data-top]:active {
+  cursor: grabbing;
+}
+
+/* The deck is one keyboard stop; the ring wraps the whole object.
+   (cq units can't be used here — a container can't query itself.) */
+.deck-frame:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 10px;
+  border-radius: 16px;
 }
 
 body {
@@ -197,64 +422,8 @@ body {
   animation: ping-ring 3.2s ease-out infinite;
 }
 
-/* The circle's confirmation lives entirely inside the ornament. It replaces
-   the old 300vmax painted veil, so phones start on paper and never render a
-   black loading-like screen. */
-@keyframes circle-bloom {
-  0% {
-    opacity: 0;
-    transform: scale(0.72);
-  }
-  38% {
-    opacity: 0.72;
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.14);
-  }
-}
-
-.circle-bloom {
-  background: radial-gradient(
-    circle,
-    color-mix(in srgb, var(--color-stone) 44%, transparent) 0,
-    color-mix(in srgb, var(--color-ink) 7%, transparent) 34%,
-    transparent 68%
-  );
-  opacity: 0;
-  transform: scale(0.72);
-  animation: circle-bloom 560ms ease-out var(--circle-settled, 1.15s) both;
-  will-change: opacity, transform;
-}
-
-@keyframes seat-search {
-  0%,
-  32% {
-    opacity: 0;
-    transform: scale(1);
-  }
-  40% {
-    opacity: 0.52;
-  }
-  78%,
-  100% {
-    opacity: 0;
-    transform: scale(1.8);
-  }
-}
-
-.seat-searching::after {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  border: 1px solid var(--color-ink-faint);
-  border-radius: inherit;
-  animation: seat-search 3.2s ease-out calc(var(--circle-settled, 1.15s) + 0.2s)
-    infinite;
-}
-
-/* Keep the fixed canvas neutral so the mascot's white field disappears into
-   the page. The separate grain layer retains the tactile paper character. */
+/* A neutral fixed canvas under every page; the separate grain layer carries
+   the tactile paper character. */
 .paper-atmosphere {
   position: fixed;
   inset: 0;
@@ -273,6 +442,8 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+/* Short windows: scale gives, never overflow. The deck is the tallest object
+   on the page, so it is the first thing to shrink. */
 @media (max-height: 620px) {
   .hero-shell {
     padding-bottom: 0.15rem;
@@ -283,12 +454,8 @@ body {
     gap: 0.38rem;
   }
 
-  .hero-ornament {
-    padding-bottom: 1rem;
-  }
-
-  .hero-mascot-media {
-    height: min(clamp(4rem, 19vh, 10rem), 38vw);
+  .deck-frame {
+    height: min(clamp(9rem, 30vh, 13rem), 34vw);
   }
 
   .hero-aside {
@@ -299,15 +466,6 @@ body {
   .hero-ask {
     gap: 0.25rem;
     padding-top: 0.3rem;
-  }
-}
-
-/* On compact portrait phones the 142% halo overhang is slightly deeper than
-   the short-screen ornament reservation. Give its bottom seat a clear landing
-   before the kicker without shrinking the mascot or affecting 390px phones. */
-@media (max-width: 360px) and (max-height: 620px) {
-  .hero-ornament {
-    padding-bottom: 2.125rem;
   }
 }
 
@@ -333,16 +491,12 @@ body {
     gap: 0.16rem;
   }
 
-  .hero-ornament {
-    padding-bottom: 1.25rem;
-  }
-
-  .hero-mascot-media {
-    height: 5rem;
+  .deck-frame {
+    height: min(46vh, 26vw);
   }
 
   .hero-kicker {
-    font-size: 0.65rem;
+    font-size: 1.05rem;
     line-height: 1.2;
   }
 
@@ -375,8 +529,6 @@ body {
     scroll-behavior: auto;
   }
 
-  .circle-bloom,
-  .seat-searching::after,
   .ping::after {
     display: none;
   }

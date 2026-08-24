@@ -5,7 +5,7 @@ import { ImageResponse } from "next/og";
 // "activities first, people second", which inverts the point: the activities
 // are the means, the people are the product.
 export const alt =
-  "whiff — activity-first friend circles of four. Not a dating app.";
+  "whiff: activity-first friend circles of four. Not a dating app.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
