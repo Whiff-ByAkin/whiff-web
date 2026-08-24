@@ -239,8 +239,8 @@ const SECTIONS: DocSection[] = [
         <p>
           <strong>
             That profile is used to make automated decisions about you
-          </strong>{" "}
-          — most importantly which circle you are placed in, who is placed with
+          </strong>, most importantly which circle you are placed in, who is
+          placed with
           you, and what activities are planned. No human reviews each placement.
           You can see much of what whiff believes about you in the app, and
           correct it there. Section 5 of our{" "}
@@ -261,7 +261,7 @@ const SECTIONS: DocSection[] = [
     body: (
       <>
         <p>
-          You keep ownership of what you write in whiff — your onboarding
+          You keep ownership of what you write in whiff: your onboarding
           answers, feedback, corrections, and messages. You grant us a
           worldwide, non-exclusive, royalty-free licence to host, store,
           reproduce, and process that content{" "}
@@ -375,8 +375,8 @@ const SECTIONS: DocSection[] = [
           judging each activity for yourself, meeting in public where that is
           sensible, telling somebody you trust where you are going, arranging
           your own transport, and following the law and the venue’s rules. Some
-          activities — hiking, climbing, cycling, skating, water sports, and
-          similar — carry inherent risks of serious injury or death. You
+          activities (hiking, climbing, cycling, skating, water sports, and
+          similar) carry inherent risks of serious injury or death. You
           knowingly assume those risks.
         </p>
         <p>
@@ -447,7 +447,7 @@ const SECTIONS: DocSection[] = [
           your Apple Account settings, and delete your account from inside the
           app (<strong>You → Account → Delete account</strong>) or by emailing{" "}
           <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Deleting your
-          account does not by itself cancel your Apple subscription — you must
+          account does not by itself cancel your Apple subscription; you must
           do both.
         </p>
         <p>
@@ -558,7 +558,7 @@ const SECTIONS: DocSection[] = [
           </strong>
           . An arbitrator may not consolidate more than one person’s claims. If
           this waiver is found unenforceable as to a particular claim, that
-          claim — and only that claim — proceeds in court.
+          claim, and only that claim, proceeds in court.
         </p>
         <p>
           <strong>Small claims.</strong> Either of us may bring an individual
@@ -623,7 +623,7 @@ const SECTIONS: DocSection[] = [
             <strong>
               Apple has no obligation to provide maintenance or support
             </strong>{" "}
-            for the app. Support is ours — email{" "}
+            for the app. Support is ours: email{" "}
             <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
           </li>
           <li>
