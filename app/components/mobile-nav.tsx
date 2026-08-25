@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { BeginAction } from "./begin-action";
 import { useEffect, useId, useRef, useState } from "react";
 
 const MENU_ACTION =
@@ -52,7 +53,10 @@ export function MobileNav({ hideBlog = false }: { hideBlog?: boolean }) {
         className="grid h-11 w-11 place-items-center rounded-full border border-line bg-transparent text-ink transition-colors hover:border-ink focus-visible:border-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-ground"
       >
         <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
-        <span aria-hidden="true" className="flex w-[1.125rem] flex-col gap-[0.23rem]">
+        <span
+          aria-hidden="true"
+          className="flex w-[1.125rem] flex-col gap-[0.23rem]"
+        >
           <span
             className={`h-0.5 w-full rounded-full bg-ink transition-transform ${
               open ? "translate-y-[0.355rem] rotate-45" : ""
@@ -77,7 +81,11 @@ export function MobileNav({ hideBlog = false }: { hideBlog?: boolean }) {
         className="absolute right-0 top-[calc(100%+0.5rem)] flex w-40 flex-col gap-1.5 bg-transparent p-0"
       >
         {!hideBlog && (
-          <Link href="/blog" onClick={() => closeMenu({ returnFocus: false })} className={MENU_ACTION}>
+          <Link
+            href="/blog"
+            onClick={() => closeMenu({ returnFocus: false })}
+            className={MENU_ACTION}
+          >
             Blog
           </Link>
         )}
@@ -95,6 +103,11 @@ export function MobileNav({ hideBlog = false }: { hideBlog?: boolean }) {
         >
           Contact
         </Link>
+        <div onClick={() => closeMenu({ returnFocus: false })}>
+          <BeginAction
+            className={`${MENU_ACTION} btn-ink justify-center border-transparent text-center`}
+          />
+        </div>
       </div>
     </div>
   );

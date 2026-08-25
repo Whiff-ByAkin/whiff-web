@@ -30,9 +30,10 @@ const fade = (delay = 0) => ({
  *
  * The mascot video argued against a serious pitch, so the app removed the
  * jellyfish from its welcome screen — and the site follows. What replaced it
- * is the product's own artifact: the deck of personality cards the reading
- * produces. The visitor plays with the deck, and the deck answers "what do I
- * get?" — you get read, then seated.
+ * is the product's own artifact: the deck of six role cards the reading
+ * produces, and the rail beneath them that shows which roles belong in the
+ * same Circle. The visitor plays with the deck, and the deck answers "what do
+ * I get?" — you get read, then seated with three people who fit.
  *
  * Desktop is an asymmetric two-column composition: the story reads down the
  * left edge (kicker → headline → aside → ask), the deck holds the right, and
@@ -48,8 +49,9 @@ export function Hero() {
   // motion prop, because the aside's motion props are spent on the entrance.
   const [askOpen, setAskOpen] = useState(false);
 
-  // The deck's hook card ends on "join whiff"; each press bumps the nonce and
-  // the CTA morph opens in place, exactly as if the pill had been pressed.
+  // The deck's closing card ends on "Begin your experience"; each press bumps
+  // the nonce and the form opens directly beneath the deck. That button is
+  // the page's only one, so this is the only thing that opens the form here.
   const [joinNonce, setJoinNonce] = useState(0);
 
   return (
@@ -104,27 +106,27 @@ export function Hero() {
               }`}
             >
               <div className="flex w-full items-center gap-[0.7em]">
-              <span className="font-body text-[clamp(0.52rem,0.9vw,0.63rem)] font-bold uppercase tracking-[0.2em] text-ink-muted">
-                meanwhile
-              </span>
-              <span
-                aria-hidden
-                className="h-px flex-1 bg-gradient-to-r from-line to-transparent"
-              />
-            </div>
+                <span className="font-body text-[clamp(0.52rem,0.9vw,0.63rem)] font-bold uppercase tracking-[0.2em] text-ink-muted">
+                  meanwhile
+                </span>
+                <span
+                  aria-hidden
+                  className="h-px flex-1 bg-gradient-to-r from-line to-transparent"
+                />
+              </div>
 
-            <p className="text-balance font-body text-[clamp(0.8rem,1.15vw,0.98rem)] leading-relaxed text-ink-muted">
-              While we find the people who{" "}
-              <span className="font-display font-semibold text-ink">
-                bring out your best
-              </span>
-              ,{/* the clause break is the rhythm of the line */}
-              <br /> other circles{" "}
-              <span className="font-display font-semibold text-ink">
-                invite you along
-              </span>{" "}
-              to activities whiff knows you love.
-            </p>
+              <p className="text-balance font-body text-[clamp(0.8rem,1.15vw,0.98rem)] leading-relaxed text-ink-muted">
+                While we find the people who{" "}
+                <span className="font-display font-semibold text-ink">
+                  bring out your best
+                </span>
+                ,{/* the clause break is the rhythm of the line */}
+                <br /> other circles{" "}
+                <span className="font-display font-semibold text-ink">
+                  invite you along
+                </span>{" "}
+                to activities whiff knows you love.
+              </p>
             </div>
           </motion.div>
         </div>
@@ -132,27 +134,33 @@ export function Hero() {
         {/* ── The deck ──────────────────────────────────────────────── */}
         <motion.div
           {...R(0.32)}
-          className="hero-deck flex justify-center md:col-start-2 md:row-span-2 md:row-start-1 md:-ml-6 md:justify-self-center"
+          className="hero-deck flex flex-col items-center md:col-start-2 md:row-span-2 md:row-start-1 md:-ml-6 md:justify-self-center"
         >
           <TypeDeck onJoin={() => setJoinNonce((n) => n + 1)} />
+
+          {/* ── The ask ─────────────────────────────────────────────────
+              No pill of its own: this is the panel the closing card's button
+              opens, and it lives inside the deck's column so the form grows
+              out of the card that was pressed rather than across the page
+              from it. Collapsed to nothing until then. */}
+          <div className="hero-ask flex w-full shrink-0 flex-col items-center">
+            <ApplyCTA
+              onOpenChange={setAskOpen}
+              openNonce={joinNonce}
+              hideTrigger
+            />
+          </div>
         </motion.div>
 
-        {/* ── The ask ───────────────────────────────────────────────── */}
-        <div className="hero-ask flex shrink-0 flex-col items-center gap-[clamp(0.45rem,1.6vh,0.85rem)] md:col-start-1 md:row-start-2 md:items-start md:self-start">
-          <motion.div {...R(0.44)}>
-            <ApplyCTA onOpenChange={setAskOpen} openNonce={joinNonce} />
-          </motion.div>
-
-          {/* Nunito italic, not Caveat — the handwriting is spent on the
-              kicker, and two hands on one screen is a ransom note. */}
-          <motion.p
-            {...R(0.54)}
-            style={{ rotate: -2 }}
-            className="hero-disclaimer font-body text-[clamp(0.78rem,3.2vw,1.1rem)] italic text-ink-muted md:pl-2 md:text-[clamp(0.85rem,1.3vw,1.1rem)]"
-          >
-            this is not a dating app.
-          </motion.p>
-        </div>
+        {/* Nunito italic, not Caveat — the handwriting is spent on the
+            kicker, and two hands on one screen is a ransom note. */}
+        <motion.p
+          {...R(0.54)}
+          style={{ rotate: -2 }}
+          className="hero-disclaimer font-body text-[clamp(0.78rem,3.2vw,1.1rem)] italic text-ink-muted md:col-start-1 md:row-start-2 md:self-start md:pl-2 md:text-[clamp(0.85rem,1.3vw,1.1rem)]"
+        >
+          this is not a dating app.
+        </motion.p>
       </div>
     </section>
   );

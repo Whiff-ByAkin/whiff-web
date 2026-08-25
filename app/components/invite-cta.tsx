@@ -40,9 +40,15 @@ export function ApplyCTA({
   // hook card) asking for the form. Every bump opens it; closing stays the
   // form's own business, so the two never fight over one piece of state.
   openNonce = 0,
+  // The page's one "Begin your experience" now lives on the deck's closing
+  // card, so this renders no resting pill of its own — only the panel the
+  // card's button opens. Without this the page would carry two of the same
+  // button, which is one more threshold than a threshold can have.
+  hideTrigger = false,
 }: {
   onOpenChange?: (open: boolean) => void;
   openNonce?: number;
+  hideTrigger?: boolean;
 } = {}) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
@@ -54,6 +60,24 @@ export function ApplyCTA({
   const [error, setError] = useState<string | null>(null);
   const reduce = useReducedMotion();
   const emailRef = useRef<HTMLInputElement>(null);
+
+  /* The header carries a "Begin" too, and the home page cannot scroll to
+   * anything — so it asks for the form by event rather than by anchor. The
+   * hash form is for arriving from another page, and it is cleared as soon
+   * as it is spent so a refresh does not reopen the panel. */
+  useEffect(() => {
+    function begin() {
+      setOpen(true);
+      onOpenChange?.(true);
+      trackCtaOpened();
+    }
+    if (window.location.hash === "#begin") {
+      history.replaceState(null, "", window.location.pathname);
+      begin();
+    }
+    window.addEventListener("whiff:begin", begin);
+    return () => window.removeEventListener("whiff:begin", begin);
+  }, [onOpenChange]);
 
   const close = useCallback(() => {
     setOpen(false);
@@ -122,7 +146,10 @@ export function ApplyCTA({
     try {
       const res = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
-        headers: { Accept: "application/json", "Content-Type": "application/json" },
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ email, city: city.trim() || "(not given)" }),
       });
       if (res.ok) {
@@ -152,7 +179,9 @@ export function ApplyCTA({
           moves anything else on the page. */}
       <span
         aria-hidden="true"
-        className="hero-primary-cta invisible inline-flex items-center gap-2 rounded-full px-[clamp(1.05rem,4.6vw,2.25rem)] py-[clamp(0.45rem,1.9vw,1rem)] font-display font-semibold tracking-wide"
+        className={`hero-primary-cta invisible items-center gap-2 rounded-full px-[clamp(1.05rem,4.6vw,2.25rem)] py-[clamp(0.45rem,1.9vw,1rem)] font-display font-semibold tracking-wide ${
+          hideTrigger ? "hidden" : "inline-flex"
+        }`}
       >
         <span className="text-[clamp(0.7rem,2.5vw,1rem)]">
           Begin your experience
@@ -170,42 +199,44 @@ export function ApplyCTA({
         >
           <AnimatePresence initial={false} mode="popLayout">
             {!open ? (
-              <motion.button
-                key="pill"
-                layoutId="whiff-cta"
-                style={{ borderRadius: 999 }}
-                type="button"
-                onClick={() => {
-                  setOpen(true);
-                  onOpenChange?.(true);
-                  trackCtaOpened();
-                }}
-                // Gesture presence must not depend on `reduce`: Motion gives
-                // pressable elements a tabindex, an SSR-visible attribute,
-                // and reduced-motion is unknown on the server. Only the
-                // values are conditioned.
-                whileHover={{ scale: reduce ? 1 : 1.04 }}
-                whileTap={{ scale: reduce ? 1 : 0.97 }}
-                className="hero-primary-cta btn-ink ping group relative inline-flex shrink-0 items-center gap-2 overflow-hidden rounded-full px-[clamp(1.05rem,4.6vw,2.25rem)] py-[clamp(0.45rem,1.9vw,1rem)] font-display font-semibold tracking-wide"
-              >
-                {/* shine sweep on hover */}
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/55 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
-                />
-                {/* This asks for a start, not a seat — and it's the only
+              hideTrigger ? null : (
+                <motion.button
+                  key="pill"
+                  layoutId="whiff-cta"
+                  style={{ borderRadius: 999 }}
+                  type="button"
+                  onClick={() => {
+                    setOpen(true);
+                    onOpenChange?.(true);
+                    trackCtaOpened();
+                  }}
+                  // Gesture presence must not depend on `reduce`: Motion gives
+                  // pressable elements a tabindex, an SSR-visible attribute,
+                  // and reduced-motion is unknown on the server. Only the
+                  // values are conditioned.
+                  whileHover={{ scale: reduce ? 1 : 1.04 }}
+                  whileTap={{ scale: reduce ? 1 : 0.97 }}
+                  className="hero-primary-cta btn-ink ping group relative inline-flex shrink-0 items-center gap-2 overflow-hidden rounded-full px-[clamp(1.05rem,4.6vw,2.25rem)] py-[clamp(0.45rem,1.9vw,1rem)] font-display font-semibold tracking-wide"
+                >
+                  {/* shine sweep on hover */}
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/55 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
+                  />
+                  {/* This asks for a start, not a seat — and it's the only
                     capitalised line on the page, which is what makes a
                     lowercase brand's one button read as a threshold. */}
-                <span className="relative text-[clamp(0.7rem,2.5vw,1rem)]">
-                  Begin your experience
-                </span>
-                <span
-                  aria-hidden="true"
-                  className="relative transition-transform duration-200 group-hover:translate-x-1"
-                >
-                  →
-                </span>
-              </motion.button>
+                  <span className="relative text-[clamp(0.7rem,2.5vw,1rem)]">
+                    Begin your experience
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    className="relative transition-transform duration-200 group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
+                </motion.button>
+              )
             ) : status === "success" ? (
               <motion.div
                 key="success"

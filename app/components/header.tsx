@@ -1,8 +1,15 @@
 import Link from "next/link";
+import { BeginAction } from "./begin-action";
 import { MobileNav } from "./mobile-nav";
 
 const HEADER_ACTION =
   "header-action rounded-full border border-line bg-transparent px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-ink hover:bg-ground-lift focus-visible:bg-ground-lift";
+
+// The one filled control in the header. It is the hero's button in miniature,
+// and the only reason it exists is that the hero's now lives at the end of a
+// deck someone has to play through.
+const HEADER_BEGIN =
+  "header-action btn-ink rounded-full px-4 py-2 font-display text-sm font-semibold";
 
 // The wordmark is set in Fredoka, not an image — so it's crisp at any size and
 // carries the brand font. The dot over the "i" is a fixed brand detail (no
@@ -61,6 +68,7 @@ export function Header({
           <Link href="/support" className={HEADER_ACTION}>
             Contact
           </Link>
+          <BeginAction className={HEADER_BEGIN} />
         </div>
         <MobileNav hideBlog={hideBlog} />
       </nav>
