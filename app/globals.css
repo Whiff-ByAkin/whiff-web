@@ -477,7 +477,6 @@ main {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  /* A 44px target around a 6px mark. */
   width: 1.4rem;
   height: 2.75rem;
   padding: 0 0 0.75rem;
@@ -485,6 +484,24 @@ main {
   border: 0;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+}
+
+/* A finger needs 44px in both directions, and the mouse-sized rail only gave
+   it 22 across — six of them in a row, which is a lot of near-misses. Where
+   the pointer is a finger the ticks widen to a full target and the gap goes,
+   so the six become one continuous strip with no dead ground between them.
+   (The width clause carries phones whose browser under-reports its pointer;
+   the pointer clause carries a phone held sideways and a touch laptop.)
+   6 x 44 = 264px, which fits inside the card on the narrowest phone. */
+@media (max-width: 900px), (pointer: coarse) {
+  .deck-rail {
+    gap: 0;
+    max-width: 100%;
+  }
+
+  .rail-tick {
+    width: 2.75rem;
+  }
 }
 
 .rail-mark {
@@ -517,12 +534,21 @@ main {
   border-color: var(--color-ink);
 }
 
-.rail-tick:hover .rail-mark {
-  background: color-mix(in srgb, var(--color-ink) 30%, transparent);
-}
+/* Hover behind a hover query: on a touch screen :hover latches onto whatever
+   was tapped last and stays there, so a tick would sit looking half-selected
+   until something else was pressed. */
+@media (hover: hover) {
+  .rail-tick:hover .rail-mark {
+    background: color-mix(in srgb, var(--color-ink) 30%, transparent);
+  }
 
-.rail-tick[data-state="current"]:hover .rail-mark {
-  background: var(--color-ink);
+  .rail-tick[data-state="current"]:hover .rail-mark {
+    background: var(--color-ink);
+  }
+
+  .rail-tick:hover .rail-name {
+    opacity: 1;
+  }
 }
 
 .rail-name {
@@ -542,7 +568,6 @@ main {
   pointer-events: none;
 }
 
-.rail-tick:hover .rail-name,
 .rail-tick:focus-visible .rail-name {
   opacity: 1;
 }
