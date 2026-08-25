@@ -1,13 +1,14 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   AnimatePresence,
   MotionConfig,
   motion,
   useReducedMotion,
 } from "motion/react";
-import { ASK_LABEL, CLOSING, ROLES, ROLE_BY_ID } from "@/app/config/roles";
+import { AskLabel } from "@/app/components/ask-label";
+import { CLOSING, ROLES, ROLE_BY_ID } from "@/app/config/roles";
 
 /* The six roles, and the question they add up to.
  *
@@ -47,16 +48,63 @@ export function RoleExplorer({
   const setActive = onActiveChange;
   const reduce = useReducedMotion();
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const touched = useRef(false);
+  const [copied, setCopied] = useState(false);
 
   const index = TABS.findIndex((tab) => tab.id === active);
   const role = ROLE_BY_ID.get(active);
+
+  /* Every role has a real address (/roles/spark), and pressing a tab moves
+   * the bar to it. That is the whole reason the pages exist: a role is worth
+   * sending to somebody, and a URL nobody can see is not a link.
+   *
+   * `replaceState`, not `push`: seven tabs would otherwise leave seven entries
+   * in the back stack and trap the visitor on the page. And nothing happens
+   * until a tab is actually pressed — rewriting the address on mount would
+   * turn every arrival on / into /roles/spark before the visitor had done
+   * anything at all. */
+  useEffect(() => {
+    if (!touched.current) return;
+    const path = active === CLOSING.id ? "/" : `/roles/${active}`;
+    if (window.location.pathname !== path) {
+      history.replaceState(null, "", path);
+    }
+  }, [active]);
+
+  function select(id: string) {
+    touched.current = true;
+    // The confirmation belongs to the role that was copied, not to the panel.
+    setCopied(false);
+    setActive(id);
+  }
+
+  /* Share sheet on a phone, clipboard everywhere else, and no third state:
+   * if both are unavailable the button is simply not rendered, rather than
+   * being a control that does nothing when pressed. */
+  async function share(name: string, url: string) {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: `${name} · whiff`, url });
+        return;
+      } catch {
+        // Cancelled, or the sheet refused. Fall through to the clipboard.
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Nothing to do that a visitor would thank us for.
+    }
+  }
 
   // Automatic activation: for a tablist whose panels are already loaded, the
   // arrow key should select, not merely focus. Moving focus without selecting
   // is the pattern for expensive panels, and these are three lines of text.
   function move(to: number) {
     const next = TABS[(to + TABS.length) % TABS.length];
-    setActive(next.id);
+    select(next.id);
     tabRefs.current[next.id]?.focus();
   }
 
@@ -108,7 +156,7 @@ export function RoleExplorer({
                 aria-controls="role-panel"
                 tabIndex={selected ? 0 : -1}
                 type="button"
-                onClick={() => setActive(tab.id)}
+                onClick={() => select(tab.id)}
                 className={`role-tab ${selected ? "is-selected" : ""}`}
               >
                 {selected && (
@@ -166,7 +214,7 @@ export function RoleExplorer({
                               out what the other three do. */}
                           <button
                             type="button"
-                            onClick={() => setActive(id)}
+                            onClick={() => select(id)}
                             className="role-link"
                           >
                             {ROLE_BY_ID.get(id)?.name}
@@ -178,6 +226,34 @@ export function RoleExplorer({
                     <dt>Fun fact</dt>
                     <dd>{role.fact}</dd>
                   </dl>
+
+                  {/* Who this is for, not what the button does.
+                      "Send Host to someone" asks a visitor to go and find a
+                      recipient. Naming the recipient does the finding: the
+                      research on why people share is consistent that a share
+                      is judged by what it is worth to the person receiving it
+                      (94% of sharers say they weigh exactly that), and that
+                      the strongest hook of all is identity — this is so you.
+                      Every role here is written to be worth being told you
+                      are, so the share is a compliment somebody already has
+                      in mind before they finish reading the line. */}
+                  <button
+                    type="button"
+                    aria-label={`Share the ${role.name} card`}
+                    data-copied={copied || undefined}
+                    onClick={() =>
+                      share(
+                        role.name,
+                        `${window.location.origin}/roles/${role.id}`,
+                      )
+                    }
+                    className="role-share"
+                  >
+                    <span aria-hidden="true">{copied ? "✓" : "↗"}</span>
+                    {copied
+                      ? "link copied — go tell them"
+                      : `send it to the ${role.name} you know`}
+                  </button>
                 </>
               ) : (
                 <>
@@ -196,7 +272,7 @@ export function RoleExplorer({
                     onClick={onBegin}
                     className="role-cta group"
                   >
-                    {ASK_LABEL}
+                    <AskLabel />
                     <span
                       aria-hidden="true"
                       className="transition-transform duration-200 group-hover:translate-x-1"

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { BeginAction } from "./begin-action";
+import { INSTAGRAM_URL } from "../config/site";
 import { useEffect, useId, useRef, useState } from "react";
 
 const MENU_ACTION =
@@ -84,7 +85,11 @@ export function MobileNav({
       <div
         id={panelId}
         hidden={!open}
-        className="absolute right-0 top-[calc(100%+0.5rem)] flex w-40 flex-col gap-1.5 bg-transparent p-0"
+        /* A real surface, not a floating list. It used to be transparent, and
+           with the hero's segmented control directly underneath it the menu
+           read as text printed over the page — worse now that the legal links
+           sit in it at 11px. */
+        className="absolute right-0 top-[calc(100%+0.5rem)] flex w-44 flex-col gap-1 rounded-2xl border border-line bg-ground p-2 shadow-[0_24px_48px_-24px_rgba(36,26,21,0.35)]"
       >
         {!hideBlog && (
           <Link
@@ -116,6 +121,39 @@ export function MobileNav({
             />
           </div>
         )}
+
+        {/* The home page's footline is desktop-only now (see footer.tsx), so
+            this menu is where the legal links live on a phone. Small, last,
+            and after a rule — they are a requirement, not a destination. */}
+        <div className="mt-1 flex items-center justify-end gap-2 border-t border-line px-4 pt-2.5 text-[0.7rem] text-ink-muted">
+          <Link
+            href="/privacy"
+            onClick={() => closeMenu({ returnFocus: false })}
+            className="py-1 transition-colors hover:text-ink"
+          >
+            privacy
+          </Link>
+          <span aria-hidden="true" className="text-ink-faint">
+            ·
+          </span>
+          <Link
+            href="/terms"
+            onClick={() => closeMenu({ returnFocus: false })}
+            className="py-1 transition-colors hover:text-ink"
+          >
+            terms
+          </Link>
+          <span aria-hidden="true" className="text-ink-faint">
+            ·
+          </span>
+          <a
+            href={INSTAGRAM_URL}
+            rel="me noopener"
+            className="py-1 transition-colors hover:text-ink"
+          >
+            instagram
+          </a>
+        </div>
       </div>
     </div>
   );

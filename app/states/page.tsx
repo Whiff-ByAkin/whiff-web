@@ -56,7 +56,7 @@ export default function StatesPage() {
           <p className="mt-4 text-[15px] leading-relaxed text-ink/90 sm:text-base">
             whiff opens one city at a time, so each market has enough members
             to form good circles. This is where circles are meeting now, and
-            at the bottom, how to ask for your state next.
+            at the bottom, how to open yours.
           </p>
         </div>
 
@@ -103,16 +103,26 @@ export default function StatesPage() {
 
         <hr className="mt-12 border-line" />
 
+        {/* Not a waitlist, and the difference is the whole section.
+            "Join the waitlist" casts the reader as somebody queueing to be
+            served: wait there, we will get to you. Every claim on this page
+            is already the other way round — whiff opens a state when enough
+            people in it are ready to be seated — so the form should ask them
+            to open one, not to wait for one. Same action, same field, same
+            email in the same inbox; the person filling it in is a founder of
+            their own market rather than the last name on a list. */}
         <section className="mt-10" aria-labelledby="next-state">
           <h2
             id="next-state"
             className="font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
           >
-            not there yet?
+            open your state.
           </h2>
           <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-ink/90">
-            tell us where to come next. whiff picks the next state from where
-            people ask, so this is the one form that actually moves a map.
+            whiff opens a state when enough people there are ready to be
+            seated, and it picks the next one from where people ask. So this
+            is not a waiting list — it is the one form that actually moves a
+            map.
           </p>
           <div className="mt-6">
             <StateInterestForm />

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ASK_LABEL } from "@/app/config/roles";
+import { AskLabel } from "@/app/components/ask-label";
 import {
   trackCtaOpened,
   trackSignupFailed,
@@ -27,7 +27,8 @@ type Status = "idle" | "submitting" | "success" | "error";
  * on the same ask, and the header on every other page links here with #begin
  * — all three go through the `whiff:begin` event, so there is one door with
  * three handles. And because the panel's ask and this button would otherwise
- * sit on screen saying the same words at the same time, the page hides this
+ * sit on screen saying the same words at the same time (whichever half of the
+ * label split this visitor is in — see AskLabel), the page hides this
  * one while that panel is open (`triggerHidden`); the space it occupies is
  * kept, so nothing moves as you tab between roles.
  *
@@ -216,7 +217,7 @@ export function InviteForm({
             aria-hidden={triggerHidden || undefined}
             tabIndex={triggerHidden ? -1 : undefined}
           >
-            {ASK_LABEL}
+            <AskLabel />
             <span
               aria-hidden="true"
               className="transition-transform duration-200 group-hover:translate-x-1"

@@ -4,7 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { AmbientBackground } from "./components/ambient-background";
-import { SITE_NAME, SITE_URL } from "./config/site";
+import { LIVE_MARKETS, SITE_NAME, SITE_URL } from "./config/site";
 import { PROMISE } from "./seo-content";
 
 // Fredoka — the display face: wordmark, headings, the emotional lines.
@@ -33,15 +33,31 @@ const nunito = Nunito({
   display: "swap",
 });
 
-// The home page's own <title>. Leads with the job the searcher is trying to do
-// ("make friends") rather than the brand, because nobody searches for a brand
-// they have never heard of — then the differentiator, then the disqualifier.
-const TITLE = "whiff: make real friends through activities, not profiles";
+/* The home page's own <title>, and the line that travels.
+ *
+ * It used to lead with the job a searcher is doing — "make real friends
+ * through activities, not profiles" — which is good for a query and bad for
+ * everything else, because a title is not read in a results page half the
+ * time. It is read in a text message. Paste the old link into a group chat
+ * and the preview said, on the recipient's screen, that the person who sent
+ * it is trying to make friends. That is a confession, and it is enough to
+ * stop somebody sharing at all.
+ *
+ * The structural line has no confession in it, and it is more distinctive
+ * anyway: nobody else can say "same four people". The cost is real and worth
+ * naming — "make friends" is gone from the highest-weighted tag on the site,
+ * so the intent match now rests on the H1, /blog and /llms.txt.
+ *
+ * A colon, not an em dash: whiff's copy does not use them. */
+const TITLE = "whiff: six activities. twelve weeks. same four people.";
 
-// Under 160 characters, opens with the promise, closes with the disqualifier so
-// no snippet can imply dating.
-const DESCRIPTION =
-  `${PROMISE} Activity-first friend circles of four who keep meeting up. No profiles, no swiping. Not a dating app.`;
+/* Under 160 characters. The promise, then the mechanism stated as the thing
+ * that makes it not a dating app — "how you answer, not how you look" does
+ * the disqualifying work that the words "not a dating app" used to do, in a
+ * sentence somebody would actually repeat. It closes on where whiff is, which
+ * is the only fact in it that can go stale, so it renders from the market
+ * data rather than being typed here. */
+const DESCRIPTION = `${PROMISE} Circles of four, seated by how you answer, not how you look. Starting in ${LIVE_MARKETS[0].region}.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -102,6 +118,19 @@ export const metadata: Metadata = {
 // emits one @graph containing the Organization plus whatever that page is
 // actually about — FAQPage, HowTo, a city Service, and so on.
 
+/* The CTA split, assigned before the first paint.
+ *
+ * It runs synchronously as the first thing in <body>, which is what makes it
+ * safe: the attribute is on <html> before the button below it is parsed, so
+ * nobody sees "Get your invite" turn into "Take your seat". The variant is
+ * kept in localStorage so a returning visitor stays in the arm they were
+ * counted in — a split that reshuffles per visit measures nothing.
+ *
+ * Wrapped in try/catch because localStorage throws outright in some privacy
+ * modes. When it does, no attribute is set, the CSS default wins, and that
+ * visitor is simply not in the experiment. */
+const CTA_SPLIT = `(function(){try{var k="whiff-cta",v=localStorage.getItem(k);if(v!=="begin"&&v!=="seat"){v=Math.random()<0.5?"begin":"seat";localStorage.setItem(k,v)}document.documentElement.dataset.cta=v}catch(e){}})()`;
+
 export const viewport: Viewport = {
   themeColor: "#FBF8F5",
   width: "device-width",
@@ -123,6 +152,7 @@ export default function RootLayout({
           Grammarly, ad blockers) commonly inject nodes/attributes into <body>
           before React hydrates. That mismatch is benign; this quiets it. */}
       <body suppressHydrationWarning className="min-h-[100svh] flex flex-col">
+        <script dangerouslySetInnerHTML={{ __html: CTA_SPLIT }} />
         {/* Keyboard and screen-reader users land on the header's dialog buttons
             first on every page; this gives them one tab to skip past it. */}
         <a

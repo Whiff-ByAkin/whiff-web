@@ -111,36 +111,50 @@ main {
   }
 }
 
+/* Every stop is the same width, which is the point: the pill that marks the
+   current one is then a fixed shape that slides, rather than a box that
+   grows and shrinks as it passes under "Host" and "Connector". A control
+   whose selection changes size on the way past reads as unstable.
+
+   Equal widths cost room, and seven of them do not fit across a phone at a
+   legible size — so below the desktop tier they wrap to two rows of four and
+   three, centred. Bigger targets, same fixed pill, still all seven visible
+   without scrolling. */
 .role-track {
   display: flex;
-  max-width: 100%;
+  width: 100%;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 1px;
-  padding: 0.2rem;
+  justify-content: center;
+  gap: 2px;
+  padding: 0.25rem;
   border: 1px solid color-mix(in srgb, var(--color-line) 70%, transparent);
-  border-radius: 999px;
+  border-radius: 1.35rem;
   background: color-mix(in srgb, var(--color-ground-lift) 70%, transparent);
-  /* Seven stops have to survive a 320px phone. They fit at the small end of
-     the clamp; if a translation or a longer name ever stops fitting, the
-     track scrolls rather than wrapping into two rows. */
-  overflow-x: auto;
-  scrollbar-width: none;
 }
 
-.role-track::-webkit-scrollbar {
-  display: none;
+/* Wide enough for one row of seven at a readable size. Below this the maths
+   does not work: the explorer's column is about half the window, and seven
+   equal cells inside it leave "Connector" less room than it needs. */
+@media (min-width: 1080px) {
+  .role-track {
+    flex-wrap: nowrap;
+    border-radius: 999px;
+  }
 }
 
 .role-tab {
   position: relative;
   display: inline-flex;
-  min-height: 2.1rem;
-  flex: 0 0 auto;
+  min-height: 2.4rem;
+  /* Four to a row, minus the gap. The last row holds the remaining three and
+     centres them under the first. */
+  flex: 0 0 calc(25% - 2px);
   align-items: center;
   justify-content: center;
-  padding: 0 clamp(0.45rem, 1.5vw, 0.95rem);
+  padding: 0 0.35rem;
   border: 0;
-  border-radius: 999px;
+  border-radius: 0.95rem;
   background: none;
   font-family: var(--font-display), system-ui, sans-serif;
   font-size: clamp(0.68rem, 1.4vw, 0.85rem);
@@ -153,22 +167,27 @@ main {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* A finger needs 44px even though the pill is drawn at text height — same
-   rule the old rail was fixed under. Seven of these sit side by side with no
-   dead ground between them, so a near-miss still lands on a tab. */
+/* A finger needs 44px. With four to a row each of these is now roughly
+   80 x 44 on a phone, so a near-miss lands on the tab you meant. */
 @media (pointer: coarse) {
   .role-tab {
     min-height: 2.75rem;
   }
 }
 
-/* The narrow-phone tier. Seven labels plus their padding come to about 319px,
-   which is wider than a 360px screen once the page's own margins are taken
-   off — so on those the padding gives way rather than the track scrolling and
-   hiding the seventh stop. The tap target keeps its height either way. */
+@media (min-width: 1080px) {
+  .role-tab {
+    flex: 1 1 0;
+    min-width: 0;
+    border-radius: 999px;
+  }
+}
+
+/* The narrow-phone tier. A quarter of a 360px screen is 78px, and "Connector"
+   has to sit inside it with room to spare rather than to the pixel. */
 @media (max-width: 380px) {
   .role-tab {
-    padding: 0 0.3rem;
+    padding: 0 0.2rem;
     font-size: 0.66rem;
   }
 }
@@ -191,7 +210,7 @@ main {
 .role-segment {
   position: absolute;
   inset: 0;
-  border-radius: 999px;
+  border-radius: inherit;
   background: var(--color-ground);
   box-shadow:
     0 0 0 0.5px rgb(36 26 21 / 6%),
@@ -333,6 +352,62 @@ main {
   text-decoration-color: var(--color-ink);
 }
 
+/* Handing the role to the person it describes.
+   Quiet in weight, but unmistakably a control: faint text with an arrow was
+   read as a caption, so this is an outlined pill — the only outlined thing on
+   the page, and the second-most pressable after the ask. */
+.role-share {
+  display: inline-flex;
+  min-height: 2.5rem;
+  align-items: center;
+  gap: 0.5em;
+  margin-top: clamp(0.4rem, 1.5vh, 0.9rem);
+  padding: 0 0.95rem;
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  background: var(--color-ground);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-ink-muted);
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    color 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.role-share:hover {
+  border-color: var(--color-ink);
+  color: var(--color-ink);
+}
+
+.role-share[data-copied] {
+  border-color: color-mix(in srgb, var(--color-ink) 45%, transparent);
+  color: var(--color-ink);
+}
+
+/* ── The CTA split ─────────────────────────────────────────────────────────
+   Both labels ship in the HTML and one is hidden, so the markup is identical
+   for every visitor and there is nothing for hydration to disagree about. The
+   inline script in layout.tsx stamps <html data-cta> before the first paint.
+
+   The default — no attribute, because the script did not run or localStorage
+   threw — is "Begin your experience". Order matters here: the seat rule has
+   to be able to win, so the default hides the seat and the attribute rules
+   undo it in both directions. */
+.cta-seat {
+  display: none;
+}
+
+[data-cta="seat"] .cta-begin {
+  display: none;
+}
+
+[data-cta="seat"] .cta-seat {
+  display: inline;
+}
+
 /* ── The ask ───────────────────────────────────────────────────────────────
    One well with hairline dividers, not three bordered boxes in a row. The
    border lives on the group and the focus ring lives on the group, so the
@@ -363,11 +438,24 @@ main {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Hidden while the explorer's closing panel is making the same ask. Kept in
-   flow — the column must not resize when the seventh tab is pressed. */
+/* Hidden while the explorer's closing panel is making the same ask.
+   On a desktop it keeps its footprint, so the left column does not resize
+   when the seventh tab is pressed — the hole it leaves sits between the
+   headline and the disclaimer, where it reads as air.
+
+   On a phone the ask is the last thing on the screen, and a reserved gap
+   there reads as a page that ended early. So it collapses, and the layout
+   settles by half its height. A settle beside a panel that is already
+   changing is a page breathing; a void is a bug. */
 .invite-rest.is-hidden {
   visibility: hidden;
   pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .invite-rest.is-hidden {
+    display: none;
+  }
 }
 
 .invite-well {
@@ -644,6 +732,50 @@ body {
   opacity: 0.026;
   mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* The short-phone tier: an SE-class screen, or any phone in a browser whose
+   chrome eats a hundred points of it.
+ 
+   Nothing is removed here — the role, what it brings, who it clicks with, the
+   fun fact and the share all survive. What gives is the air between them, so
+   that the ask stays on the first screen instead of below the fold. Below
+   768px only: a short desktop window has its own tier further down, and this
+   one would tighten a layout that has room to spare. */
+@media (max-height: 740px) and (max-width: 767px) {
+  .hero-shell {
+    padding-top: 4.6rem;
+  }
+
+  .hero-grid {
+    gap: 0.6rem;
+  }
+
+  .role-panel {
+    padding-top: 0.5rem;
+  }
+
+  .role-line {
+    margin-top: 0.3rem;
+  }
+
+  .role-meta {
+    margin-top: 0.45rem;
+    padding-top: 0.4rem;
+  }
+
+  .role-meta dd + dt {
+    margin-top: 0.35rem;
+  }
+
+  .role-share {
+    min-height: 2.3rem;
+    margin-top: 0.5rem;
+  }
+
+  .hero-ask {
+    margin-top: 0.9rem;
+  }
 }
 
 /* Short windows: scale gives, never overflow. The explorer's panel is the

@@ -9,9 +9,10 @@ import { track } from "@vercel/analytics";
    there is nothing to instrument for "how many people arrived from search".
    What it cannot know on its own is what happened next:
 
-     cta_opened        the invite dialog was opened
+     cta_opened        the field was opened   (carries cta_variant)
      signup_submitted  an email was actually sent
      signup_succeeded  Formspree accepted it        ← the conversion
+                       (carries cta_variant, and the city if one was typed)
      signup_failed     it did not                   ← catches a silent outage
 
    This used to also derive a `surface` and a `market` from the path, back when
@@ -23,8 +24,18 @@ import { track } from "@vercel/analytics";
    silently splits its history in the dashboard, so treat them as an API.
    ───────────────────────────────────────────────────────────────────────── */
 
+/* Which half of the CTA split this browser is in, as stamped on <html> before
+ * paint by layout.tsx. Undefined for anyone the script could not assign (no
+ * JavaScript, localStorage unavailable), and those visitors are deliberately
+ * left out of both arms rather than folded into the default one. */
+function ctaVariant(): "begin" | "seat" | undefined {
+  const value = document.documentElement.dataset.cta;
+  return value === "begin" || value === "seat" ? value : undefined;
+}
+
 export function trackCtaOpened() {
-  track("cta_opened");
+  const variant = ctaVariant();
+  track("cta_opened", variant ? { cta_variant: variant } : {});
 }
 
 export function trackSignupSubmitted() {
@@ -38,7 +49,13 @@ export function trackSignupSubmitted() {
  *  length-capped because a free-text field is a free-text field. */
 export function trackSignupSucceeded(requestedCity?: string) {
   const requested = requestedCity?.trim().toLowerCase().slice(0, 60);
-  track("signup_succeeded", requested ? { requested_city: requested } : {});
+  const variant = ctaVariant();
+  track("signup_succeeded", {
+    ...(requested ? { requested_city: requested } : {}),
+    // The conversion end of the split. Opened-rate alone would say which word
+    // gets pressed; this is the one that says which word gets people in.
+    ...(variant ? { cta_variant: variant } : {}),
+  });
 }
 
 /** `reason` is a coarse bucket, never the message or the address — this is an

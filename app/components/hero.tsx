@@ -48,14 +48,21 @@ const fade = (delay = 0) => ({
  * happens while your Circle is being assembled. The explorer took its room and
  * does more with it; that promise is still made in the /blog copy and in the
  * success chip after you sign up. */
-export function Hero() {
+export function Hero({
+  // Which tab the explorer opens on. /roles/spark is this screen with Spark
+  // already showing, so a link somebody was sent lands them inside the thing
+  // it was about rather than on the first role in the list.
+  initialRole,
+}: {
+  initialRole?: string;
+} = {}) {
   const reduce = useReducedMotion();
   const R = reduce ? fade : reveal;
 
   // Which panel the explorer is showing. The page needs it for one reason:
   // the seventh panel ends on the same ask as the button beside it, and two
   // controls saying "Get your invite" at once is one too many.
-  const [tab, setTab] = useState(ROLES[0].id);
+  const [tab, setTab] = useState(initialRole ?? ROLES[0].id);
 
   return (
     <section
@@ -106,7 +113,12 @@ export function Hero() {
           {/* ── The ask ─────────────────────────────────────────────── */}
           <motion.div
             {...R(0.42)}
-            className="hero-ask order-4 flex w-full justify-center md:mt-[clamp(1.1rem,3.6vh,2.1rem)] md:justify-start"
+            // The gap above the ask is the largest on the phone layout, and
+            // deliberately: the explorer is something to read, the button is
+            // something to do, and the two should not look like one stack of
+            // controls. The room came from the footline, which no longer
+            // renders at this width.
+            className="hero-ask order-4 mt-[clamp(1.1rem,4.5vh,2.75rem)] flex w-full justify-center md:mt-[clamp(1.1rem,3.6vh,2.1rem)] md:justify-start"
           >
             <InviteForm triggerHidden={tab === CLOSING.id} />
           </motion.div>

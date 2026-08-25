@@ -95,15 +95,9 @@ export const ROLES: readonly Role[] = [
 
 export const ROLE_BY_ID = new Map(ROLES.map((role) => [role.id, role]));
 
-/* One string for the one action, used by both places that ask for it: the
- * button under the claim and the closing panel's link. They are never on
- * screen together — the button hides on the seventh tab — and the handoff
- * only reads as a handoff if the words do not change underneath it.
- *
- * "Invite", not "reading": the reading happens in the app, after whiff opens
- * your city. This button opens a field and asks for an address, so it says
- * the thing it actually does. */
-export const ASK_LABEL = "Get your invite";
+/* The words on the ask used to live here as one string. They are now two,
+ * split 50/50 across visitors — see app/components/ask-label.tsx, which owns
+ * both the copy and the reason there are two of it. */
 
 /** The seventh tab. It is not a role — it is the question the six ask, and
  *  the only place on the page that points at the field. */

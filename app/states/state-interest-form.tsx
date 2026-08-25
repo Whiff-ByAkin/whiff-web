@@ -9,12 +9,24 @@ type Status = "idle" | "submitting" | "success" | "error";
 /* The demand signal the States dialog used to collect, now at the foot of the
  * page that shows what a live market gets. Both fields are required because
  * both are the point: the state is the purpose of the form, and the email is
- * what lets the signal lead to a reply. */
+ * what lets the signal lead to a reply.
+ *
+ * The copy around it asks the visitor to open a state rather than to wait for
+ * one (see the section in page.tsx), and the two states of this form follow
+ * that through: the button is something they do, and what comes back names
+ * the state they just did it for.
+ *
+ * What it deliberately does not do is show them how close that state is. That
+ * number would have to come from somewhere — there is no backend here, only
+ * an email in an inbox — and a progress bar with a made-up denominator is the
+ * one thing that would make the rest of this page untrustworthy. */
 export function StateInterestForm() {
   const [email, setEmail] = useState("");
   const [requestedState, setRequestedState] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
+  // Kept past the reset, because the thank-you names it back to them.
+  const [openedState, setOpenedState] = useState("");
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -50,6 +62,7 @@ export function StateInterestForm() {
       }
 
       setStatus("success");
+      setOpenedState(cleanState);
       setEmail("");
       setRequestedState("");
     } catch {
@@ -65,10 +78,11 @@ export function StateInterestForm() {
     return (
       <div aria-live="polite">
         <p className="font-display text-xl font-semibold text-ink">
-          got it. we’ll keep you posted.
+          you just moved the map.
         </p>
-        <p className="mt-2 max-w-[34ch] text-sm leading-relaxed text-ink-muted">
-          when whiff reaches your state, you’ll be the first to know.
+        <p className="mt-2 max-w-[36ch] text-sm leading-relaxed text-ink-muted">
+          {openedState} is on the board, and every name from there brings it
+          closer. we’ll write to you first when it opens.
         </p>
       </div>
     );
@@ -138,7 +152,7 @@ export function StateInterestForm() {
             <span className="spinner" /> sending…
           </>
         ) : (
-          "tell us your state"
+          "open my state"
         )}
       </button>
     </form>
