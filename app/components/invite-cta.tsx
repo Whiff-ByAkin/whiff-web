@@ -173,7 +173,10 @@ export function ApplyCTA({
     "w-full rounded-full border border-line bg-ground px-4 py-2.5 text-sm text-ink placeholder:text-ink-faint transition-shadow focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink/25 disabled:opacity-60";
 
   return (
-    <div className="relative">
+    // Headless, the footprint below is display:none — and a shrink-to-fit box
+    // around nothing is a box of zero width, which the panel's `inset-x-0`
+    // would then anchor to. It has to claim the column it sits in.
+    <div className={`relative ${hideTrigger ? "w-full" : ""}`}>
       {/* The footprint. Identical box to the resting pill, permanently in
           flow and permanently invisible — it is the reason the morph never
           moves anything else on the page. */}
@@ -189,7 +192,15 @@ export function ApplyCTA({
         <span>→</span>
       </span>
 
-      <div className="absolute inset-x-0 bottom-0 z-30 flex justify-center md:justify-start">
+      {/* The panel is wider than the deck's column, so on a desktop it hangs
+          off one side or the other. It hangs off the left, aligned to the
+          card's right edge: centred on the column it would run past the right
+          edge of the window on anything narrower than about 1100px. */}
+      <div
+        className={`absolute inset-x-0 bottom-0 z-30 flex justify-center ${
+          hideTrigger ? "md:justify-end" : "md:justify-start"
+        }`}
+      >
         <MotionConfig
           transition={
             reduce
