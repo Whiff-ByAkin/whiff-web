@@ -1,13 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import {
-  AnimatePresence,
-  MotionConfig,
-  motion,
-  useReducedMotion,
-} from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { ASK_LABEL } from "@/app/config/roles";
 import {
   trackCtaOpened,
   trackSignupFailed,
@@ -19,101 +15,87 @@ const FORMSPREE_ENDPOINT = "https://formspree.io/f/mlgovgdp";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-/* The ask, morphing in place.
+/* One button, and the field it opens in place.
  *
- * The dialog is gone from the home page: the pill itself becomes the form
- * (one shared layoutId, so Motion FLIPs the pill's bounds into the panel's),
- * and the form becomes the success chip. Nothing is portaled and nothing is
- * modal — the page underneath stays alive.
+ * A resting form is two empty boxes and a submit — three quiet grey shapes
+ * asking to be filled in by somebody who has not yet decided. A button is one
+ * shape with a verb on it. So the field waits behind the button and takes its
+ * place when pressed: no overlay, no dialog, no second page, and the cursor
+ * is already in the email by the time it finishes arriving.
  *
- * The page cannot scroll, so the morph must never change the page's height:
- * an invisible copy of the pill holds its exact footprint in normal flow, and
- * every real state renders in an absolute overlay anchored to that footprint's
- * bottom edge. Whatever the form grows into, it grows upward over the hero,
- * never downward into the footline. */
-export function ApplyCTA({
-  // Fires as the morph opens and closes, so the hero can clear the paper the
-  // panel grows over — without it the panel's top edge slices through the
-  // aside's text.
-  onOpenChange,
-  // A counter, not a boolean: something elsewhere on the page (the deck's
-  // hook card) asking for the form. Every bump opens it; closing stays the
-  // form's own business, so the two never fight over one piece of state.
-  openNonce = 0,
-  // The page's one "Begin your experience" now lives on the deck's closing
-  // card, so this renders no resting pill of its own — only the panel the
-  // card's button opens. Without this the page would carry two of the same
-  // button, which is one more threshold than a threshold can have.
-  hideTrigger = false,
+ * The button is not the only way in. The seventh panel of the explorer ends
+ * on the same ask, and the header on every other page links here with #begin
+ * — all three go through the `whiff:begin` event, so there is one door with
+ * three handles. And because the panel's ask and this button would otherwise
+ * sit on screen saying the same words at the same time, the page hides this
+ * one while that panel is open (`triggerHidden`); the space it occupies is
+ * kept, so nothing moves as you tab between roles.
+ *
+ * Once open it stays open. Nothing here closes, because there is nothing to
+ * close back to — the button has already done its job.
+ *
+ * The city stays optional and stays visible. whiff opens one city at a time
+ * and picks the next from where people ask, so it is the second most useful
+ * thing on the page; hiding it behind a disclosure to save a row would trade
+ * the roadmap for 40 pixels. */
+export function InviteForm({
+  // True while the explorer's closing panel is showing, because that panel
+  // carries the same ask. Hidden, not unmounted: the box keeps its footprint
+  // so the column does not resize when the seventh tab is pressed.
+  triggerHidden = false,
 }: {
-  onOpenChange?: (open: boolean) => void;
-  openNonce?: number;
-  hideTrigger?: boolean;
+  triggerHidden?: boolean;
 } = {}) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
-  // Optional, and the only reason the field exists: whiff opens one city at a
-  // time and picks the next one from where people ask. Without this the demand
-  // signal is a mailto link nobody can count.
   const [city, setCity] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
-  const reduce = useReducedMotion();
+  // A ring that fires once, when something else on the page sends you here —
+  // the closing panel's "Get your reading", or an arrival on /#begin. Without
+  // it the cursor lands in a field the eye has not been told about.
+  const [nudged, setNudged] = useState(false);
+  const opened = useRef(false);
   const emailRef = useRef<HTMLInputElement>(null);
+  const reduce = useReducedMotion();
 
-  /* The header carries a "Begin" too, and the home page cannot scroll to
-   * anything — so it asks for the form by event rather than by anchor. The
-   * hash form is for arriving from another page, and it is cleared as soon
-   * as it is spent so a refresh does not reopen the panel. */
+  /* One "the visitor is at the ask" event, however they got here: the first
+   * focus, the closing panel's button, or the hash from another page. */
+  function markOpened() {
+    if (opened.current) return;
+    opened.current = true;
+    trackCtaOpened();
+  }
+
   useEffect(() => {
+    // Asked for from somewhere else on the page: open the field, and ring it
+    // once so the eye follows the cursor that just landed there.
     function begin() {
+      markOpened();
       setOpen(true);
-      onOpenChange?.(true);
-      trackCtaOpened();
+      setNudged(true);
+      window.setTimeout(() => setNudged(false), 1400);
     }
+    // The hash is for arriving from another page, and it is cleared as soon
+    // as it is spent so a refresh does not re-fire the ring.
     if (window.location.hash === "#begin") {
       history.replaceState(null, "", window.location.pathname);
       begin();
     }
     window.addEventListener("whiff:begin", begin);
     return () => window.removeEventListener("whiff:begin", begin);
-  }, [onOpenChange]);
+  }, []);
 
-  const close = useCallback(() => {
-    setOpen(false);
-    onOpenChange?.(false);
-    setTimeout(() => {
-      setStatus("idle");
-      setError(null);
-    }, 200);
-  }, [onOpenChange]);
-
+  // The field does not exist until `open`, so focus waits for the render that
+  // creates it rather than being called beside the state change.
   useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") close();
-    }
-    if (open) window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [close, open]);
-
-  // Focus follows the morph: the field is ready the moment it exists.
-  useEffect(() => {
-    if (open && status !== "success") emailRef.current?.focus();
-  }, [open, status]);
-
-  // The nonce is a request to open, from the deck's hook card. Same analytics
-  // as the pill: however the form was reached, it was opened.
-  useEffect(() => {
-    if (openNonce === 0) return;
-    setOpen(true);
-    onOpenChange?.(true);
-    trackCtaOpened();
-  }, [openNonce, onOpenChange]);
+    if (open) emailRef.current?.focus({ preventScroll: true });
+  }, [open]);
 
   // The one flourish on the whole site, and it is deliberately unreachable
   // until somebody has actually converted — so it costs a first-time visitor
   // nothing in attention and pays the one moment worth paying for. Brand
-  // colours only, one burst, and nothing at all under reduced-motion.
+  // colours only, one burst, and nothing at all under reduced motion.
   useEffect(() => {
     if (status !== "success" || reduce) return;
     let cancelled = false;
@@ -126,7 +108,7 @@ export function ApplyCTA({
         gravity: 0.9,
         scalar: 0.9,
         ticks: 160,
-        origin: { y: 0.45 },
+        origin: { y: 0.62 },
         colors: ["#241a15", "#6b5a50", "#b8adab", "#f4eee9"],
         zIndex: 200,
         disableForReducedMotion: true,
@@ -169,200 +151,179 @@ export function ApplyCTA({
     }
   }
 
-  const inputClass =
-    "w-full rounded-full border border-line bg-ground px-4 py-2.5 text-sm text-ink placeholder:text-ink-faint transition-shadow focus:border-ink focus:outline-none focus:ring-2 focus:ring-ink/25 disabled:opacity-60";
+  // The success chip replaces the well in place. Same box, same width, so the
+  // column it sits in does not resize at the one moment worth celebrating.
+  if (status === "success") {
+    return (
+      <div className="invite-shell">
+        <motion.div
+          initial={reduce ? false : { opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          role="status"
+          className="invite-success"
+        >
+          {/* the jellyfish's one cameo — the app shows the mascot only at the
+              reading, and the site shows it only here */}
+          <Image
+            src="/whiff-mascot.png"
+            alt=""
+            width={2160}
+            height={3870}
+            sizes="52px"
+            className="h-14 w-auto shrink-0 select-none mix-blend-multiply"
+            draggable={false}
+          />
+          <div className="min-w-0">
+            <p className="font-display text-base font-semibold text-ink">
+              good. it’s started.
+            </p>
+            <p className="mt-0.5 text-[13px] leading-snug text-ink-muted">
+              we’ll write the moment your three are found, and other circles may
+              reach you before that.
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // The resting state: one shape with a verb on it.
+  if (!open) {
+    return (
+      <div className="invite-shell">
+        {/* Button and promise hide together. The promise is the line that
+            makes pressing the button feel safe, and on its own — with the
+            button gone — it is a sentence floating in the column. */}
+        <div className={`invite-rest ${triggerHidden ? "is-hidden" : ""}`}>
+          <motion.button
+            type="button"
+            onClick={() => {
+              markOpened();
+              setOpen(true);
+            }}
+            // Gesture presence must not depend on `reduce`: Motion gives
+            // pressable elements a tabindex, an SSR-visible attribute, and
+            // reduced-motion is unknown on the server. Only the values are
+            // conditioned.
+            whileHover={{ scale: reduce ? 1 : 1.03 }}
+            whileTap={{ scale: reduce ? 1 : 0.97 }}
+            transition={{ type: "spring", stiffness: 480, damping: 30 }}
+            // Hidden by visibility rather than by unmounting, so the column
+            // keeps its shape — and hidden from the keyboard and the screen
+            // reader too, because the panel beside it is making the same ask.
+            className="invite-trigger btn-ink group"
+            aria-hidden={triggerHidden || undefined}
+            tabIndex={triggerHidden ? -1 : undefined}
+          >
+            {ASK_LABEL}
+            <span
+              aria-hidden="true"
+              className="transition-transform duration-200 group-hover:translate-x-1"
+            >
+              →
+            </span>
+          </motion.button>
+
+          <p className="invite-promise">
+            we promise:{" "}
+            <span className="font-semibold text-ink">
+              strangers only on week one.
+            </span>
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    // Headless, the footprint below is display:none — and a shrink-to-fit box
-    // around nothing is a box of zero width, which the panel's `inset-x-0`
-    // would then anchor to. It has to claim the column it sits in.
-    <div className={`relative ${hideTrigger ? "w-full" : ""}`}>
-      {/* The footprint. Identical box to the resting pill, permanently in
-          flow and permanently invisible — it is the reason the morph never
-          moves anything else on the page. */}
-      <span
-        aria-hidden="true"
-        className={`hero-primary-cta invisible items-center gap-2 rounded-full px-[clamp(1.05rem,4.6vw,2.25rem)] py-[clamp(0.45rem,1.9vw,1rem)] font-display font-semibold tracking-wide ${
-          hideTrigger ? "hidden" : "inline-flex"
-        }`}
-      >
-        <span className="text-[clamp(0.7rem,2.5vw,1rem)]">
-          Begin your experience
-        </span>
-        <span>→</span>
-      </span>
+    <motion.div
+      className="invite-shell"
+      initial={reduce ? false : { opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <form onSubmit={handleSubmit} noValidate aria-label="Request an invite">
+        {/* One well, hairline-divided. The border is on the group and never on
+            the inputs: three bordered boxes in a row is a form, one bordered
+            well with dividers is a control. */}
+        <div className="invite-well" data-nudged={nudged || undefined}>
+          <input
+            ref={emailRef}
+            id="whiff-email"
+            type="email"
+            name="email"
+            required
+            autoComplete="email"
+            aria-label="Your email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onFocus={markOpened}
+            disabled={status === "submitting"}
+            className="invite-input invite-email"
+          />
 
-      {/* The panel is wider than the deck's column, so on a desktop it hangs
-          off one side or the other. It hangs off the left, aligned to the
-          card's right edge: centred on the column it would run past the right
-          edge of the window on anything narrower than about 1100px. */}
-      <div
-        className={`absolute inset-x-0 bottom-0 z-30 flex justify-center ${
-          hideTrigger ? "md:justify-end" : "md:justify-start"
-        }`}
-      >
-        <MotionConfig
-          transition={
-            reduce
-              ? { duration: 0 }
-              : { type: "spring", stiffness: 380, damping: 32 }
-          }
-        >
-          <AnimatePresence initial={false} mode="popLayout">
-            {!open ? (
-              hideTrigger ? null : (
-                <motion.button
-                  key="pill"
-                  layoutId="whiff-cta"
-                  style={{ borderRadius: 999 }}
-                  type="button"
-                  onClick={() => {
-                    setOpen(true);
-                    onOpenChange?.(true);
-                    trackCtaOpened();
-                  }}
-                  // Gesture presence must not depend on `reduce`: Motion gives
-                  // pressable elements a tabindex, an SSR-visible attribute,
-                  // and reduced-motion is unknown on the server. Only the
-                  // values are conditioned.
-                  whileHover={{ scale: reduce ? 1 : 1.04 }}
-                  whileTap={{ scale: reduce ? 1 : 0.97 }}
-                  className="hero-primary-cta btn-ink ping group relative inline-flex shrink-0 items-center gap-2 overflow-hidden rounded-full px-[clamp(1.05rem,4.6vw,2.25rem)] py-[clamp(0.45rem,1.9vw,1rem)] font-display font-semibold tracking-wide"
-                >
-                  {/* shine sweep on hover */}
-                  <span
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/55 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
-                  />
-                  {/* This asks for a start, not a seat — and it's the only
-                    capitalised line on the page, which is what makes a
-                    lowercase brand's one button read as a threshold. */}
-                  <span className="relative text-[clamp(0.7rem,2.5vw,1rem)]">
-                    Begin your experience
-                  </span>
-                  <span
-                    aria-hidden="true"
-                    className="relative transition-transform duration-200 group-hover:translate-x-1"
-                  >
-                    →
-                  </span>
-                </motion.button>
-              )
-            ) : status === "success" ? (
-              <motion.div
-                key="success"
-                layoutId="whiff-cta"
-                style={{ borderRadius: 24 }}
-                className="relative flex w-[min(92vw,24rem)] shrink-0 items-center gap-3 border border-line bg-ground-lift p-3.5 pr-9 text-left shadow-[0_30px_60px_-28px_rgba(36,26,21,0.35)]"
-                role="status"
-              >
-                {/* the jellyfish's one cameo — the app shows the mascot only
-                    at the reading, and the site shows it only here */}
-                <Image
-                  src="/whiff-mascot.png"
-                  alt=""
-                  width={2160}
-                  height={3870}
-                  sizes="45px"
-                  className="h-16 w-auto shrink-0 select-none mix-blend-multiply"
-                  draggable={false}
-                />
-                <div className="min-w-0">
-                  <p className="font-display text-base font-semibold text-ink">
-                    good. it’s started.
-                  </p>
-                  <p className="mt-0.5 text-[13px] leading-snug text-ink-muted">
-                    we’ll write the moment your three are found, and other
-                    circles may reach you before that.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={close}
-                  aria-label="Close"
-                  className="absolute right-2.5 top-2.5 flex h-7 w-7 items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-ground hover:text-ink"
-                >
-                  ✕
-                </button>
-              </motion.div>
+          <input
+            id="whiff-city"
+            type="text"
+            name="city"
+            autoComplete="address-level2"
+            aria-label="Which city are you in? Optional."
+            placeholder="city (optional)"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            onFocus={markOpened}
+            disabled={status === "submitting"}
+            className="invite-input invite-city"
+          />
+
+          <button
+            type="submit"
+            disabled={status === "submitting" || !email}
+            className="invite-submit btn-ink"
+          >
+            {status === "submitting" ? (
+              <>
+                <span className="spinner" />
+                <span className="hidden sm:inline">sending…</span>
+              </>
             ) : (
-              <motion.form
-                key="form"
-                layoutId="whiff-cta"
-                style={{ borderRadius: 26 }}
-                onSubmit={handleSubmit}
-                noValidate
-                aria-label="Request an invite"
-                className="relative w-[min(92vw,33rem)] shrink-0 border border-line bg-ground-lift p-3 shadow-[0_30px_60px_-28px_rgba(36,26,21,0.35)]"
-              >
-                <p className="px-2 pb-2 pt-0.5 text-left text-[13px] text-ink-muted">
-                  we promise:{" "}
-                  <span className="font-semibold text-ink">
-                    strangers only on week one.
-                  </span>
-                </p>
-                <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-                  <input
-                    ref={emailRef}
-                    id="whiff-email"
-                    type="email"
-                    name="email"
-                    required
-                    autoComplete="email"
-                    aria-label="Your email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={status === "submitting"}
-                    className={`${inputClass} sm:flex-1`}
-                  />
-                  <input
-                    id="whiff-city"
-                    type="text"
-                    name="city"
-                    autoComplete="address-level2"
-                    aria-label="Which city are you in? Optional."
-                    placeholder="your city (optional)"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    disabled={status === "submitting"}
-                    className={`${inputClass} sm:w-40`}
-                  />
-                  <button
-                    type="submit"
-                    disabled={status === "submitting" || !email}
-                    className="btn-ink inline-flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-full px-5 py-2.5 font-display text-sm font-semibold tracking-wide disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {status === "submitting" ? (
-                      <>
-                        <span className="spinner" /> sending…
-                      </>
-                    ) : (
-                      "count me in"
-                    )}
-                  </button>
-                </div>
-                {error && (
-                  <p
-                    role="alert"
-                    className="px-2 pb-0.5 pt-2 text-left text-[13px] font-semibold text-ink"
-                  >
-                    {error}
-                  </p>
-                )}
-                <button
-                  type="button"
-                  onClick={close}
-                  aria-label="Close"
-                  className="absolute -right-2.5 -top-2.5 flex h-7 w-7 items-center justify-center rounded-full border border-line bg-ground text-[13px] text-ink-muted shadow-sm transition-colors hover:text-ink"
-                >
-                  ✕
-                </button>
-              </motion.form>
+              <>
+                <span className="hidden sm:inline">count me in</span>
+                <span aria-hidden="true" className="sm:hidden">
+                  →
+                </span>
+                <span className="sr-only sm:hidden">count me in</span>
+              </>
             )}
-          </AnimatePresence>
-        </MotionConfig>
-      </div>
-    </div>
+          </button>
+        </div>
+
+        {/* The promise sits under the field rather than inside it — it is the
+            reassurance you read while deciding, not a label on an input. */}
+        <p className="invite-promise">
+          we promise:{" "}
+          <span className="font-semibold text-ink">
+            strangers only on week one.
+          </span>
+        </p>
+
+        <AnimatePresence initial={false}>
+          {error && (
+            <motion.p
+              key="error"
+              role="alert"
+              initial={reduce ? false : { opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="invite-error"
+            >
+              {error}
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </form>
+    </motion.div>
   );
 }

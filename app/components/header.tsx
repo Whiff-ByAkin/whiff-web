@@ -5,9 +5,9 @@ import { MobileNav } from "./mobile-nav";
 const HEADER_ACTION =
   "header-action rounded-full border border-line bg-transparent px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-ink hover:bg-ground-lift focus-visible:bg-ground-lift";
 
-// The one filled control in the header. It is the hero's button in miniature,
-// and the only reason it exists is that the hero's now lives at the end of a
-// deck someone has to play through.
+// The one filled control in the header, and it appears on every page except
+// home — where the field itself is on the screen and this would be a second
+// ask for the same thing. See BeginAction.
 const HEADER_BEGIN =
   "header-action btn-ink rounded-full px-4 py-2 font-display text-sm font-semibold";
 
@@ -16,14 +16,18 @@ const HEADER_BEGIN =
 // pulsing). The current brand uses one ink voice, including the mark.
 export function Header({
   hideBlog = false,
+  hideBegin = false,
   mobileSurface = false,
 }: {
   hideBlog?: boolean;
+  // The home page passes this: it carries the field itself, so the header's
+  // miniature of the same ask would be the second one on the screen.
+  hideBegin?: boolean;
   mobileSurface?: boolean;
 }) {
   return (
     <header
-      className={`site-header fade-up fixed inset-x-0 top-0 z-50 flex items-center justify-between px-3 py-3 min-[360px]:px-6 min-[360px]:py-5 md:px-10 ${
+      className={`site-header fade-up fixed inset-x-0 top-0 z-50 flex items-center justify-between px-4 py-3 min-[400px]:px-6 min-[400px]:py-5 md:px-10 ${
         mobileSurface
           ? "border-b border-line/80 bg-ground md:border-b-0 md:bg-transparent"
           : ""
@@ -68,9 +72,9 @@ export function Header({
           <Link href="/support" className={HEADER_ACTION}>
             Contact
           </Link>
-          <BeginAction className={HEADER_BEGIN} />
+          {!hideBegin && <BeginAction className={HEADER_BEGIN} />}
         </div>
-        <MobileNav hideBlog={hideBlog} />
+        <MobileNav hideBlog={hideBlog} hideBegin={hideBegin} />
       </nav>
     </header>
   );

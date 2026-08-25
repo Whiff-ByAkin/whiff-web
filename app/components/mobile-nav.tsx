@@ -7,7 +7,13 @@ import { useEffect, useId, useRef, useState } from "react";
 const MENU_ACTION =
   "flex min-h-11 w-full items-center justify-end rounded-xl border border-transparent px-4 py-2.5 text-right font-display text-sm font-semibold text-ink transition-colors hover:border-line focus-visible:border-ink focus-visible:outline-none";
 
-export function MobileNav({ hideBlog = false }: { hideBlog?: boolean }) {
+export function MobileNav({
+  hideBlog = false,
+  hideBegin = false,
+}: {
+  hideBlog?: boolean;
+  hideBegin?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -103,11 +109,13 @@ export function MobileNav({ hideBlog = false }: { hideBlog?: boolean }) {
         >
           Contact
         </Link>
-        <div onClick={() => closeMenu({ returnFocus: false })}>
-          <BeginAction
-            className={`${MENU_ACTION} btn-ink justify-center border-transparent text-center`}
-          />
-        </div>
+        {!hideBegin && (
+          <div onClick={() => closeMenu({ returnFocus: false })}>
+            <BeginAction
+              className={`${MENU_ACTION} btn-ink justify-center border-transparent text-center`}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { ApplyCTA } from "@/app/components/invite-cta";
-import { TypeDeck } from "./type-deck";
+import { InviteForm } from "@/app/components/invite-cta";
+import { RoleExplorer } from "@/app/components/role-explorer";
+import { CLOSING, ROLES } from "@/app/config/roles";
 import { PROMISE } from "@/app/seo-content";
 
 // Each element gets its own delay and a spring-like ease, so the entrance never
@@ -26,61 +27,74 @@ const fade = (delay = 0) => ({
   transition: { duration: 0, ease: "linear" as const, delay: delay * 0 },
 });
 
-/* The card is the hero now.
+/* Claim, artifact, ask.
  *
- * The mascot video argued against a serious pitch, so the app removed the
- * jellyfish from its welcome screen — and the site follows. What replaced it
- * is the product's own artifact: the deck of six role cards the reading
- * produces, and the rail beneath them that shows which roles belong in the
- * same Circle. The visitor plays with the deck, and the deck answers "what do
- * I get?" — you get read, then seated with three people who fit.
+ * The headline says what whiff sells, the explorer shows the thing it makes
+ * (six roles, and which of them sit well together), and one button asks for
+ * the one piece of information whiff needs to start. The field itself waits
+ * behind that button and opens in its place — a resting form is three empty
+ * grey boxes asking to be filled in by somebody who has not decided yet.
  *
- * Desktop is an asymmetric two-column composition: the story reads down the
- * left edge (kicker → headline → aside → ask), the deck holds the right, and
- * nothing is centred — centred-everything is the template look this layout
- * exists to escape. On a phone the columns fold into one centred stack with
- * the deck between the headline and the ask. */
+ * There are two places that ask, and never at the same time: the button here,
+ * and the explorer's seventh panel. `tab` is in this component for that one
+ * reason — while the seventh panel is up, the button steps aside.
+ *
+ * Desktop is two columns — the claim and the ask read down the left edge, the
+ * explorer holds the right, and nothing is centred, because centred-everything
+ * is the template look this layout exists to escape. A phone folds them into
+ * one centred stack in reading order: claim, explorer, ask.
+ *
+ * The "meanwhile" aside used to live under the headline, explaining what
+ * happens while your Circle is being assembled. The explorer took its room and
+ * does more with it; that promise is still made in the /blog copy and in the
+ * success chip after you sign up. */
 export function Hero() {
   const reduce = useReducedMotion();
   const R = reduce ? fade : reveal;
 
-  // The open form grows upward over the aside; the aside steps aside. A CSS
-  // opacity transition (zeroed globally under reduced motion) rather than a
-  // motion prop, because the aside's motion props are spent on the entrance.
-  const [askOpen, setAskOpen] = useState(false);
-
-  // The deck's closing card ends on "Begin your experience"; each press bumps
-  // the nonce and the form opens directly beneath the deck. That button is
-  // the page's only one, so this is the only thing that opens the form here.
-  const [joinNonce, setJoinNonce] = useState(0);
+  // Which panel the explorer is showing. The page needs it for one reason:
+  // the seventh panel ends on the same ask as the button beside it, and two
+  // controls saying "Get your invite" at once is one too many.
+  const [tab, setTab] = useState(ROLES[0].id);
 
   return (
     <section
       aria-label="What whiff is"
-      // The page owns the height (h-[100svh], overflow-hidden) and this fills
-      // whatever is left between the header and the legal hairline. min-h-0 is
-      // required on a flex child that must be allowed to shrink; without it
-      // this would refuse to go below its content height and push the footline
-      // off the bottom of a short window.
-      className="hero-shell relative flex min-h-0 flex-1 flex-col px-6 pb-[clamp(0.5rem,2vh,1.25rem)] pt-[clamp(3.2rem,8vh,4.5rem)] md:px-10"
+      // From 768px up the page owns the height (h-[100svh], overflow-hidden)
+      // and this fills whatever is left between the header and the legal
+      // hairline: `md:min-h-0` is what allows a flex child to shrink below its
+      // content, and it is why the composition scales down on a short window
+      // instead of pushing the footline off the bottom.
+      //
+      // Below 768px it is deliberately absent. A 640px-tall phone was clipping
+      // the handwritten line off the top, because a centred box that cannot
+      // grow loses its overflow at both ends. There the page grows and scrolls
+      // the last few pixels instead.
+      className="hero-shell relative flex flex-1 flex-col px-5 pb-[clamp(0.5rem,2vh,1.25rem)] pt-[4.9rem] min-[380px]:px-6 min-[400px]:pt-[5.9rem] md:min-h-0 md:px-10 md:pt-[clamp(4.25rem,8vh,4.75rem)]"
     >
-      <div className="hero-grid mx-auto flex min-h-0 w-full max-w-[68rem] flex-1 flex-col items-center justify-center gap-[clamp(0.55rem,2.2vh,1.1rem)] md:grid md:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] md:grid-rows-[auto_auto] md:items-center md:gap-x-[clamp(1.25rem,3.5vw,3.5rem)] md:gap-y-[clamp(0.9rem,3.2vh,2rem)]">
-        {/* ── The story ─────────────────────────────────────────────── */}
-        <div className="hero-story flex min-h-0 flex-col items-center gap-[clamp(0.4rem,1.8vh,0.9rem)] text-center md:col-start-1 md:row-start-1 md:items-start md:self-end md:text-left">
+      <div className="hero-grid mx-auto flex w-full max-w-[70rem] flex-1 flex-col items-center justify-center gap-[clamp(0.7rem,2.4vh,1.3rem)] md:min-h-0 md:grid md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] md:items-center md:gap-[clamp(1.5rem,4vw,3.75rem)]">
+        {/* The left column is one stack on a desktop and no box at all on a
+            phone: `contents` dissolves this wrapper into the flex column
+            above, which is what lets the explorer sit between the headline
+            and the field on a phone (reading order: claim, proof, ask) while
+            staying a single vertically centred column beside them on a
+            desktop. A grid row per element gave the same DOM two layouts and
+            neither spaced well. */}
+        <div className="hero-story contents text-center md:flex md:flex-col md:items-start md:text-left">
           {/* Handwriting is whiff's voice, and the app's rule travels to the
               site: exactly one handwritten line per screen. This is it — the
               one line the whole site has to land, in the hand that signs it. */}
           <motion.p
             {...R(0)}
             style={{ rotate: -2 }}
-            className="hero-kicker font-hand text-[clamp(1.35rem,5vw,1.9rem)] leading-tight text-ink"
+            className="hero-kicker order-1 font-hand text-[clamp(1.3rem,4.8vw,1.9rem)] leading-tight text-ink"
           >
             {PROMISE.toLowerCase()}
           </motion.p>
 
           <motion.h1
             {...R(0.1)}
-            className="hero-headline max-w-[21rem] text-balance font-display text-[clamp(1.35rem,6vw,2.6rem)] font-semibold leading-[1.12] tracking-tight text-ink sm:max-w-[26rem] md:max-w-none md:text-wrap md:text-[clamp(1.7rem,3.6vw,3.15rem)]"
+            className="hero-headline order-2 max-w-[21rem] text-balance font-display text-[clamp(1.4rem,6vw,2.6rem)] font-semibold leading-[1.12] tracking-tight text-ink sm:max-w-[26rem] md:mt-[0.35rem] md:max-w-none md:text-wrap md:text-[clamp(1.7rem,3.5vw,3.05rem)]"
           >
             {/* One sentence a line: the three claims read as three beats, not
                 as wherever the column runs out of room. */}
@@ -89,78 +103,39 @@ export function Hero() {
             <br /> Same four people.
           </motion.h1>
 
-          {/* What happens before your circle exists — framed as being wanted
-              rather than parked. The hairline and the "meanwhile" label keep
-              its footnote register; on a phone it yields its room to the deck. */}
+          {/* ── The ask ─────────────────────────────────────────────── */}
           <motion.div
-            {...R(0.22)}
-            aria-hidden={askOpen || undefined}
-            className="hero-aside mt-[clamp(0.4rem,1.8vh,1rem)] hidden w-full max-w-[28rem] md:flex"
+            {...R(0.42)}
+            className="hero-ask order-4 flex w-full justify-center md:mt-[clamp(1.1rem,3.6vh,2.1rem)] md:justify-start"
           >
-            {/* The fade rides an inner wrapper: the motion parent keeps its
-                entrance styles inline (opacity: 1), which would out-rank any
-                opacity class set on the same element. */}
-            <div
-              className={`flex w-full flex-col gap-[clamp(0.3rem,1.2vh,0.55rem)] transition-opacity duration-200 ${
-                askOpen ? "pointer-events-none opacity-0" : ""
-              }`}
-            >
-              <div className="flex w-full items-center gap-[0.7em]">
-                <span className="font-body text-[clamp(0.52rem,0.9vw,0.63rem)] font-bold uppercase tracking-[0.2em] text-ink-muted">
-                  meanwhile
-                </span>
-                <span
-                  aria-hidden
-                  className="h-px flex-1 bg-gradient-to-r from-line to-transparent"
-                />
-              </div>
-
-              <p className="text-balance font-body text-[clamp(0.8rem,1.15vw,0.98rem)] leading-relaxed text-ink-muted">
-                While we find the people who{" "}
-                <span className="font-display font-semibold text-ink">
-                  bring out your best
-                </span>
-                ,{/* the clause break is the rhythm of the line */}
-                <br /> other circles{" "}
-                <span className="font-display font-semibold text-ink">
-                  invite you along
-                </span>{" "}
-                to activities whiff knows you love.
-              </p>
-            </div>
+            <InviteForm triggerHidden={tab === CLOSING.id} />
           </motion.div>
+
+          {/* Nunito italic, not Caveat — the handwriting is spent on the
+              kicker, and two hands on one screen is a ransom note. */}
+          <motion.p
+            {...R(0.54)}
+            style={{ rotate: -2 }}
+            className="hero-disclaimer order-5 font-body text-[clamp(0.78rem,3.2vw,1.05rem)] italic text-ink-muted md:mt-[clamp(0.7rem,2.2vh,1.2rem)] md:pl-2"
+          >
+            this is not a dating app.
+          </motion.p>
         </div>
 
-        {/* ── The deck ──────────────────────────────────────────────── */}
+        {/* ── The artifact ──────────────────────────────────────────── */}
         <motion.div
-          {...R(0.32)}
-          className="hero-deck flex flex-col items-center md:col-start-2 md:row-span-2 md:row-start-1 md:-ml-6 md:justify-self-center"
+          {...R(0.28)}
+          className="hero-explorer order-3 flex w-full justify-center md:order-none md:col-start-2"
         >
-          <TypeDeck onJoin={() => setJoinNonce((n) => n + 1)} />
-
-          {/* ── The ask ─────────────────────────────────────────────────
-              No pill of its own: this is the panel the closing card's button
-              opens, and it lives inside the deck's column so the form grows
-              out of the card that was pressed rather than across the page
-              from it. Collapsed to nothing until then. */}
-          <div className="hero-ask flex w-full shrink-0 flex-col items-center">
-            <ApplyCTA
-              onOpenChange={setAskOpen}
-              openNonce={joinNonce}
-              hideTrigger
-            />
-          </div>
+          <RoleExplorer
+            active={tab}
+            onActiveChange={setTab}
+            // The closing panel's ask opens the field in the other column. It
+            // goes through the same window event the header and /#begin use,
+            // so there is one way in, not three.
+            onBegin={() => window.dispatchEvent(new Event("whiff:begin"))}
+          />
         </motion.div>
-
-        {/* Nunito italic, not Caveat — the handwriting is spent on the
-            kicker, and two hands on one screen is a ransom note. */}
-        <motion.p
-          {...R(0.54)}
-          style={{ rotate: -2 }}
-          className="hero-disclaimer font-body text-[clamp(0.78rem,3.2vw,1.1rem)] italic text-ink-muted md:col-start-1 md:row-start-2 md:self-start md:pl-2 md:text-[clamp(0.85rem,1.3vw,1.1rem)]"
-        >
-          this is not a dating app.
-        </motion.p>
       </div>
     </section>
   );
