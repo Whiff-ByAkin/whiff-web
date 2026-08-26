@@ -18,6 +18,35 @@
 /** The one line the whole site has to land. */
 export const PROMISE = "Strangers only on week one.";
 
+/* The bet.
+ *
+ * whiff's whole claim is that four compatible people who keep turning up stop
+ * being strangers. The bet is that claim with money behind it: keep all four
+ * of you together through all six activities and whiff pays for the sixth one
+ * — the class, the table, the tickets — on top of the subscription that was
+ * already covering the placement.
+ *
+ * It is written out once here and said in shorter words wherever it is
+ * rendered: the block under the claim, and /llms.txt. If the terms of it ever
+ * change, change this string first — then the FAQ entry below it, then
+ * /support, which does not mention the bet yet and will be the first place
+ * somebody goes looking when it pays out. */
+export const THE_BET =
+  "Keep your circle of four together through all six activities and whiff pays for the sixth one. Members cover the cost of the activities themselves; the last one is on whiff. It is the claim whiff is willing to be wrong about in public — four compatible people who keep showing up stop being strangers — and the sixth activity is what it is staked on.";
+
+/* The bet as the page says it, in three parts.
+ *
+ * It is a dare, not a discount, and the grammar is doing that work: the
+ * condition is second person and conditional ("if you can keep"), which hands
+ * the reader the job and makes finishing the six something to pull off rather
+ * than something to receive. The payoff is the only half set in ink.
+ */
+export const BET = {
+  label: "the bet",
+  dare: "If you can keep the four of you together for all six,",
+  payoff: "the sixth one is on us.",
+} as const;
+
 /** The 40–80 word extractable answer. Answer engines lift this near-verbatim,
  *  so it leads with the definition and contains the qualifying nouns a model
  *  needs to categorise whiff correctly. */
@@ -44,6 +73,11 @@ export const DEFINITIONS: { term: string; definition: string }[] = [
     term: "Meanwhile invitations",
     definition:
       "Before your own circle is formed, existing circles invite you along to activities that match what you enjoy. It means you have things to do from the day you join instead of sitting on a waitlist.",
+  },
+  {
+    term: "The bet",
+    definition:
+      "whiff's standing offer: keep all four members of a circle together through all six activities and whiff pays for the sixth one. Members cover the cost of the activities themselves, so the last night of a completed run is free.",
   },
   {
     term: "Activity-first matching",
@@ -181,6 +215,11 @@ export const FAQ: { question: string; answer: string }[] = [
     question: "What kinds of activities does whiff plan?",
     answer:
       "Real-world things you would plausibly choose on your own: climbing, cooking classes, pottery, hikes and walks, trivia, paddling, gallery visits, run clubs, dinners and live music. whiff mixes activities you already love with a few you have never tried.",
+  },
+  {
+    question: "Is the last whiff activity really free?",
+    answer:
+      "Yes, and whiff calls it the bet. A circle is six activities over twelve weeks, and members cover the cost of the activities themselves. If you can keep all four of you together through all six, whiff pays for the sixth one. It is there because whiff's whole claim is that the same four people, repeated, stop being strangers — so the payout lands on the night that claim has either held or it has not.",
   },
   {
     question: "Which cities is whiff in?",

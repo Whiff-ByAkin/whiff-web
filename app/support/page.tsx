@@ -115,12 +115,25 @@ const FAQS: { question: string; answer: string[]; extra?: React.ReactNode }[] =
         </p>
       ),
     },
+    {
+      /* The bet is now stated on the home page and on the share card, which
+         makes this the page somebody lands on when they want the terms of it.
+         What is deliberately not answered here yet: what "together" means when
+         a seat is released mid-run and refilled, and how the payment reaches
+         the circle. Both are product decisions, and inventing them in a
+         support answer is how a support answer becomes wrong. */
+      question: "Is the sixth activity really free?",
+      answer: [
+        "Yes. whiff calls it the bet: keep the four of you together through all six activities and whiff pays for the sixth one. Members cover the cost of the activities themselves — the class, the table, the tickets — so the last night of a completed run is on whiff, on top of the subscription that was already covering the placement.",
+        "It is there because it is the claim whiff is willing to be wrong about in public: four compatible people who keep showing up stop being strangers. The payout lands on the night that claim has either held or it has not.",
+      ],
+    },
   ];
 
 export const metadata: Metadata = {
   title: "Support",
   description:
-    "Get help with whiff: how circles form, what happens when you can't make a night, how to report a member, how to delete your account, and how to cancel.",
+    "Get help with whiff: how circles form, what happens when you can't make a night, how to report a member, how to delete your account, how to cancel, and how the bet on the sixth activity works.",
   alternates: { canonical: "/support" },
 };
 

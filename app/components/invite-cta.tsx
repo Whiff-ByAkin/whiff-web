@@ -193,9 +193,10 @@ export function InviteForm({
   if (!open) {
     return (
       <div className="invite-shell">
-        {/* Button and promise hide together. The promise is the line that
-            makes pressing the button feel safe, and on its own — with the
-            button gone — it is a sentence floating in the column. */}
+        {/* The bet used to be repeated here in 0.8rem grey. It is stated
+            once now, above, at a size that matches what it is worth — and
+            saying it twice in one column was what made neither of them
+            land. */}
         <div className={`invite-rest ${triggerHidden ? "is-hidden" : ""}`}>
           <motion.button
             type="button"
@@ -225,13 +226,6 @@ export function InviteForm({
               →
             </span>
           </motion.button>
-
-          <p className="invite-promise">
-            we promise:{" "}
-            <span className="font-semibold text-ink">
-              strangers only on week one.
-            </span>
-          </p>
         </div>
       </div>
     );
@@ -300,15 +294,6 @@ export function InviteForm({
             )}
           </button>
         </div>
-
-        {/* The promise sits under the field rather than inside it — it is the
-            reassurance you read while deciding, not a label on an input. */}
-        <p className="invite-promise">
-          we promise:{" "}
-          <span className="font-semibold text-ink">
-            strangers only on week one.
-          </span>
-        </p>
 
         <AnimatePresence initial={false}>
           {error && (

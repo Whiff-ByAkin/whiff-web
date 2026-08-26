@@ -8,6 +8,7 @@ import {
   NOT_LIST,
   PROMISE,
   STEPS,
+  THE_BET,
 } from "../seo-content";
 
 /* /llms.txt — a plain-text brief for LLM-based assistants.
@@ -42,6 +43,7 @@ ${ABOUT_PARAGRAPHS.join("\n\n")}
 - Circle size: 4 people, and the membership stays the same rather than rotating
 - Matching: based on activities you enjoy and when you are free. There are no profiles to browse and nothing to swipe on.
 - While you wait: existing circles invite you to activities that suit you, so members have things to do from day one
+- The bet: ${THE_BET}
 - Live in: ${LIVE_MARKETS.map((m) => `${m.city}, ${m.state}`).join("; ")}
 - Expansion: one city at a time, based on where people ask for it
 - Contact: ${CONTACT_EMAIL}

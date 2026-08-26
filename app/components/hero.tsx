@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { InviteForm } from "@/app/components/invite-cta";
 import { RoleExplorer } from "@/app/components/role-explorer";
 import { CLOSING, ROLES } from "@/app/config/roles";
-import { PROMISE } from "@/app/seo-content";
+import { BET, PROMISE } from "@/app/seo-content";
 
 // Each element gets its own delay and a spring-like ease, so the entrance never
 // reads as one uniform fade (a classic AI-slop tell).
@@ -42,7 +42,7 @@ const fade = (delay = 0) => ({
  * Desktop is two columns — the claim and the ask read down the left edge, the
  * explorer holds the right, and nothing is centred, because centred-everything
  * is the template look this layout exists to escape. A phone folds them into
- * one centred stack in reading order: claim, explorer, ask.
+ * one centred stack in reading order: claim, bet, explorer, ask.
  *
  * The "meanwhile" aside used to live under the headline, explaining what
  * happens while your Circle is being assembled. The explorer took its room and
@@ -110,6 +110,25 @@ export function Hero({
             <br /> Same four people.
           </motion.h1>
 
+          {/* ── The bet ─────────────────────────────────────────────────
+              The thing whiff actually stakes money on, and until now it was a
+              0.8rem grey line under the button — the size of a disclaimer,
+              which is how it read. It sits in the claim now, directly under
+              the headline it completes: three facts, then the wager on them.
+
+              A dashed stub rather than a filled block, because the button
+              below is the only ink-filled shape in this column and a second
+              one would fight it for the press. */}
+          <motion.div {...R(0.34)} className="hero-bet order-3">
+            <p className="hero-bet-label">{BET.label}</p>
+            <p className="hero-bet-line">
+              {BET.dare}{" "}
+              {/* The only half of the sentence set in ink: the condition is
+                  the reader's work, the payoff is whiff's money. */}
+              <strong>{BET.payoff}</strong>
+            </p>
+          </motion.div>
+
           {/* ── The ask ─────────────────────────────────────────────── */}
           <motion.div
             {...R(0.42)}
@@ -118,7 +137,7 @@ export function Hero({
             // something to do, and the two should not look like one stack of
             // controls. The room came from the footline, which no longer
             // renders at this width.
-            className="hero-ask order-4 mt-[clamp(1.1rem,4.5vh,2.75rem)] flex w-full justify-center md:mt-[clamp(1.1rem,3.6vh,2.1rem)] md:justify-start"
+            className="hero-ask order-5 mt-[clamp(1.1rem,4.5vh,2.75rem)] flex w-full justify-center md:mt-[clamp(1.1rem,3.6vh,2.1rem)] md:justify-start"
           >
             <InviteForm triggerHidden={tab === CLOSING.id} />
           </motion.div>
@@ -128,7 +147,7 @@ export function Hero({
           <motion.p
             {...R(0.54)}
             style={{ rotate: -2 }}
-            className="hero-disclaimer order-5 font-body text-[clamp(0.78rem,3.2vw,1.05rem)] italic text-ink-muted md:mt-[clamp(0.7rem,2.2vh,1.2rem)] md:pl-2"
+            className="hero-disclaimer order-6 font-body text-[clamp(0.78rem,3.2vw,1.05rem)] italic text-ink-muted md:mt-[clamp(0.7rem,2.2vh,1.2rem)] md:pl-2"
           >
             this is not a dating app.
           </motion.p>
@@ -137,7 +156,7 @@ export function Hero({
         {/* ── The artifact ──────────────────────────────────────────── */}
         <motion.div
           {...R(0.28)}
-          className="hero-explorer order-3 flex w-full justify-center md:order-none md:col-start-2"
+          className="hero-explorer order-4 flex w-full justify-center md:order-none md:col-start-2"
         >
           <RoleExplorer
             active={tab}
