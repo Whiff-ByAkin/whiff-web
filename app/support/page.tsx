@@ -4,6 +4,7 @@ import { Header } from "../components/header";
 import { PageFootline } from "../components/doc-shell";
 import { JsonLd } from "../components/json-ld";
 import { CONTACT_EMAIL, INSTAGRAM_URL } from "../config/site";
+import { PRICING } from "../seo-content";
 import { faqPage, organization } from "../lib/structured-data";
 
 /* Apple asks for a support URL for every app, and a mailto: on a landing page
@@ -92,7 +93,7 @@ const FAQS: { question: string; answer: string[]; extra?: React.ReactNode }[] =
     {
       question: "How does billing work, and how do I cancel?",
       answer: [
-        "whiff is $49.99 a month, billed through Apple. New subscribers get a 7-day free trial that includes one real activity, and we email you on day 5, before anything is charged.",
+        `whiff is ${PRICING.perMonth} a month, billed through Apple. New subscribers get a ${PRICING.trialDays}-day free trial that includes one real activity, and we email you on day ${PRICING.reminderDay}, before anything is charged.`,
         "Cancel any time in Settings → your name → Subscriptions on your device. Cancelling stops the next charge; it does not refund the period you are already in, and you keep your access until that period ends. We do that on purpose: cutting somebody off mid-circle takes three other people's evening with it.",
       ],
       extra: (

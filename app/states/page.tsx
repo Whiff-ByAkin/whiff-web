@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Header } from "../components/header";
 import { PageFootline } from "../components/doc-shell";
 import { JsonLd } from "../components/json-ld";
-import { LIVE_MARKETS, LIVE_STATES } from "../config/site";
+import { HUB_NAME, OPEN_MARKETS, OPEN_STATES } from "../config/site";
 import { organization, service } from "../lib/structured-data";
 import { StateInterestForm } from "./state-interest-form";
 
@@ -17,26 +17,26 @@ import { StateInterestForm } from "./state-interest-form";
    not a legal document, so there is no LegalShell card — a full-width masthead
    straight onto the paper, then one column per city so both halves of a
    desktop screen carry content. Every claim on the page renders from
-   MARKETS/LIVE_STATES; nothing about coverage is written by hand, so the page
+   MARKETS/OPEN_STATES; nothing about coverage is written by hand, so the page
    cannot say a state the data does not back up.
 
    This page may scroll. Only the home page is one screen. */
 
-const STATE_LINE = LIVE_STATES.join(" and ");
-const CITY_LINE = LIVE_MARKETS.map((m) => m.city).join(" and ");
+const STATE_LINE = OPEN_STATES.join(" and ");
+const CITY_LINE = OPEN_MARKETS.map((m) => m.city).join(" and ");
 
 export const metadata: Metadata = {
-  title: `States: live in ${STATE_LINE}`,
-  description: `whiff is live in ${STATE_LINE}, in ${CITY_LINE}. See where circles meet, what a season of activities looks like, and tell whiff which state to open next.`,
+  title: `States: whiff is open in ${STATE_LINE}`,
+  description: `whiff is open in ${STATE_LINE}, across ${CITY_LINE}. See where circles will meet, what a season of activities looks like, and tell whiff which state to open next.`,
   alternates: { canonical: "/states" },
 };
 
 export default function StatesPage() {
   return (
     <div className="relative flex min-h-[100svh] flex-col">
-      {/* The Service node already carries the live cities as areaServed, and
-          this page is the first one that visibly shows them — schema and
-          served content finally match. */}
+      {/* The Service node carries the same cities as areaServed, so schema and
+          served content match. Both are OPEN rather than LIVE: whiff-shared
+          holds this hub at FORMING and no circle has completed a run. */}
       <JsonLd nodes={[organization, service]} />
 
       <Header />
@@ -51,12 +51,13 @@ export default function StatesPage() {
 
         <div className="mt-6 max-w-2xl">
           <h1 className="font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
-            whiff is live in {STATE_LINE}
+            whiff is open in {STATE_LINE}
           </h1>
           <p className="mt-4 text-[15px] leading-relaxed text-ink/90 sm:text-base">
-            whiff opens one city at a time, so each market has enough members
-            to form good circles. This is where circles are meeting now, and
-            at the bottom, how to open yours.
+            whiff opens one metro at a time, so each has enough members to form
+            good circles. {HUB_NAME} is one metro, not two markets — circles
+            are seated across the whole of it. This is where whiff is taking
+            members now, and at the bottom, how to open yours.
           </p>
         </div>
 
@@ -65,7 +66,7 @@ export default function StatesPage() {
         {/* One column per city. `items-start` for the same reason /support
             gives: prose columns must not inherit each other's height. */}
         <div className="mt-10 grid items-start gap-x-16 gap-y-12 lg:grid-cols-2">
-          {LIVE_MARKETS.map((market) => (
+          {OPEN_MARKETS.map((market) => (
             <section key={market.slug} aria-labelledby={`city-${market.slug}`}>
               <p className="font-body text-xs font-bold uppercase tracking-[0.2em] text-ink-muted">
                 {market.region} · {market.stateAbbr}

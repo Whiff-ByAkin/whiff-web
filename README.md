@@ -46,17 +46,31 @@ app/
   blog/                      the interactive editorial explorer
     posts.ts                 the three articles
     blog-explorer.tsx        the accessible tablist + the animation
+  roles/[role]/              one page per role, from config/roles.ts
+    opengraph-image.tsx      a social card per role
+  states/                    where whiff is open, and the form to ask for more
+    state-interest-form.tsx  posts to Formspree, client-side
+  support/                   the help page, and the only FAQPage JSON-LD
   privacy/ terms/            legal (kept deliberately — see below)
   seo-content.ts             SINGLE SOURCE OF TRUTH for every factual claim
-  config/site.ts             origin, contact, and the live market list
-  lib/structured-data.ts     the JSON-LD graph (Organization, WebSite, Service)
+  config/site.ts             origin, contact, and the market list
+  config/roles.ts            the roles /roles/[role] is generated from
+  lib/structured-data.ts     the JSON-LD nodes + the @graph builder
   lib/analytics.ts           typed custom events
   llms.txt/route.ts          plain-text brief for AI assistants
   robots.ts sitemap.ts       crawl rules (AI crawlers explicitly welcomed)
+  manifest.ts                the web app manifest
   opengraph-image.tsx        generated social card
-  components/                UI
+  twitter-image.tsx          the same card, Twitter's tags
+  components/                UI — see below
 public/                      mascot art
+artifacts/                   QA and design-review output. GITIGNORED, not source
 ```
+
+`components/` holds `header`, `mobile-nav`, `footer`, `hero`, `home-screen`,
+`ambient-background`, `ask-label`, `begin-action`, `doc-shell`, `invite-cta`,
+`json-ld` and `role-explorer`. The old card deck is gone; `role-explorer`
+replaced it and only a comment remembers it.
 
 ## The content contract
 
@@ -73,6 +87,25 @@ now the only full description of whiff a crawler or model can read.
 origin and `MARKETS`, the list of markets whiff genuinely serves. Nothing in it
 is aspirational — the header's "States" dialog and the structured data both
 derive from it.
+
+**`status` on a market means a circle has FILLED there, not that whiff is
+open.** It mirrors `CityCoverageStatus` in whiff-shared, which holds the Twin
+Cities hub at `FORMING` and says why: *"LIVE on day one would be the lie this
+status exists to prevent."* Both entries here said `"live"` for a while and the
+word reached the layout description, `/llms.txt`, both `areaServed` nodes and
+the whole of `/states`. Render from `OPEN_MARKETS`; `LIVE_MARKETS` is markets
+where a circle has actually completed a run, and is currently empty.
+
+Saint Paul and Minneapolis are two entries and **one** pool — whiff-shared
+merges them into `twin-cities` because two 25-mile city circles halve the
+matching pool. They stay separate here only because the neighbourhoods and
+seasons genuinely differ. `HUB_NAME` is what to call the metro.
+
+**`PRICING` lives in `seo-content.ts` and mirrors the backend.** The price, the
+trial length and the reminder day were not in this file at all, and `/terms` and
+`/support` each typed `$49.99` against a real `SUBSCRIPTION_PRICE_PER_MONTH` of
+`19.99`. The site cannot import from `whiff-api`, so this is a mirror: change
+`whiff-shared/src/constants.ts` first, then `PRICING`, and nowhere else.
 
 ## The blog
 
@@ -97,12 +130,15 @@ linked from the footer and listed in the sitemap. Remove them only deliberately.
 
 ## SEO & AI discoverability
 
-- **Structured data** (`app/lib/structured-data.ts`) — one JSON-LD `@graph` on
-  `/`: `Organization`, `WebSite`, `Service`. This is now the only thing on the
-  page telling a crawler what whiff is, since the explanatory copy is gone.
-  `FAQPage`, `HowTo`, `DefinedTermSet`, `BreadcrumbList` and the per-city
-  `Service` and `Event` builders were deleted with the pages they described —
-  structured data for a URL you do not serve is worse than none.
+- **Structured data** (`app/lib/structured-data.ts`) — a JSON-LD `@graph` on
+  three pages, not one. `/` carries `Organization`, `WebSite` and `Service`;
+  `/states` carries `Organization` and `Service`; `/support` carries
+  `Organization` and `FAQPage`. **`FAQPage` came back with `/support` and this
+  section said it had been deleted** — `HowTo`, `DefinedTermSet`,
+  `BreadcrumbList` and the per-city `Service`/`Event` builders really are gone,
+  with the pages they described. The rule they went for still holds: structured
+  data for a URL you do not serve is worse than none, which cuts both ways —
+  a page you DO serve should carry it.
 - **Crawler access** (`app/robots.ts`) — search, AI *training* and AI
   *retrieval* crawlers are each allowed explicitly. Blocking the retrieval
   crawlers (OAI-SearchBot, PerplexityBot, Claude-SearchBot) is what removes a

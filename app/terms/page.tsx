@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DocShell, type DocSection } from "../components/doc-shell";
 import { CONTACT_EMAIL } from "../config/site";
+import { PRICING } from "../seo-content";
 
 /* This document is doing two jobs at once, and the second one is why it is
    shaped the way it is.
@@ -154,15 +155,16 @@ const SECTIONS: DocSection[] = [
           </li>
           <li>
             <strong>Price and period.</strong> The subscription is{" "}
-            <strong>$49.99 per month (USD)</strong>, billed monthly. A full
-            twelve-week circle is three monthly charges. The price shown in the
+            <strong>{PRICING.perMonth} per month (USD)</strong>, billed monthly. A
+            full twelve-week circle is three monthly charges. The price shown in the
             app at the time you subscribe is the price that governs; if it ever
             differs from the figure here, the in-app price controls.
           </li>
           <li>
             <strong>Free trial.</strong> New subscribers get a{" "}
-            <strong>7-day free trial</strong>, which includes one real activity.
-            We email you on day 5, before anything is charged. Your first charge
+            <strong>{PRICING.trialDays}-day free trial</strong>, which includes one
+            real activity. We email you on day {PRICING.reminderDay}, before
+            anything is charged. Your first charge
             is on day 7 unless you cancel before it. The free trial is offered
             once per person.
           </li>

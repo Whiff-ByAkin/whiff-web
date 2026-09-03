@@ -22,7 +22,17 @@ export type Market = {
   stateAbbr: string;
   /** How locals refer to the wider area — used in copy, never keyword-stuffed */
   region: string;
-  status: "live" | "waitlist";
+  /**
+   * Whether a circle has actually FILLED here, not whether whiff is open.
+   *
+   * Mirrors `CityCoverageStatus` in whiff-shared, which draws the line in the
+   * same place and says why: "FORMING until a Circle actually fills here. Whiff
+   * has never run anywhere; LIVE on day one would be the lie this status exists
+   * to prevent." Both Twin Cities entries were `"live"` here while the backend
+   * hub they belong to was FORMING, so the site was telling readers and
+   * crawlers that circles were meeting.
+   */
+  status: "live" | "forming" | "waitlist";
   /** Neighbourhoods and venues circles actually go to. Local specificity is
    *  what keeps a city page from being a template with the name swapped. */
   neighborhoods: string[];
@@ -42,7 +52,7 @@ export const MARKETS: Market[] = [
     state: "Minnesota",
     stateAbbr: "MN",
     region: "the Twin Cities",
-    status: "live",
+    status: "forming",
     neighborhoods: [
       "Cathedral Hill",
       "Lowertown",
@@ -79,7 +89,7 @@ export const MARKETS: Market[] = [
     state: "Minnesota",
     stateAbbr: "MN",
     region: "the Twin Cities",
-    status: "live",
+    status: "forming",
     neighborhoods: [
       "North Loop",
       "Uptown",
@@ -112,14 +122,42 @@ export const MARKETS: Market[] = [
   },
 ];
 
+/**
+ * The one hub, as the backend names it.
+ *
+ * **Saint Paul and Minneapolis are two entries here and ONE pool there.**
+ * whiff-shared merges them into `id: 'twin-cities'`, `city:
+ * 'Minneapolis–Saint Paul'`, because they are 8.7 miles apart and two 25-mile
+ * city circles would halve the matching pool — `cities.ts` calls that "the
+ * Minneapolis/Saint Paul failure". They stay separate in this file because the
+ * neighbourhoods and the seasons genuinely differ and that copy is the reason
+ * these pages are worth reading, but nothing on the site may present them as
+ * two places whiff operates in independently.
+ */
+export const HUB_NAME = "Minneapolis–Saint Paul";
+
+/**
+ * Where whiff is OPEN — live or forming.
+ *
+ * This was `LIVE_MARKETS`, filtered on `"live"`, and every surface downstream
+ * inherited the word: the layout description, `/llms.txt`'s "Live in:", both
+ * `areaServed` nodes and the whole of `/states`. Renamed rather than
+ * redefined, because a list called LIVE whose members are forming is how the
+ * claim survived being read.
+ */
+export const OPEN_MARKETS = MARKETS.filter(
+  (m) => m.status === "live" || m.status === "forming",
+);
+
+/** Markets where a circle has actually filled. Empty, and honestly so. */
 export const LIVE_MARKETS = MARKETS.filter((m) => m.status === "live");
 
 export function marketBySlug(slug: string): Market | undefined {
   return MARKETS.find((m) => m.slug === slug);
 }
 
-/** States with at least one live market — the header dialog reads from this so
- *  the site can never claim a state the markets list doesn't back up. */
-export const LIVE_STATES = Array.from(
-  new Set(LIVE_MARKETS.map((m) => m.state)),
+/** States whiff is open in — the header dialog reads from this so the site can
+ *  never claim a state the markets list doesn't back up. */
+export const OPEN_STATES = Array.from(
+  new Set(OPEN_MARKETS.map((m) => m.state)),
 );

@@ -1,4 +1,5 @@
-import { CONTACT_EMAIL, INSTAGRAM_URL, LIVE_MARKETS, SITE_URL } from "../config/site";
+import { ROLES } from "../config/roles";
+import { CONTACT_EMAIL, HUB_NAME, INSTAGRAM_URL, OPEN_MARKETS, SITE_URL } from "../config/site";
 import {
   ABOUT_PARAGRAPHS,
   ANSWER,
@@ -44,7 +45,8 @@ ${ABOUT_PARAGRAPHS.join("\n\n")}
 - Matching: based on activities you enjoy and when you are free. There are no profiles to browse and nothing to swipe on.
 - While you wait: existing circles invite you to activities that suit you, so members have things to do from day one
 - The bet: ${THE_BET}
-- Live in: ${LIVE_MARKETS.map((m) => `${m.city}, ${m.state}`).join("; ")}
+- Open in: ${HUB_NAME}, ${OPEN_MARKETS[0].state} — one metro, covering ${OPEN_MARKETS.map((m) => m.city).join(" and ")}
+- Status: forming. whiff is taking members here; no circle has completed a run yet.
 - Expansion: one city at a time, based on where people ask for it
 - Contact: ${CONTACT_EMAIL}
 - Instagram: ${INSTAGRAM_URL}
@@ -77,6 +79,8 @@ ${FAQ.map((f) => `### ${f.question}\n\n${f.answer}`).join("\n\n")}
 
 - [Home](${url("/")}): a single screen with the proposition and the way to join
 - [Blog](${url("/blog")}): what whiff is, who it is for, how it works, why four people, why it is not a dating app
+- [States](${url("/states")}): where whiff is open, what a season of activities looks like there, and how to ask for a new state
+${ROLES.map((r) => `- [${r.name}](${url(`/roles/${r.id}`)}): ${r.tagline}`).join("\n")}
 - [Support](${url("/support")}): how circles form, missing a night, reporting a member, deleting an account, billing
 - [Privacy](${url("/privacy")})
 - [Terms](${url("/terms")})

@@ -4,7 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { AmbientBackground } from "./components/ambient-background";
-import { LIVE_MARKETS, SITE_NAME, SITE_URL } from "./config/site";
+import { OPEN_MARKETS, SITE_NAME, SITE_URL } from "./config/site";
 import { PROMISE } from "./seo-content";
 
 // Fredoka — the display face: wordmark, headings, the emotional lines.
@@ -57,7 +57,7 @@ const TITLE = "whiff: six activities. twelve weeks. same four people.";
  * sentence somebody would actually repeat. It closes on where whiff is, which
  * is the only fact in it that can go stale, so it renders from the market
  * data rather than being typed here. */
-const DESCRIPTION = `${PROMISE} Circles of four, seated by how you answer, not how you look. Starting in ${LIVE_MARKETS[0].region}.`;
+const DESCRIPTION = `${PROMISE} Circles of four, seated by how you answer, not how you look. Starting in ${OPEN_MARKETS[0].region}.`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

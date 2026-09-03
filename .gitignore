@@ -44,3 +44,7 @@ next-env.d.ts
 __pycache__/
 *.pyc
 /api/_badge/generated_badges/
+
+# QA and design-review output (screenshots, screen recordings). Regenerated on
+# demand and 6MB of it was tracked; not source.
+/artifacts/

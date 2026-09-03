@@ -2,7 +2,7 @@ import {
   CONTACT_EMAIL,
   FOUNDED_YEAR,
   INSTAGRAM_URL,
-  LIVE_MARKETS,
+  OPEN_MARKETS,
   SITE_NAME,
   SITE_URL,
 } from "@/app/config/site";
@@ -54,7 +54,7 @@ export const organization: Node = {
       areaServed: "US",
     },
   ],
-  areaServed: LIVE_MARKETS.map((m) => ({
+  areaServed: OPEN_MARKETS.map((m) => ({
     "@type": "City",
     name: m.city,
     address: {
@@ -96,7 +96,7 @@ export const service: Node = {
     audienceType:
       "Adults who recently moved to a new city, remote workers, and people seeking a friend group or activity partners",
   },
-  areaServed: LIVE_MARKETS.map((m) => ({
+  areaServed: OPEN_MARKETS.map((m) => ({
     "@type": "City",
     name: m.city,
   })),

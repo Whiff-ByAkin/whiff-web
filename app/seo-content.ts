@@ -18,6 +18,40 @@
 /** The one line the whole site has to land. */
 export const PROMISE = "Strangers only on week one.";
 
+/* What it costs.
+ *
+ * **These were not in this file, and both pages that stated a price were
+ * wrong.** /support and /terms each typed "$49.99 a month" — two and a half
+ * times the real figure — while the backend's `SUBSCRIPTION_PRICE_PER_MONTH`
+ * has been 19.99 and `GET /v1/paywall` has been serving it to the app. A file
+ * whose header says it is the single source of every factual claim did not
+ * carry the one number a regulator cares about, so nothing was contradicting
+ * anything: there was no claim here to contradict.
+ *
+ * The backend is the real source and this is its mirror, which is second best
+ * — the site cannot import from `whiff-api`. So: if the price moves, it moves
+ * in `whiff-shared/src/constants.ts` first, then here, and nowhere else on this
+ * site. Anything rendering a price renders one of these.
+ *
+ * Apple's guideline 3.1.2 wants the price, the billing period and the trial
+ * stated where somebody can find them before subscribing, which is what /terms
+ * and /support are for. Being wrong there is a consumer-protection problem
+ * rather than a typo, and being wrong high is the worse direction.
+ */
+export const PRICING = {
+  /** `SUBSCRIPTION_PRICE_PER_MONTH` in whiff-shared. */
+  perMonth: "$19.99",
+  /** `TRIAL_DAYS`. */
+  trialDays: 7,
+  /**
+   * `TRIAL_DAYS - TRIAL_REMINDER_DAYS_BEFORE`. The day the reminder email goes
+   * out, which is the fact that makes the trial honest rather than a trap.
+   */
+  reminderDay: 5,
+  /** `CIRCLE_DURATION_WEEKS` — how long a circle's run of six activities is. */
+  journeyWeeks: 12,
+} as const;
+
 /* The bet.
  *
  * whiff's whole claim is that four compatible people who keep turning up stop
