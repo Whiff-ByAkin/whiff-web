@@ -110,9 +110,10 @@ export const metadata: Metadata = {
 const CTA_SPLIT = `(function(){try{var k="whiff-cta",v=localStorage.getItem(k);if(v!=="begin"&&v!=="seat"){v=Math.random()<0.5?"begin":"seat";localStorage.setItem(k,v)}document.documentElement.dataset.cta=v}catch(e){}})()`;
 
 export const viewport: Viewport = {
-  themeColor: "#FBF8F5",
+  themeColor: "#f6f2e9",
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
   colorScheme: "light",
 };
 

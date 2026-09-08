@@ -103,7 +103,7 @@ export default function BlogPage() {
       />
 
       <div className="relative flex min-h-[100svh] flex-col">
-        <Header hideBlog mobileSurface />
+        <Header />
 
         <main
           id="main"
@@ -117,13 +117,7 @@ export default function BlogPage() {
               outran the content column below it, so the h1 and the list rules
               started on two different left edges. */}
           <header className="mx-auto mb-12 w-full max-w-[68rem] text-center sm:text-left">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-muted transition-colors hover:text-ink"
-            >
-              <span aria-hidden="true">←</span> back home
-            </Link>
-            <h1 className="mt-5 text-balance font-display text-[clamp(2rem,5vw,3.4rem)] font-semibold leading-[1.08] tracking-tight text-ink">
+            <h1 className="text-balance font-display text-[clamp(2rem,5vw,3.4rem)] font-semibold leading-[1.08] tracking-tight text-ink">
               {H1}
             </h1>
             <p className="mx-auto mt-4 max-w-[58ch] text-[1.05rem] leading-relaxed text-ink-muted sm:mx-0">
@@ -134,6 +128,13 @@ export default function BlogPage() {
           </header>
 
           <BlogExplorer />
+
+          <section id="where-we-are" aria-labelledby="launch-title" className="mx-auto mt-14 w-full max-w-[68rem] border-t border-line pt-8">
+            <p className="font-display text-sm font-medium uppercase tracking-wider text-ink-muted">First circles / Twin Cities</p>
+            <h2 id="launch-title" className="mt-3 font-display text-3xl font-semibold tracking-tight text-ink">Starting in Minneapolis–Saint Paul.</h2>
+            <p className="mt-4 max-w-[60ch] leading-relaxed text-ink-muted">We’re bringing our first circles together in the Twin Cities. Join the invite list for updates and next steps as they take shape. Signing up doesn’t start a subscription or match you immediately.</p>
+            <Link href="/#begin" className="mt-5 inline-flex min-h-11 items-center rounded-full bg-ink px-5 py-3 font-display text-sm font-semibold text-ground">Get an invite</Link>
+          </section>
         </main>
       </div>
     </>

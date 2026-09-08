@@ -249,7 +249,7 @@ export function RoleExplorer({
                     }
                     className="role-share"
                   >
-                    <span aria-hidden="true">{copied ? "✓" : "↗"}</span>
+                    {copied && <span aria-hidden="true">✓</span>}
                     {copied
                       ? "link copied — go tell them"
                       : `send it to the ${role.name} you know`}
@@ -273,12 +273,7 @@ export function RoleExplorer({
                     className="role-cta group"
                   >
                     <AskLabel />
-                    <span
-                      aria-hidden="true"
-                      className="transition-transform duration-200 group-hover:translate-x-1"
-                    >
-                      →
-                    </span>
+
                   </button>
                 </>
               )}

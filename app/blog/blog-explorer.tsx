@@ -121,7 +121,7 @@ export function BlogExplorer() {
                     onClick={() => activate(post.id, true)}
                     className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap font-display text-sm font-semibold text-ink underline decoration-line decoration-2 underline-offset-4 transition-colors hover:decoration-ink lg:justify-self-end lg:pt-1"
                   >
-                    Read the full thing <span aria-hidden="true">→</span>
+                    Read the full thing
                   </button>
                 </article>
               </li>
@@ -143,7 +143,7 @@ export function BlogExplorer() {
                 onClick={() => activate(OVERVIEW_ID, true)}
                 className="mb-5 inline-flex min-h-11 items-center gap-1.5 font-display text-sm font-semibold text-ink-muted transition-colors hover:text-ink"
               >
-                <span aria-hidden="true">←</span> Back to one-paragraph overview
+                 Back to one-paragraph overview
               </button>
 
               <motion.div

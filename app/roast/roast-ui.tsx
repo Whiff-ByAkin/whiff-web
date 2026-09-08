@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Header } from "../components/header";
 
 export const NOTE_COLORS = ["yellow", "pink", "sage", "lilac"] as const;
 export type NoteColor = typeof NOTE_COLORS[number];
@@ -13,8 +14,8 @@ export async function readResponse<T>(response: Response): Promise<T> {
   return data as T;
 }
 
-export function RoastHeader({ review = false }: { review?: boolean }) {
-  return <header className="roast-header roast-wrap"><Link href="/" className="roast-wordmark" aria-label="Whiff home">whiff</Link><nav aria-label="Page navigation"><Link href="/">Meet Whiff <span aria-hidden="true">↗</span></Link>{review ? <Link href="/roast">Public wall <span aria-hidden="true">↗</span></Link> : <a href="#write-a-note">Leave a note <span aria-hidden="true">↘</span></a>}</nav></header>;
+export function RoastHeader() {
+  return <Header flow />;
 }
 
 export function RoastFooter() {

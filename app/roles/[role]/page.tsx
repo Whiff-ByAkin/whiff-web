@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { HomeScreen } from "../../components/home-screen";
 import { ROLES, ROLE_BY_ID } from "../../config/roles";
-import { circleImage } from "../../lib/circle-image";
 
 /* Six addresses for the six roles, and the reason they exist is the share.
  *
@@ -68,5 +67,5 @@ export default async function RolePage({
   const { role: id } = await params;
   if (!ROLE_BY_ID.has(id)) notFound();
 
-  return <HomeScreen initialRole={id} circleImage={circleImage()} />;
+  return <HomeScreen initialRole={id} />;
 }

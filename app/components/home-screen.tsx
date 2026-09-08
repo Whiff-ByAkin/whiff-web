@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Header } from "./header";
 import { InviteForm } from "./invite-cta";
 import { RoleExplorer } from "./role-explorer";
 import { JsonLd } from "./json-ld";
@@ -20,20 +21,15 @@ const OUTINGS = [
   { name: "One more reason to show up.", short: "Dinner", week: "12", mood: "Keep all four together through all six activities, and this one is on Whiff.", artifact: "dinner", note: "same time again?", number: "06" },
 ];
 
-function Arrow() { return <span aria-hidden="true">↗</span>; }
-
-export function HomeScreen({ initialRole, circleImage }: { initialRole?: string; circleImage?: string } = {}) {
+export function HomeScreen({ initialRole }: { initialRole?: string } = {}) {
   const [outing, setOuting] = useState(0);
   const [role, setRole] = useState(initialRole ?? "spark");
-  const [menu, setMenu] = useState(false);
-  const menuButton = useRef<HTMLButtonElement>(null);
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
   const current = OUTINGS[outing];
 
   useEffect(() => { if (initialRole) document.getElementById("your-circle")?.scrollIntoView({ behavior: "instant" }); }, [initialRole]);
 
   function begin() {
-    setMenu(false);
     window.dispatchEvent(new Event("whiff:begin"));
     document.getElementById("begin")?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "center" });
   }
@@ -41,52 +37,19 @@ export function HomeScreen({ initialRole, circleImage }: { initialRole?: string;
   return (
     <div className="whiff-home">
       <JsonLd nodes={[organization, website, service]} />
-      <header className="wh-header wh-wrap" onKeyDown={event => { if (event.key === "Escape" && menu) { setMenu(false); menuButton.current?.focus(); } }}>
-        <Link href="/" aria-label="Whiff home" className="wh-wordmark">whiff</Link>
-        <nav id="mobile-links" aria-label="Main navigation" className={menu ? "wh-nav is-open" : "wh-nav"}>
-          <a href="#how-it-works" onClick={() => setMenu(false)}>How it works</a>
-          <a href="#your-circle" onClick={() => setMenu(false)}>Your circle</a>
-          <Link href="/blog">Field notes <Arrow /></Link>
-          <Link href="/roast">Roast us</Link>
-        </nav>
-        <button className="wh-header-cta" onClick={begin}>Get an invite <Arrow /></button>
-        <button ref={menuButton} className="wh-menu" aria-expanded={menu} aria-controls="mobile-links" onClick={() => setMenu(!menu)} aria-label={menu ? "Close menu" : "Open menu"}>{menu ? "×" : "☰"}</button>
-      </header>
+      <Header flow />
 
       <main id="main">
         <section className="wh-hero wh-wrap" aria-labelledby="hero-title">
           <div className="wh-hero-copy">
             <p className="wh-eyebrow">A REAL-LIFE FRIENDSHIP EXPERIMENT</p>
-            <h1 id="hero-title">Make room<br />for <span>your<br className="wh-desktop-break" /> people.</span></h1>
+            <h1 id="hero-title">Good company.<br /><span>On repeat.</span></h1>
             <p className="wh-hero-description">Four people. Six activities. Twelve weeks.<br />A little less scrolling. A lot more showing up.</p>
-            <button className="wh-button" onClick={begin}>Find your people <Arrow /></button>
-            <Link href="/states" className="wh-location">First circles forming in Minneapolis–Saint Paul <span aria-hidden="true">↗</span></Link>
+            <button className="wh-button" onClick={begin}>Get an invite</button>
+            <p className="wh-location">First circles forming in Minneapolis–Saint Paul </p>
           </div>
 
           <div className="wh-journey">
-            <div className="wh-scene-top"><span className="wh-eyebrow">A SMALL CIRCLE. A BIG POSSIBILITY.</span><span className="wh-edition">EST. 2026</span></div>
-            {circleImage ? <div className="wh-circle-image"><Image src={circleImage} alt="Four chairs around a yellow table. A small circle with room for you." width={2560} height={1920} sizes="(max-width: 760px) 100vw, 55vw" priority /></div> : <div className={`wh-scene wh-scene-${current.artifact}`} role="img" aria-label={`Four colorful seats around a yellow table, one for you. Outing ${outing + 1}: ${current.short}. The same four seats stay for all six outings.`}>
-              <div className="wh-orbit" />
-              <span className="wh-scene-hand">there’s a place for you</span>
-              <span className="wh-hand-arrow" aria-hidden="true">⤵</span>
-              <div className="wh-floor-shadow" />
-              <div className="wh-chair wh-chair-back"><i /><b /><em /></div>
-              <div className="wh-chair wh-chair-left"><i /><b /><em /></div>
-              <div className="wh-table-leg wh-leg-one" />
-              <div className="wh-table-leg wh-leg-two" />
-              <div className="wh-table-leg wh-leg-three" />
-              <div className="wh-table-edge" />
-              <div className="wh-tabletop">
-                <div className={`wh-artifacts wh-artifacts-${current.artifact}`} key={current.artifact}>
-                  <div className="wh-artifact wh-artifact-one" /><div className="wh-artifact wh-artifact-two" /><div className="wh-artifact wh-artifact-three" />
-                  <div className="wh-table-note"><span>WHIFF CIRCLE</span><b>{current.short}</b><small>{current.note}</small></div>
-                </div>
-              </div>
-              <div className="wh-chair wh-chair-right"><i /><b /><em /></div>
-              <div className="wh-chair wh-chair-front"><i /><b /><em /><span>you</span></div>
-              <span className="wh-seat-label wh-seat-label-one">01</span><span className="wh-seat-label wh-seat-label-two">02</span><span className="wh-seat-label wh-seat-label-three">03</span>
-              <span className="wh-circle-stamp">SAME FOUR<br /><b>every time.</b></span>
-            </div>}
             <div className="wh-journey-caption"><span>AN EXAMPLE CIRCLE JOURNEY</span><span>12 WEEKS / 6 OUTINGS</span></div>
             <div className="wh-outing-tabs" role="tablist" aria-label="Explore six example outings" onKeyDown={event => {
               const next = event.key === "ArrowRight" ? (outing + 1) % 6 : event.key === "ArrowLeft" ? (outing + 5) % 6 : event.key === "Home" ? 0 : event.key === "End" ? 5 : undefined;
@@ -96,7 +59,6 @@ export function HomeScreen({ initialRole, circleImage }: { initialRole?: string;
             </div>
             <div className="wh-outing-panel" id="outing-panel" role="tabpanel" aria-labelledby={`outing-${outing}`} tabIndex={0}>
               <div><span className="wh-week">WEEK {current.week}</span><h2>{current.name}</h2><p>{current.mood}</p></div>
-              <button aria-label={outing === 5 ? "Back to first outing" : "Next outing"} onClick={() => setOuting((outing + 1) % 6)}>→</button>
             </div>
           </div>
         </section>
@@ -113,11 +75,11 @@ export function HomeScreen({ initialRole, circleImage }: { initialRole?: string;
 
         <section className="wh-bet wh-wrap" aria-labelledby="bet-title"><div className="wh-bet-ticket"><span>WHIFF MAKES A BET</span><strong>06</strong><span>THE LAST ONE’S ON US</span><div className="wh-ticket-perf" /></div><div><p className="wh-eyebrow">03 / WE’RE IN THIS, TOO.</p><h2 id="bet-title">Keep showing up.<br />We’ll pick up the tab.</h2><p>{BET.dare} <strong>{BET.payoff}</strong></p><p className="wh-fine-print">All four people. All six activities. Members cover other activity costs. We’re betting on what happens when you give friendship time.</p></div></section>
 
-        <section className="wh-invite-section" id="begin"><div className="wh-wrap wh-invite-inner"><div><p className="wh-eyebrow">MINNEAPOLIS–SAINT PAUL / NOW FORMING</p><h2>Your next chapter<br />has <span>other people in it.</span></h2><p>We’re getting our first circles together in {HUB_NAME}. Join the invite list. We’ll email you when it’s time to begin.</p></div><div className="wh-invite-box"><span className="wh-hand">A small first step.</span><InviteForm /><p>Just your email. Your city helps us know where to go next.</p><p className="wh-price">Joining the invite list is free.<br />Membership: {PRICING.perMonth}/month after a {PRICING.trialDays}-day trial.<br />Activity costs are separate. <Link href="/terms">The details ↗</Link></p></div></div></section>
+        <section className="wh-invite-section" id="begin"><div className="wh-wrap wh-invite-inner"><div><p className="wh-eyebrow">MINNEAPOLIS–SAINT PAUL / NOW FORMING</p><h2>Your next chapter<br />has <span>other people in it.</span></h2><p>We’re getting our first circles together in {HUB_NAME}. Join the invite list. We’ll email you when it’s time to begin.</p></div><div className="wh-invite-box"><span className="wh-hand">A small first step.</span><InviteForm /><p>Just your email. Your city helps us know where to go next.</p><p className="wh-price">Joining the invite list is free.<br />Membership: {PRICING.perMonth}/month after a {PRICING.trialDays}-day trial.<br />Activity costs are separate. <Link href="/terms">The details</Link></p></div></div></section>
 
         <section className="wh-faq wh-wrap" aria-label="A few good questions"><p className="wh-eyebrow">A FEW GOOD QUESTIONS</p><div><details><summary>Is this a dating thing?<span>+</span></summary><p>No. Whiff is for platonic friendship. Four people, shared activities, and time to get to know each other.</p></details><details><summary>What happens after I join the invite list?<span>+</span></summary><p>We’ll email you with updates and next steps as our first Twin Cities circles come together. Signing up here doesn’t start a subscription or match you immediately.</p></details><details><summary>What if Whiff isn’t in my city?<span>+</span></summary><p>Add your city when you request an invite. It helps us decide where to open next. We’re starting with one hub: Minneapolis–Saint Paul.</p></details></div></section>
       </main>
-      <footer className="wh-footer wh-wrap"><div><Link href="/" className="wh-wordmark">whiff</Link><p>Go do something. Together.</p></div><nav aria-label="Footer navigation"><Link href="/blog">Field notes</Link><Link href="/roast">Roast us</Link><Link href="/states">Where we are</Link><Link href="/support">Support</Link><a href={INSTAGRAM_URL} rel="me noopener">Instagram ↗</a><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></nav><span>© 2026 WHIFF<br />MADE FOR REAL LIFE.</span></footer>
+      <footer className="wh-footer wh-wrap"><div><Link href="/" className="wh-wordmark">whiff</Link><p>Go do something. Together.</p></div><nav aria-label="Footer navigation"><Link href="/blog">Field notes</Link><Link href="/roast">Roast us</Link><Link href="/support">Support</Link><a href={INSTAGRAM_URL} rel="me noopener">Instagram</a><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link></nav><span>© 2026 WHIFF<br />MADE FOR REAL LIFE.</span></footer>
     </div>
   );
 }

@@ -42,7 +42,7 @@ export default function StatesPage() {
           href="/"
           className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-muted transition-colors hover:text-ink"
         >
-          <span aria-hidden="true">←</span> back home
+           back home
         </Link>
 
         <div className="mt-6 max-w-2xl">

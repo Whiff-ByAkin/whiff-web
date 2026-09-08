@@ -5,7 +5,7 @@
 @theme inline {
   /* Pure white is a screen; warm white is paper. The app's warm paper is the
      source of truth for the site's ground now. */
-  --color-ground: #fbf8f5;
+  --color-ground: #f6f2e9;
   --color-ground-lift: #f4eee9;
   --color-stone: #b8adab;
   --color-line: #e5dcd6;
@@ -1002,4 +1002,19 @@ body {
 /* All button surfaces share a pill shape, including component overrides. */
 body button, body [role="button"], body .btn-ink {
   border-radius: 9999px !important;
+}
+
+/* Paint the browser safe area with Whiff’s paper while keeping controls clear
+   of a phone’s sensor housing and home indicator. */
+html { background-color:#f6f2e9; }
+body {
+  padding-top:env(safe-area-inset-top, 0px);
+  padding-bottom:env(safe-area-inset-bottom, 0px);
+  padding-left:env(safe-area-inset-left, 0px);
+  padding-right:env(safe-area-inset-right, 0px);
+}
+body .site-header {
+  top:env(safe-area-inset-top, 0px);
+  left:env(safe-area-inset-left, 0px);
+  right:env(safe-area-inset-right, 0px);
 }

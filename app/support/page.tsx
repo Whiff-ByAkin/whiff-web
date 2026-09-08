@@ -156,7 +156,7 @@ export default function SupportPage() {
           href="/"
           className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-muted transition-colors hover:text-ink"
         >
-          <span aria-hidden="true">←</span> back home
+           back home
         </Link>
 
         {/* The masthead. The ask sits at the end of the row on desktop so the

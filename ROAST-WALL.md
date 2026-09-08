@@ -53,13 +53,10 @@ The older unrelated `MONGODB_URI` in `.env` was preserved. The dedicated
 deployment remains future work. Missing/unavailable storage returns a retryable
 error, never fake success.
 
-## Replace the hero image
+## Homepage
 
-Save the user-created image as `public/whiff-circle.png`. Reload during local
-development; rebuild for production. Home and role pages detect the file on
-the server. Until it exists they retain the existing scene. The replacement
-is one illustration; the six outing controls continue to change the example
-activity details. A landscape 4:3 image with all objects inset is recommended.
+The homepage uses a text-led hero and six example outing controls. The earlier
+`public/whiff-circle.png` asset is retained but is no longer displayed.
 
 ## Checks
 

@@ -219,12 +219,7 @@ export function InviteForm({
             tabIndex={triggerHidden ? -1 : undefined}
           >
             <AskLabel />
-            <span
-              aria-hidden="true"
-              className="transition-transform duration-200 group-hover:translate-x-1"
-            >
-              →
-            </span>
+
           </motion.button>
         </div>
       </div>
@@ -285,11 +280,9 @@ export function InviteForm({
               </>
             ) : (
               <>
-                <span className="hidden sm:inline">count me in</span>
-                <span aria-hidden="true" className="sm:hidden">
-                  →
-                </span>
-                <span className="sr-only sm:hidden">count me in</span>
+                <span>Join list</span>
+
+
               </>
             )}
           </button>

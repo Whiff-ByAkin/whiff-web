@@ -43,7 +43,7 @@ review access, tests and the future shared-database connection.
 ```
 app/
   layout.tsx                 root metadata, fonts, analytics
-  page.tsx                   the one screen: header, hero, legal hairline
+  page.tsx                   homepage: shared header, text hero, activities and signup
   blog/                      the interactive editorial explorer
     posts.ts                 the three articles
     blog-explorer.tsx        the accessible tablist + the animation

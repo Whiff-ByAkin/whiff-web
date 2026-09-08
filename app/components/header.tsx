@@ -1,75 +1,21 @@
 import Link from "next/link";
 import { BeginAction } from "./begin-action";
 import { MobileNav } from "./mobile-nav";
+import { PRIMARY_LINKS } from "./navigation";
+import "./header.css";
 
-const HEADER_ACTION =
-  "header-action rounded-full border border-line bg-transparent px-4 py-2 font-display text-sm font-medium text-ink transition-colors hover:border-ink hover:bg-ground-lift focus-visible:bg-ground-lift";
-
-// The one filled control in the header, and it appears on every page except
-// home — where the field itself is on the screen and this would be a second
-// ask for the same thing. See BeginAction.
-const HEADER_BEGIN =
-  "header-action btn-ink rounded-full px-4 py-2 font-display text-sm font-semibold";
-
-// The wordmark is set in Fredoka, not an image — so it's crisp at any size and
-// carries the brand font. The dot over the "i" is a fixed brand detail (no
-// pulsing). The current brand uses one ink voice, including the mark.
-export function Header({
-  hideBlog = false,
-  hideBegin = false,
-  mobileSurface = false,
-}: {
-  hideBlog?: boolean;
-  // The home page passes this: it carries the field itself, so the header's
-  // miniature of the same ask would be the second one on the screen.
-  hideBegin?: boolean;
-  mobileSurface?: boolean;
-}) {
+/** The same navigation and controls on every public page. */
+export function Header({ flow = false }: { flow?: boolean }) {
   return (
-    <header
-      className={`site-header fade-up fixed inset-x-0 top-0 z-50 flex items-center justify-between px-4 py-3 min-[400px]:px-6 min-[400px]:py-5 md:px-10 ${
-        mobileSurface
-          ? "border-b border-line/80 bg-ground md:border-b-0 md:bg-transparent"
-          : ""
-      }`}
-    >
-      <Link
-        href="/"
-        aria-label="whiff home"
-        className="group inline-flex items-end"
-      >
-        <span className="site-wordmark relative font-display text-xl font-semibold lowercase tracking-tight text-ink transition-transform duration-200 group-hover:-translate-y-0.5 min-[360px]:text-2xl md:text-3xl">
-          whiff
-        </span>
-      </Link>
-
-      {/* The home page cannot scroll, so this link is the only route to the
-          explanatory content. It is a real link rather than a dialog because
-          it is also the one internal edge a crawler can follow off the home
-          page. */}
-      <nav aria-label="Primary">
-        <div className="hidden items-center gap-2 md:flex">
-          {!hideBlog && (
-            <Link href="/blog" className={HEADER_ACTION}>
-              Blog
-            </Link>
-          )}
-          {/* Both used to be dialogs. States earned a page (the dialog never
-              had room for what the markets data actually says), and Contact
-              was a thinner copy of what /support already is. */}
-          <Link href="/roast" className={HEADER_ACTION}>
-            Roast us
-          </Link>
-          <Link href="/states" className={HEADER_ACTION}>
-            States
-          </Link>
-          <Link href="/support" className={HEADER_ACTION}>
-            Contact
-          </Link>
-          {!hideBegin && <BeginAction className={HEADER_BEGIN} />}
-        </div>
-        <MobileNav hideBlog={hideBlog} hideBegin={hideBegin} />
+    <header className={`whiff-site-header ${flow ? "whiff-site-header--flow" : "site-header whiff-site-header--fixed"}`}>
+      <Link href="/" aria-label="Whiff home" className="whiff-site-wordmark">whiff</Link>
+      <nav className="whiff-desktop-nav" aria-label="Primary">
+        {PRIMARY_LINKS.map(link => <Link key={link.href} href={link.href}>{link.label}</Link>)}
       </nav>
+      <div className="whiff-header-controls">
+        <BeginAction className="whiff-header-invite" />
+        <MobileNav />
+      </div>
     </header>
   );
 }
