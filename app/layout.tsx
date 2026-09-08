@@ -34,7 +34,7 @@ const nunito = Nunito({
 
 // Search results explain the product; social previews keep the shareable promise.
 const TITLE = "Whiff | Make friends in Minneapolis–Saint Paul";
-const SHARE_TITLE = "whiff: six activities. twelve weeks. same four people.";
+const SHARE_TITLE = "Good company. On repeat.";
 const DESCRIPTION = "Make friends in the Twin Cities with Whiff: the same four people, six activities, twelve weeks. Join the invite list as our first circles form.";
 
 export const metadata: Metadata = {
