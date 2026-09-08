@@ -1182,3 +1182,13 @@ keep them readable at every size. */
   .wh-outing-panel { min-height:137px; padding-top:18px; }
   .wh-outing-panel h2 { font-size:24px; }
 }
+
+/* Let wide desktop windows breathe without trapping the page in a narrow column.
+   The existing tablet and phone gutters stay unchanged. */
+@media (min-width:1512px) {
+  .whiff-home .wh-wrap,
+  .whiff-home .whiff-site-header--flow {
+    width:calc(100% - clamp(112px, 8vw, 256px));
+    max-width:none;
+  }
+}
