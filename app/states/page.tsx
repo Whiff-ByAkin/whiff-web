@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "../lib/page-metadata";
 import Link from "next/link";
 import { Header } from "../components/header";
 import { PageFootline } from "../components/doc-shell";
@@ -25,11 +25,7 @@ import { StateInterestForm } from "./state-interest-form";
 const STATE_LINE = OPEN_STATES.join(" and ");
 const CITY_LINE = OPEN_MARKETS.map((m) => m.city).join(" and ");
 
-export const metadata: Metadata = {
-  title: `States: whiff is open in ${STATE_LINE}`,
-  description: `whiff is open in ${STATE_LINE}, across ${CITY_LINE}. See where circles will meet, what a season of activities looks like, and tell whiff which state to open next.`,
-  alternates: { canonical: "/states" },
-};
+export const metadata = pageMetadata("/states", `Friendship circles in ${CITY_LINE}`, `Whiff’s first friendship circles are forming in ${CITY_LINE}, ${STATE_LINE}. Explore example activities and join the invite list.`);
 
 export default function StatesPage() {
   return (

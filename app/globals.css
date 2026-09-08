@@ -764,28 +764,6 @@ body {
   animation: spin 0.7s linear infinite;
 }
 
-/* A restrained signal that the primary invitation is alive. */
-@keyframes ping-ring {
-  0% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-ink) 24%, transparent);
-  }
-  72% {
-    box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-ink) 0%, transparent);
-  }
-  100% {
-    box-shadow: 0 0 0 0 transparent;
-  }
-}
-
-.ping::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  animation: ping-ring 3.2s ease-out infinite;
-}
-
 /* A neutral fixed canvas under every page; the separate grain layer carries
    the tactile paper character. */
 .paper-atmosphere {
@@ -1019,4 +997,9 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+/* All button surfaces share a pill shape, including component overrides. */
+body button, body [role="button"], body .btn-ink {
+  border-radius: 9999px !important;
 }

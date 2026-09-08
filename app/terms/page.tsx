@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "../lib/page-metadata";
 import { DocShell, type DocSection } from "../components/doc-shell";
 import { CONTACT_EMAIL } from "../config/site";
 import { PRICING } from "../seo-content";
@@ -19,12 +19,7 @@ import { PRICING } from "../seo-content";
    The subscription section states the price, the period, the renewal, and how
    to cancel, in that order. Those four facts are the ones review looks for. */
 
-export const metadata: Metadata = {
-  title: "Terms of Service",
-  description:
-    "The terms that govern your use of whiff, including the whiff app, subscriptions, and in-person activities.",
-  alternates: { canonical: "/terms" },
-};
+export const metadata = pageMetadata("/terms", "Terms of Service", "The terms that govern your use of whiff, including the whiff app, subscriptions, and in-person activities.");
 
 const INTRO = (
   <>

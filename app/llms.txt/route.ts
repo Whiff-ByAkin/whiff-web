@@ -8,6 +8,7 @@ import {
   FAQ,
   NOT_LIST,
   PROMISE,
+  PRICING,
   STEPS,
   THE_BET,
 } from "../seo-content";
@@ -43,10 +44,12 @@ ${ABOUT_PARAGRAPHS.join("\n\n")}
 - Category: activity-first social platform for making platonic friends
 - Circle size: 4 people, and the membership stays the same rather than rotating
 - Matching: based on activities you enjoy and when you are free. There are no profiles to browse and nothing to swipe on.
-- While you wait: existing circles invite you to activities that suit you, so members have things to do from day one
+- Run: six activities over twelve weeks with the same four people
+- While you wait: activity suggestions depend on local availability; no immediate outings or matching are guaranteed
+- Membership: ${PRICING.perMonth}/month with a ${PRICING.trialDays}-day trial and a reminder on day ${PRICING.reminderDay}. Activity costs are separate. Website invite-list signup does not start billing.
 - The bet: ${THE_BET}
 - Open in: ${HUB_NAME}, ${OPEN_MARKETS[0].state} — one metro, covering ${OPEN_MARKETS.map((m) => m.city).join(" and ")}
-- Status: forming. whiff is taking members here; no circle has completed a run yet.
+- Status: first circles forming. The website takes invite-list signups for updates and next steps.
 - Expansion: one city at a time, based on where people ask for it
 - Contact: ${CONTACT_EMAIL}
 - Instagram: ${INSTAGRAM_URL}
@@ -77,7 +80,8 @@ ${FAQ.map((f) => `### ${f.question}\n\n${f.answer}`).join("\n\n")}
 
 ## Pages
 
-- [Home](${url("/")}): a single screen with the proposition and the way to join
+- [Home](${url("/")}): friendship circles, six example activities, pricing, launch status, and the invite list
+- [Roast us](${url("/roast")}): public sticky-note feedback wall; everyone can read approved notes. New submissions stay private until reviewed.
 - [Blog](${url("/blog")}): what whiff is, who it is for, how it works, why four people, why it is not a dating app
 - [States](${url("/states")}): where whiff is open, what a season of activities looks like there, and how to ask for a new state
 ${ROLES.map((r) => `- [${r.name}](${url(`/roles/${r.id}`)}): ${r.tagline}`).join("\n")}

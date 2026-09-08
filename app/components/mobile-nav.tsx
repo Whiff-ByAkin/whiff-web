@@ -100,6 +100,9 @@ export function MobileNav({
             Blog
           </Link>
         )}
+        <Link href="/roast" onClick={() => closeMenu({ returnFocus: false })} className={MENU_ACTION}>
+          Roast us
+        </Link>
         <Link
           href="/states"
           onClick={() => closeMenu({ returnFocus: false })}

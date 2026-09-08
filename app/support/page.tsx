@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "../lib/page-metadata";
 import Link from "next/link";
 import { Header } from "../components/header";
 import { PageFootline } from "../components/doc-shell";
@@ -131,12 +131,7 @@ const FAQS: { question: string; answer: string[]; extra?: React.ReactNode }[] =
     },
   ];
 
-export const metadata: Metadata = {
-  title: "Support",
-  description:
-    "Get help with whiff: how circles form, what happens when you can't make a night, how to report a member, how to delete your account, how to cancel, and how the bet on the sixth activity works.",
-  alternates: { canonical: "/support" },
-};
+export const metadata = pageMetadata("/support", "Support", "Get help with whiff: how circles form, what happens when you can't make a night, how to report a member, how to delete your account, how to cancel, and how the bet on the sixth activity works.");
 
 export default function SupportPage() {
   return (

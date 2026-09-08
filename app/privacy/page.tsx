@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "../lib/page-metadata";
 import { DocShell, type DocSection } from "../components/doc-shell";
 import { CONTACT_EMAIL } from "../config/site";
 
@@ -16,12 +16,7 @@ import { CONTACT_EMAIL } from "../config/site";
    decision-making about a person is a named right under GDPR Article 22 and a
    disclosure obligation under several US state laws. */
 
-export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description:
-    "What whiff collects, what it infers about you, who it shares data with, and how to get it deleted.",
-  alternates: { canonical: "/privacy" },
-};
+export const metadata = pageMetadata("/privacy", "Privacy Policy", "What whiff collects, what it infers about you, who it shares data with, and how to get it deleted.");
 
 const INTRO = (
   <>

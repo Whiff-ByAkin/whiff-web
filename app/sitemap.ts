@@ -5,10 +5,10 @@ import { SITE_URL } from "./config/site";
 // A fixed date keeps this sitemap statically generated and deterministic.
 // Bump it when page content meaningfully changes — a lastmod that silently
 // tracks the build date teaches crawlers to ignore the field.
-const CONTENT_UPDATED = new Date("2026-08-18");
+const CONTENT_UPDATED = new Date("2026-09-08");
 const LEGAL_UPDATED = new Date("2026-08-21");
-const STATES_ADDED = new Date("2026-08-24");
-const ROLES_ADDED = new Date("2026-08-25");
+const STATES_ADDED = new Date("2026-09-08");
+const ROLES_ADDED = new Date("2026-09-08");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const url = (path: string) => new URL(path, SITE_URL).toString();
@@ -25,6 +25,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: CONTENT_UPDATED,
       changeFrequency: "monthly",
       priority: 0.9,
+    },
+    {
+      url: url("/roast"),
+      lastModified: new Date("2026-09-08"),
+      changeFrequency: "weekly",
+      priority: 0.7,
     },
     {
       url: url("/states"),

@@ -35,9 +35,10 @@ npm run lint     # eslint
 
 ## Project layout
 
-The **home page is a single screen that does not scroll** — `h-[100svh]` plus
-`overflow-hidden`, with everything inside sized in fluid clamps so it shrinks to
-fit rather than overflowing. Everything the hero cannot say lives on `/blog`.
+The home page is a responsive scrolling experience with an example circle
+journey, personality roles, invite signup and FAQs. The moderated feedback wall
+lives at `/roast`; see [ROAST-WALL.md](ROAST-WALL.md) for local storage, private
+review access, tests and the future shared-database connection.
 
 ```
 app/

@@ -177,11 +177,11 @@ export function InviteForm({
           />
           <div className="min-w-0">
             <p className="font-display text-base font-semibold text-ink">
-              good. it’s started.
+              you’re on the list.
             </p>
             <p className="mt-0.5 text-[13px] leading-snug text-ink-muted">
-              we’ll write the moment your three are found, and other circles may
-              reach you before that.
+              we’ll email you with updates and next steps as our first circles
+              come together.
             </p>
           </div>
         </motion.div>
@@ -238,7 +238,7 @@ export function InviteForm({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
     >
-      <form onSubmit={handleSubmit} noValidate aria-label="Request an invite">
+      <form onSubmit={handleSubmit} aria-label="Request an invite">
         {/* One well, hairline-divided. The border is on the group and never on
             the inputs: three bordered boxes in a row is a form, one bordered
             well with dividers is a control. */}

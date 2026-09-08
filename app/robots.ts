@@ -47,10 +47,10 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        // Next.js internals: no value to a crawler, and they waste crawl budget.
-        disallow: ["/_next/static/chunks/", "/api/"],
+        // Keep rendering assets crawlable; private tools and API responses stay out.
+        disallow: ["/api/", "/roast/review"],
       },
-      { userAgent: AI_CRAWLERS, allow: "/" },
+      { userAgent: AI_CRAWLERS, allow: "/", disallow: ["/api/", "/roast/review"] },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: SITE_URL,

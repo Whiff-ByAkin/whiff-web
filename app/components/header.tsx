@@ -39,16 +39,7 @@ export function Header({
         className="group inline-flex items-end"
       >
         <span className="site-wordmark relative font-display text-xl font-semibold lowercase tracking-tight text-ink transition-transform duration-200 group-hover:-translate-y-0.5 min-[360px]:text-2xl md:text-3xl">
-          wh
-          {/* the dotless i + a static dot carrying the brand gradient */}
-          <span className="relative">
-            <span aria-hidden="true">ı</span>
-            <span
-              aria-hidden="true"
-              className="brand-gradient absolute left-1/2 top-[0.08em] h-[0.18em] w-[0.18em] -translate-x-1/2 rounded-full"
-            />
-          </span>
-          ff
+          whiff
         </span>
       </Link>
 
@@ -66,6 +57,9 @@ export function Header({
           {/* Both used to be dialogs. States earned a page (the dialog never
               had room for what the markets data actually says), and Contact
               was a thinner copy of what /support already is. */}
+          <Link href="/roast" className={HEADER_ACTION}>
+            Roast us
+          </Link>
           <Link href="/states" className={HEADER_ACTION}>
             States
           </Link>
