@@ -98,8 +98,9 @@ const SECTIONS: DocSection[] = [
     body: (
       <>
         <p>
-          You must be <strong>18 years or older</strong> and able to form a
-          binding contract. You must not be barred from using the Service under
+          You must be <strong>21 years or older</strong> and able to form a
+          binding contract. When you join, you confirm that your twenty-first
+          birthday has already happened. You must not be barred from using the Service under
           the laws of your country or the United States, and you must not be
           listed on any U.S. government list of prohibited or restricted
           parties. You may not use whiff if we have previously removed you.
@@ -719,7 +720,7 @@ export default function TermsPage() {
   return (
     <DocShell
       title="Terms of Service"
-      updated="August 20, 2026"
+      updated="September 15, 2026"
       intro={INTRO}
       sections={SECTIONS}
     />

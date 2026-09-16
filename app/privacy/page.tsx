@@ -207,8 +207,8 @@ const SECTIONS: DocSection[] = [
           </li>
           <li>
             <strong>Consent</strong>: for optional things such as approximate
-            location and any marketing email. You can withdraw consent at any
-            time.
+            location, sharing personal information with Anthropic, and any
+            marketing email. You can withdraw consent at any time.
           </li>
           <li>
             <strong>Legal obligation</strong>: where the law requires us to
@@ -227,14 +227,27 @@ const SECTIONS: DocSection[] = [
           <strong>This is how whiff works, so please read it.</strong>
         </p>
         <p>
-          When you answer whiff’s onboarding questions, your answers are sent to
-          a{" "}
+          Before your first reading, we ask for your explicit permission to share
+          your answers, reflections, feedback, profile details, and information
+          about your circle and activities with a{" "}
           <strong>third-party large language model provider (Anthropic)</strong>{" "}
-          and read automatically. The result is a structured profile of you:
+          to create your reading, help with matching, and write personal suggestions
+          and messages. This includes processing while the app is closed. With
+          that permission, your answers are read automatically. The result is a structured profile of you:
           interests, traits, an inferred personality type, and a set of
           statements whiff holds as beliefs about you, each with a confidence
           attached. Your attendance and your feedback after activities update
           those beliefs over time.
+        </p>
+        <p>
+          You can turn off future AI sharing in the app under You → Settings &amp;
+          Support → AI sharing. Requests already sent cannot be recalled. Your
+          account and existing readings remain available, but new AI readings and
+          personal suggestions stop. Creating a first reading requires permission;
+          choosing Not now leaves onboarding without starting that sharing. We
+          record your choice, the disclosure version, your birth year and the time
+          you made the choice. We do not ask for your full date of birth or an ID
+          document as part of this age confirmation.
         </p>
         <p>
           <strong>That profile drives automated decisions about you.</strong> It
@@ -328,7 +341,8 @@ const SECTIONS: DocSection[] = [
           <li>
             <strong>
               <a href="https://www.anthropic.com/legal/privacy">Anthropic</a>
-            </strong>: the language model that reads your onboarding answers (section 5).
+            </strong>: our AI provider for readings, matching assistance, personal suggestions,
+            and messages, with your permission (section 5).
           </li>
           <li>
             <strong>
@@ -528,13 +542,14 @@ const SECTIONS: DocSection[] = [
   },
   {
     id: "section-14",
-    title: "14. Children",
+    title: "14. Age eligibility",
     body: (
       <>
         <p>
-          whiff is for adults <strong>18 and over</strong>. It is not directed
-          to children and we do not knowingly collect information from anyone
-          under 18. If you believe a minor has given us information, email{" "}
+          whiff membership is for adults <strong>21 and over</strong>. We ask for
+          your birth year and confirmation that you are already 21 before you
+          begin onboarding. The service is not directed to children. If you believe
+          someone under 21 has created an account or a child has given us information, email{" "}
           <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> and we will
           delete it.
         </p>
@@ -704,7 +719,7 @@ export default function PrivacyPage() {
   return (
     <DocShell
       title="Privacy Policy"
-      updated="August 21, 2026"
+      updated="September 15, 2026"
       intro={INTRO}
       sections={SECTIONS}
     />
