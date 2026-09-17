@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:roast": "node --conditions=react-server --import tsx --test tests/roast.test.ts"
+    "test:roast": "node --conditions=react-server --import tsx --test tests/roast.test.ts",
+    "test:homepage": "node --conditions=react-server --import tsx --test tests/homepage.test.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
@@ -18,7 +19,8 @@
     "next": "16.2.2",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

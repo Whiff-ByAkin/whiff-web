@@ -47,7 +47,7 @@ export default function StatesPage() {
 
         <div className="mt-6 max-w-2xl">
           <h1 className="font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
-            whiff is open in {STATE_LINE}
+            Whiff is forming circles in {STATE_LINE}
           </h1>
           <p className="mt-4 text-[15px] leading-relaxed text-ink/90 sm:text-base">
             whiff opens one metro at a time, so each has enough members to form
@@ -57,6 +57,7 @@ export default function StatesPage() {
           </p>
         </div>
 
+        <p className="mt-5"><Link href="/mn" className="underline underline-offset-4">New to Minnesota? Explore Whiff in the Twin Cities.</Link></p>
         <hr className="mt-10 border-line" />
 
         {/* One column per city. `items-start` for the same reason /support

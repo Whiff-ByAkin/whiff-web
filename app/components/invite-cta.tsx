@@ -5,6 +5,7 @@ import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { AskLabel } from "@/app/components/ask-label";
 import {
+  homepageContext,
   trackCtaOpened,
   trackSignupFailed,
   trackSignupSubmitted,
@@ -44,8 +45,10 @@ export function InviteForm({
   // carries the same ask. Hidden, not unmounted: the box keeps its footprint
   // so the column does not resize when the seventh tab is pressed.
   triggerHidden = false,
+  triggerLabel,
 }: {
   triggerHidden?: boolean;
+  triggerLabel?: string;
 } = {}) {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
@@ -96,9 +99,20 @@ export function InviteForm({
     if (!open) return;
     let frame = 0;
     const viewport = window.visualViewport;
+    const previousPadding = document.body.style.paddingBottom;
+    const basePadding = Number.parseFloat(getComputedStyle(document.body).paddingBottom) || 0;
     function revealFocusedField() {
       const input = document.activeElement;
-      if (!(input instanceof HTMLInputElement) || !formRef.current?.contains(input)) return;
+      if (!(input instanceof HTMLInputElement) || !formRef.current?.contains(input)) {
+        document.body.style.paddingBottom = previousPadding;
+        return;
+      }
+      // The keyboard may leave the layout viewport tall. A field near the
+      // footer then cannot scroll far enough even with the correct delta.
+      // Add only the obscured height while this form owns focus, and remove
+      // it on blur, keyboard close, or navigation.
+      const inset = Math.max(0, window.innerHeight - (viewport?.height ?? window.innerHeight));
+      document.body.style.paddingBottom = inset ? `${basePadding + inset}px` : previousPadding;
       const rect = input.getBoundingClientRect();
       const top = (viewport?.offsetTop ?? 0) + 24;
       const bottom = (viewport?.offsetTop ?? 0) + (viewport?.height ?? window.innerHeight) - 24;
@@ -114,6 +128,7 @@ export function InviteForm({
     viewport?.addEventListener("resize", scheduleReveal);
     window.addEventListener("resize", scheduleReveal);
     document.addEventListener("focusin", scheduleReveal);
+    document.addEventListener("focusout", scheduleReveal);
     emailRef.current?.focus({ preventScroll: true });
     scheduleReveal();
     return () => {
@@ -121,6 +136,8 @@ export function InviteForm({
       viewport?.removeEventListener("resize", scheduleReveal);
       window.removeEventListener("resize", scheduleReveal);
       document.removeEventListener("focusin", scheduleReveal);
+      document.removeEventListener("focusout", scheduleReveal);
+      document.body.style.paddingBottom = previousPadding;
     };
   }, [open]);
 
@@ -154,6 +171,11 @@ export function InviteForm({
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!email) return;
+    if (window.location.pathname.startsWith("/owner/")) {
+      setError("This is a preview. No signup was sent.");
+      setStatus("error");
+      return;
+    }
     setStatus("submitting");
     setError(null);
     trackSignupSubmitted();
@@ -164,7 +186,7 @@ export function InviteForm({
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, city: city.trim() || "(not given)" }),
+        body: JSON.stringify({ email, city: city.trim() || "(not given)", ...homepageContext() }),
       });
       if (res.ok) {
         setStatus("success");
@@ -249,7 +271,7 @@ export function InviteForm({
             aria-hidden={triggerHidden || undefined}
             tabIndex={triggerHidden ? -1 : undefined}
           >
-            <AskLabel />
+            {triggerLabel ?? <AskLabel />}
 
           </motion.button>
         </div>

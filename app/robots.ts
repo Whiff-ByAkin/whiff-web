@@ -48,9 +48,9 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         allow: "/",
         // Keep rendering assets crawlable; private tools and API responses stay out.
-        disallow: ["/api/", "/roast/review"],
+        disallow: ["/api/", "/roast/review", "/owner"],
       },
-      { userAgent: AI_CRAWLERS, allow: "/", disallow: ["/api/", "/roast/review"] },
+      { userAgent: AI_CRAWLERS, allow: "/", disallow: ["/api/", "/roast/review", "/owner"] },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
     host: SITE_URL,

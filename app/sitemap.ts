@@ -6,7 +6,8 @@ import { SITE_URL } from "./config/site";
 // Bump it when page content meaningfully changes — a lastmod that silently
 // tracks the build date teaches crawlers to ignore the field.
 const CONTENT_UPDATED = new Date("2026-09-08");
-const LEGAL_UPDATED = new Date("2026-08-21");
+const HOME_UPDATED = new Date("2026-09-17");
+const LEGAL_UPDATED = new Date("2026-09-15");
 const STATES_ADDED = new Date("2026-09-08");
 const ROLES_ADDED = new Date("2026-09-08");
 
@@ -16,10 +17,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: url("/"),
-      lastModified: CONTENT_UPDATED,
+      lastModified: HOME_UPDATED,
       changeFrequency: "weekly",
       priority: 1,
     },
+    { url: url("/mn"), lastModified: HOME_UPDATED, changeFrequency: "monthly", priority: 0.9 },
     {
       url: url("/blog"),
       lastModified: CONTENT_UPDATED,

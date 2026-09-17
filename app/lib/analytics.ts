@@ -28,18 +28,45 @@ import { track } from "@vercel/analytics";
  * paint by layout.tsx. Undefined for anyone the script could not assign (no
  * JavaScript, localStorage unavailable), and those visitors are deliberately
  * left out of both arms rather than folded into the default one. */
-function ctaVariant(): "begin" | "seat" | undefined {
+function ctaVariant(): "begin" | "seat" | "story" | undefined {
+  if (document.querySelector('[data-home-variant="city"]')) return "story";
   const value = document.documentElement.dataset.cta;
   return value === "begin" || value === "seat" ? value : undefined;
 }
 
+export function homepageContext(): { homepage_variant?: string; audience?: string } {
+  const page = document.querySelector<HTMLElement>("[data-home-variant]");
+  const story = document.querySelector<HTMLElement>("[data-home-audience]");
+  const audience = story?.dataset.homeAudience;
+  return {
+    ...(page ? { homepage_variant: page.dataset.homeVariant } : {}),
+    ...(story?.dataset.homeAudienceSelected === "true" && ["new", "local"].includes(audience || "") ? { audience } : {}),
+  };
+}
+
+function publicTrack(name: string, properties: Record<string, string> = {}) {
+  // Owner previews must not count toward campaign conversion results.
+  if (window.location.pathname.startsWith("/owner")) return;
+  track(name, { ...homepageContext(), ...properties });
+}
+
+export function trackAudienceSelected(audience: "new" | "local") {
+  publicTrack("homepage_audience_selected", { audience });
+}
+
+export function trackStoryChapter(chapter: number, audience: "new" | "local") {
+  if (Number.isInteger(chapter) && chapter >= 0 && chapter < 3) {
+    publicTrack("homepage_story_chapter", { chapter: String(chapter + 1), audience });
+  }
+}
+
 export function trackCtaOpened() {
   const variant = ctaVariant();
-  track("cta_opened", variant ? { cta_variant: variant } : {});
+  publicTrack("cta_opened", variant ? { cta_variant: variant } : {});
 }
 
 export function trackSignupSubmitted() {
-  track("signup_submitted");
+  publicTrack("signup_submitted");
 }
 
 /** `requestedCity` is whatever the person typed into the optional city field.
@@ -50,7 +77,7 @@ export function trackSignupSubmitted() {
 export function trackSignupSucceeded(requestedCity?: string) {
   const requested = requestedCity?.trim().toLowerCase().slice(0, 60);
   const variant = ctaVariant();
-  track("signup_succeeded", {
+  publicTrack("signup_succeeded", {
     ...(requested ? { requested_city: requested } : {}),
     // The conversion end of the split. Opened-rate alone would say which word
     // gets pressed; this is the one that says which word gets people in.
@@ -61,5 +88,5 @@ export function trackSignupSucceeded(requestedCity?: string) {
 /** `reason` is a coarse bucket, never the message or the address — this is an
  *  analytics event, so nothing identifying goes into it. */
 export function trackSignupFailed(reason: "rejected" | "network") {
-  track("signup_failed", { reason });
+  publicTrack("signup_failed", { reason });
 }
