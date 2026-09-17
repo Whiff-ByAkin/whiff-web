@@ -132,3 +132,16 @@ export async function listPublicNotes(before?: { createdAt: string; id: string }
       ({ id, message, name, color, createdAt, publishedAt })),
   };
 }
+
+/** Lookup filters on approval in storage, never fetches private text for public callers. */
+export async function getPublicNote(id: string) {
+  const note = isLocalStore()
+    ? await localState(state => state.notes.find(note => note.id === id && note.status === "approved"))
+    : await (await database()).collection<RoastNote>("website_roasts").findOne(
+      { id, status: "approved" },
+      { projection: { _id: 0, id: 1, message: 1, name: 1, color: 1, createdAt: 1, publishedAt: 1 } },
+    );
+  if (!note) return null;
+  const { message, name, color, createdAt, publishedAt } = note;
+  return { id, message, name, color, createdAt, publishedAt };
+}

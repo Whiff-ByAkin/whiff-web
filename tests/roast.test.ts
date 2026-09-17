@@ -8,7 +8,7 @@ import { NextRequest } from "next/server";
 import { GET as publicNotes, POST as submit } from "../app/api/roasts/route";
 import { GET as reviewNotes, PATCH as moderate } from "../app/api/roasts/review/route";
 import { POST as login, DELETE as logout } from "../app/api/roasts/session/route";
-import { insertNote } from "../app/lib/roast-store";
+import { getPublicNote, moderateNote, insertNote } from "../app/lib/roast-store";
 import { SESSION_COOKIE } from "../app/lib/roast-http";
 
 let dir:string;
@@ -113,4 +113,73 @@ test("production never pretends local files are a shared database",async()=>{
     if(previousUri!==undefined) process.env.MONGODB_URI=previousUri;
     if(previousRoastUri!==undefined) process.env.ROAST_MONGODB_URI=previousRoastUri;
   }
+});
+
+
+test("durable links expose only currently approved notes, including after hiding", async () => {
+  const { getPublicRoast } = await import("../app/lib/public-roast");
+  const { GET: image } = await import("../app/roast/[id]/og/route");
+  const id = randomUUID();
+  await insertNote({ id, message: "Private until approved", name: "Visitor", color: "pink", status: "pending", createdAt: new Date().toISOString(), publishedAt: null });
+  assert.equal(await getPublicNote(id), null);
+  assert.equal(await getPublicRoast(id), null);
+  assert.equal((await image(new Request("http://localhost"), { params: Promise.resolve({ id }) })).status, 404);
+  await moderateNote(id, "approved");
+  const visible = await getPublicRoast(id);
+  assert.equal(visible?.message, "Private until approved");
+  assert.equal(visible?.source, "community");
+  assert.equal("status" in visible!, false);
+  assert.equal("_id" in visible!, false);
+  await moderateNote(id, "rejected");
+  assert.equal(await getPublicRoast(id), null);
+  const hiddenImage = await image(new Request("http://localhost"), { params: Promise.resolve({ id }) });
+  assert.equal(hiddenImage.status, 404);
+  assert.equal(hiddenImage.headers.get("cache-control"), "no-store");
+  assert.equal(await getPublicRoast(randomUUID()), null);
+});
+
+test("editorial routes and neutral share text work without storage", async () => {
+  const { getPublicRoast } = await import("../app/lib/public-roast");
+  const { TEAM_ROASTS, roastShareText, roastUrl } = await import("../app/lib/roast-content");
+  const previous = process.env.ROAST_DATA_FILE;
+  process.env.ROAST_DATA_FILE = "/dev/null/unavailable.json";
+  try {
+    for (const note of TEAM_ROASTS) {
+      assert.deepEqual(await getPublicRoast(note.id), note);
+      const text = roastShareText(note);
+      assert.ok(text.includes(note.message));
+      assert.ok(text.includes("Roast Whiff"));
+      assert.equal(text.includes("The Whiff team"), false);
+      assert.ok(text.endsWith(roastUrl(note.id)));
+    }
+    assert.equal(await getPublicRoast("not-a-roast"), null);
+  } finally { process.env.ROAST_DATA_FILE = previous; }
+});
+
+
+test("saved images have square PNG dimensions, safe attachment names and the same approval gate", async () => {
+  const { GET: image } = await import("../app/roast/[id]/og/route");
+  const download = (id: string) => image(new Request(`http://localhost/roast/${id}/og?download=1`), { params: Promise.resolve({ id }) });
+  const response = await download("friendship-syllabus");
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("cache-control"), "no-store");
+  assert.equal(response.headers.get("content-disposition"), 'attachment; filename="whiff-roast-friendship-syllabus.png"');
+  const png = Buffer.from(await response.arrayBuffer());
+  assert.equal(png.toString("ascii", 1, 4), "PNG");
+  assert.equal(png.readUInt32BE(16), 1080);
+  assert.equal(png.readUInt32BE(20), 1080);
+  const preview = await image(new Request("http://localhost/roast/houseplants/og"), { params: Promise.resolve({ id: "houseplants" }) });
+  const previewPng = Buffer.from(await preview.arrayBuffer());
+  assert.equal(previewPng.readUInt32BE(16), 1200);
+  assert.equal(previewPng.readUInt32BE(20), 630);
+  assert.equal(preview.headers.get("content-disposition"), null);
+  const id = randomUUID();
+  await insertNote({ id, message: "Hidden submission", name: "Visitor", color: "pink", status: "pending", createdAt: new Date().toISOString(), publishedAt: null });
+  assert.equal((await download(id)).status, 404);
+  await moderateNote(id, "approved");
+  const publicImage = await download(id);
+  assert.equal(publicImage.status, 200);
+  await publicImage.arrayBuffer();
+  await moderateNote(id, "rejected");
+  assert.equal((await download(id)).status, 404);
 });

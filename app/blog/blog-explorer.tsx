@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useSyncExternalStore } from "react";
 import { motion, useReducedMotion, type Variants } from "motion/react";
 import { POSTS } from "./posts";
 
@@ -10,6 +10,22 @@ const OPTIONS = [
   { id: OVERVIEW_ID, label: OVERVIEW_LABEL },
   ...POSTS.map((post) => ({ id: post.id, label: post.label })),
 ];
+
+function currentTopic() {
+  const id = window.location.hash.slice(1);
+  return OPTIONS.some(option => option.id === id) ? id : OVERVIEW_ID;
+}
+
+function subscribeToTopic(onChange: () => void) {
+  window.addEventListener("hashchange", onChange);
+  window.addEventListener("popstate", onChange);
+  window.addEventListener("whiff:blog-topic", onChange);
+  return () => {
+    window.removeEventListener("hashchange", onChange);
+    window.removeEventListener("popstate", onChange);
+    window.removeEventListener("whiff:blog-topic", onChange);
+  };
+}
 
 const list: Variants = {
   resting: {},
@@ -32,13 +48,18 @@ const lineCalm: Variants = {
 };
 
 export function BlogExplorer() {
-  const [activeId, setActiveId] = useState(OVERVIEW_ID);
+  const activeId = useSyncExternalStore(subscribeToTopic, currentTopic, () => OVERVIEW_ID);
   const reduce = useReducedMotion();
   const item = reduce ? lineCalm : line;
   const contentRefs = useRef<Record<string, HTMLHeadingElement | null>>({});
 
   function activate(id: string, focusContent = false) {
-    setActiveId(id);
+    if (id !== activeId) {
+      const url = new URL(window.location.href);
+      url.hash = id === OVERVIEW_ID ? "" : id;
+      window.history.pushState(window.history.state, "", url);
+      window.dispatchEvent(new Event("whiff:blog-topic"));
+    }
     if (!focusContent) return;
 
     requestAnimationFrame(() => {

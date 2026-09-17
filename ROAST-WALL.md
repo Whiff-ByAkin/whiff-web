@@ -1,4 +1,4 @@
-# Roast us
+# Whiff’s complaint department
 
 `/roast` is the public wall. `/roast/review` is the private review area. Notes
 may be positive or negative; no note appears publicly before approval.
@@ -46,7 +46,7 @@ overwrites. Without it, all requests use a single conservative rate bucket.
 The limits are five notes/hour and ten login attempts/15 minutes per bucket.
 Rate-limit keys are HMACs; raw IP addresses are not saved. MongoDB expires
 rate-limit records using a TTL index. The public API pages through approved
-notes in batches of 24. No fake feedback is seeded.
+notes in batches of 24. No fake visitor feedback is seeded. Unattributed jokes are static editorial content, stored separately in `app/lib/roast-content.ts`.
 
 The older unrelated `MONGODB_URI` in `.env` was preserved. The dedicated
 `ROAST_MONGODB_*` settings take precedence for this feature only. Public
@@ -68,3 +68,47 @@ data. They do not contact MongoDB or modify local visitor submissions.
 Also run `npm run lint`, `npx tsc --noEmit`, and `npm run build`. Stop the dev
 server before a production build so both processes do not write the same
 Next.js build artifacts.
+
+
+## Campaign and durable sharing
+
+The wall leads with six unattributed editorial jokes. Their internal `team`
+source remains separate from visitor submissions: they have no fake users,
+customer labels, dates, or invented engagement counts. Community submissions
+keep their actual supplied names and require approval. Editorial notes remain
+usable if the community database is unavailable. The composer keeps its
+consent, validation, honeypot and moderation flow.
+
+Each note has one **Share** action. It opens native sharing wherever the browser
+supports it, with the exact quote and canonical note URL. Cancelling does
+nothing. Without native sharing (or if it fails), the button copies the roast
+and link and confirms success. Clipboard failure reveals focused, selectable
+text with a clear manual-copy label. Community shares retain the submitted
+byline; editorial notes invent none.
+
+The quote on every wall card links to `/roast/[id]`, where one generous sticky
+note has the same Share action, an All roasts link, and a quiet homepage link.
+Roast pages do not explain the product. The wall header has a single Add a
+roast action; the composer retains its original moderation behavior.
+
+`/roast/[id]/og` renders a 1200×630 social preview. A server-only
+`?download=1` variant remains available for a 1080×1080 PNG attachment, but
+there is no separate download or copy-link action in the interface. Both image
+formats use a locally bundled Caveat font (OFL license alongside it), pastel
+paper and the visible canonical note URL. Team slugs are stable; visitor links
+use UUIDs.
+
+Community lookups filter for `approved` in storage without persistent caching
+of public pages or images. Pending, hidden and missing notes return no public
+content, including downloads. Third-party social services may keep their own
+old previews until they refresh; origin hiding cannot purge those copies.
+
+The production public API was returning HTTP 503 during this redesign.
+Production storage is **not fixed by this UI change**. Confirm MongoDB
+connectivity, permissions, indexes and production environment settings before
+promoting visitor submissions. Do not replace unavailable storage with fake
+success. Local UI verification uses an isolated temporary file store.
+
+See `ROAST-CAMPAIGN.md` for posting examples and campaign guidance. Tests cover
+moderation, durable link/OG/download privacy, PNG dimensions and editorial-note
+availability without storage.

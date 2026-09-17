@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { TEAM_ROASTS } from "../lib/roast-content";
 import Link from "next/link";
 import { NOTE_COLORS, NotePaper, RoastFooter, RoastHeader, readResponse, type NoteColor, type NotesResponse, type RoastNote } from "./roast-ui";
 import "./roast.css";
@@ -64,11 +65,28 @@ export function RoastWall({ initial = null }: { initial?: NotesResponse | null }
   }
 
   return <div className="roast-page">
-    <RoastHeader />
+    <RoastHeader onAdd={() => { if (sendStatus === "success") setSendStatus("idle"); requestAnimationFrame(() => messageRef.current?.focus()); }} />
     <main id="main" className="roast-wrap">
-      <section className="roast-intro"><div><p className="roast-eyebrow">THE HONEST OPINION DEPARTMENT</p><h1>Roast us<span>.</span></h1><p className="roast-subhead">Love it? Hate it? <span>Stick it here.</span></p></div><p className="roast-intro-aside">We’re building Whiff for real people. <br />So let’s hear from some.<br /><strong>Good or bad, we want the honest version.</strong></p></section>
-      <div className="roast-layout">
-        <section className="roast-composer-section" id="write-a-note" aria-labelledby="composer-title"><div className="roast-section-heading"><h2 id="composer-title">Your two cents.</h2><span>NO EMAIL NEEDED</span></div>
+      <section className="roast-campaign-intro">
+        <div><p className="roast-eyebrow">NO SUGAR-COATING.</p><h1>Roast <span>Whiff.</span></h1></div>
+        <p className="roast-annotation">Read one. Pass it on. Leave your own.</p>
+      </section>
+      <section className="roast-campaign-wall" id="the-wall" aria-labelledby="wall-title">
+        <div className="roast-wall-heading"><h2 id="wall-title">The wall of mild damage.</h2></div>
+        <div className="roast-campaign-grid">{TEAM_ROASTS.map(note => <NotePaper key={note.id} note={note} linked />)}</div>
+        <section className="roast-community" aria-labelledby="community-title" aria-busy={loading || moreLoading}>
+          <div className="roast-section-heading"><h3 id="community-title">From the community</h3><button onClick={() => setRevision(value => value + 1)} disabled={loading || moreLoading} aria-label="Refresh community notes">{loading ? "Loading…" : "Refresh ↻"}</button></div>
+          <p>Visitor notes, published after review.</p>
+          {notes.length > 0 && <div className="roast-campaign-grid roast-community-grid">{notes.map(note => <NotePaper key={note.id} note={note} linked />)}</div>}
+          {loading && <p role="status">Checking for community notes…</p>}
+          {!loading && loadError && <div className="roast-community-error" role="status"><p>Community notes couldn’t load right now. Please try again.</p><button className="roast-text-button" onClick={() => setRevision(value => value + 1)}>Try again</button></div>}
+          {!loading && !loadError && notes.length === 0 && <p className="roast-community-empty">No published community notes yet. Got something to get off your chest?</p>}
+          {!loading && cursor && <button className="roast-outline-button roast-load-more" onClick={loadMore} disabled={moreLoading}>{moreLoading ? "Loading more…" : "More community notes"}</button>}
+        </section>
+      </section>
+      <div className="roast-curiosity"><Link href="/">Find out for yourself</Link></div>
+      <div className="roast-write-section"><div className="roast-write-intro"><p className="roast-eyebrow">OPEN TO CONSTRUCTIVE DESTRUCTION</p><h2 aria-label="We can take it. Probably.">We can take it.<br /><span>Probably.</span></h2><p>A roast, a real criticism, or a surprisingly nice thing to say. There’s room for all of it.</p><p>No email needed. Just your two cents.</p></div>
+        <section className="roast-composer-section" id="write-a-note" aria-labelledby="composer-title"><div className="roast-section-heading"><h2 id="composer-title">Your turn. Take a shot.</h2></div>
           {sendStatus === "success" ? <div className={`roast-composer roast-color-${color} roast-sent`} role="status"><span className="roast-note-category">THANKS FOR KEEPING IT REAL</span><h3>Noted. Literally.</h3><p>Sent for review. Your note will appear here once approved.</p><button type="button" className="roast-button" onClick={() => { setSendStatus("idle"); requestAnimationFrame(() => messageRef.current?.focus()); }}>Write another note </button></div> : <form onSubmit={submit} className={`roast-composer roast-color-${color}`}>
             <div className="roast-message-label"><label htmlFor="roast-message">Dear Whiff,</label><span>{message.length}/400</span></div>
             <textarea ref={messageRef} id="roast-message" name="message" placeholder="Here’s what I really think…" maxLength={400} required value={message} onChange={event => setMessage(event.target.value)} disabled={sendStatus === "sending"} aria-describedby="note-guidance" />
@@ -79,17 +97,9 @@ export function RoastWall({ initial = null }: { initial?: NotesResponse | null }
             {sendError && <p className="roast-error" role="alert">{sendError}</p>}
             <button type="submit" className="roast-button" disabled={sendStatus === "sending"}>{sendStatus === "sending" ? "Sending your note…" : "Stick it to us"}</button>
           </form>}
-          <p id="note-guidance" className="roast-composer-help">Notes appear after review. Criticism is welcome. Please leave out personal details, spam, and attacks on other people.</p><a href="#the-wall" className="roast-wall-jump">See the wall below <span aria-hidden="true">↓</span></a>
-        </section>
-        <section className="roast-wall-section" id="the-wall" aria-labelledby="wall-title" aria-busy={loading || moreLoading}>
-          <div className="roast-section-heading"><h2 id="wall-title">The wall.</h2><button onClick={() => setRevision(value => value + 1)} disabled={loading || moreLoading} aria-label="Refresh public notes">{loading ? "Loading…" : "Refresh ↻"}</button></div>
-          <p className="roast-wall-intro">Good notes. Bad notes. All real opinions.<br />Published after review, just as they were written.</p>
-          {loading ? <div className="roast-wall-loading" role="status"><span className="roast-loading-paper" /><p>Gathering the notes…</p></div> : loadError && notes.length === 0 ? <div className="roast-wall-error" role="alert"><h3>The wall needs a moment.</h3><p>{loadError}</p><button className="roast-outline-button" onClick={() => setRevision(value => value + 1)}>Try again</button></div> : notes.length === 0 ? <div className="roast-empty"><div className="roast-note roast-color-lilac roast-first-note"><span className="roast-note-category">A NOTE FROM WHIFF</span><p className="roast-note-message">Be the first to leave a note.<br /><br />We can take it.<br />Probably.</p><footer><span>The Whiff team</span><span>YOUR TURN</span></footer></div><p>No published notes yet.<br />Yours could start the conversation.</p></div> : <div className="roast-note-grid">{notes.map(note => <NotePaper key={note.id} note={note} />)}</div>}
-          {!loading && loadError && notes.length > 0 && <p className="roast-error" role="alert">{loadError}</p>}
-          {!loading && cursor && <button className="roast-outline-button roast-load-more" onClick={loadMore} disabled={moreLoading}>{moreLoading ? "Loading more…" : "More from the wall ↓"}</button>}
+          <p id="note-guidance" className="roast-composer-help">Notes appear after review. Criticism is welcome. Please leave out personal details, spam, and attacks on other people.</p>
         </section>
       </div>
-      <div className="roast-bottom-line"><span>A work in progress.</span><p>And better with you in the conversation.</p><Link href="/#begin">Get to know Whiff </Link></div>
     </main>
     <RoastFooter />
   </div>;
