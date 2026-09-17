@@ -443,10 +443,26 @@
 .whiff-home .role-meta dd+dt {
   margin-top:0
 }
+.whiff-home .role-share-area { margin-top:22px; width:100%; }
 .whiff-home .role-share {
-  font-size:11px;
-  margin-top:20px
+  min-height:48px; margin:0; padding:11px 19px; gap:10px;
+  border:1px solid #34432d; background:#34432d; color:#fffdf3;
+  font-size:14px; line-height:1.4; border-radius:999px;
+  transition:background .18s ease, transform .18s ease;
 }
+.whiff-home .role-share:hover:not(:disabled) { background:#43563a; color:#fffdf3; }
+.whiff-home .role-share:active:not(:disabled) { transform:translateY(1px) scale(.98); }
+.whiff-home .role-share:disabled { opacity:.65; cursor:wait; }
+.whiff-home .role-share svg { flex-shrink:0; }
+.whiff-home .role-share-hint { font-size:13px; color:#515b44; margin-top:9px; }
+.whiff-home .role-share-status { font-size:13px; line-height:1.6; margin-top:9px; }
+.whiff-home .role-share-status:empty { display:none; }
+.whiff-home .role-share-manual { margin-top:12px; max-width:100%; }
+.whiff-home .role-share-manual label { display:block; font-size:13px; margin-bottom:7px; }
+.whiff-home .role-share-manual input { width:100%; min-height:44px; padding:9px; border:1px solid #7b846e; border-radius:4px; background:#f8f6e9; font-size:16px; }
+.whiff-home .role-share-manual button { min-height:44px; font-size:14px; text-decoration:underline; }
+.whiff-home .role-connections { display:flex; flex-wrap:wrap; gap:4px 12px; }
+.whiff-home .role-meta dd+dt, .whiff-home .role-meta dd+dt+dd { display:block; }
 .whiff-home .role-closing-body {
   font-size:15px;
   margin-top:15px
@@ -902,22 +918,25 @@
     min-height:44px
   }
   .whiff-home .role-panel {
-    padding-top:25px;
-    min-height:325px
+    padding-top:18px;
+    min-height:0
   }
   .whiff-home .role-name {
-    font-size:54px
+    font-size:50px; margin-top:6px
   }
   .whiff-home .role-line {
-    font-size:16px
+    font-size:16px; margin-top:9px; text-wrap:pretty
   }
   .whiff-home .role-meta {
-    grid-template-columns:70px 1fr;
-    gap:11px
+    grid-template-columns:1fr; gap:7px; margin-top:17px; padding-top:14px;
   }
-  .whiff-home .role-meta dd {
-    font-size:12px
-  }
+  .whiff-home .role-meta dt { font-size:10px; }
+  .whiff-home .role-meta dd { font-size:14px; }
+  .whiff-home .role-meta dd+dt { margin-top:8px; }
+  .whiff-home .role-connections { gap:6px; }
+  .whiff-home .role-link { display:inline-flex; align-items:center; min-height:44px; padding:7px 12px; border:1px solid #abb79a; border-radius:999px; background:#e8eddc; font-size:14px; line-height:1.2; }
+  .whiff-home .role-link:hover { background:#f8f6e9; }
+  .whiff-home .role-share-area { margin-top:19px; }
   .wh-bet {
     padding-top:46px;
     padding-bottom:43px;
@@ -1201,10 +1220,13 @@ keep them readable at every size. */
 
 .wh-roast-teaser { display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:60px; padding-block:55px; border-bottom:1px solid var(--rule); }
 .wh-roast-teaser h2 { font-family:var(--font-fredoka),sans-serif; font-size:34px; font-weight:500; line-height:1.15; letter-spacing:-1px; margin:17px 0; }
-.wh-roast-teaser a { display:inline-flex; align-items:center; gap:30px; min-height:44px; font-size:13px; font-weight:800; text-decoration:underline; text-underline-offset:5px; }
-.wh-roast-teaser a:hover { color:#a64e3e; }
-.wh-roast-teaser figure { background:#d8d1e5; padding:26px 30px; transform:rotate(1.5deg); box-shadow:2px 7px 10px #413c2d14; max-width:390px; justify-self:center; }
+.wh-roast-teaser a { display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:11px 20px; border:1px solid var(--ink); border-radius:999px; font-size:14px; font-weight:800; text-decoration:none; transition:background .18s ease, color .18s ease; }
+.wh-roast-teaser a:hover { background:var(--ink); color:#faf6e9; }
+.wh-roast-teaser figure { background:#d8d1e5; padding:26px 30px; transform:rotate(1.5deg); box-shadow:2px 7px 10px #413c2d14; max-width:390px; justify-self:center; transition:transform .25s ease, box-shadow .25s ease; }
 .wh-roast-teaser figure>span { font-size:9px; font-weight:800; letter-spacing:1.5px; }
 .wh-roast-teaser blockquote { font-family:var(--font-caveat),cursive; font-size:36px; line-height:1.1; margin:20px 0; }
 .wh-roast-teaser figcaption { font-size:11px; line-height:1.6; }
 @media(max-width:760px) { .wh-roast-teaser { grid-template-columns:1fr; gap:24px; padding-block:35px; } .wh-roast-teaser h2 { font-size:30px; } .wh-roast-teaser figure { justify-self:start; margin-inline:5px; } }
+
+@media(hover:hover) { .wh-roast-teaser:hover figure, .wh-roast-teaser:focus-within figure { transform:translateY(-3px) rotate(.5deg); box-shadow:3px 10px 15px #413c2d1c; } }
+@media(prefers-reduced-motion:reduce) { .whiff-home .role-share, .wh-roast-teaser figure, .wh-roast-teaser a { transition:none; } .whiff-home .role-share:active, .wh-roast-teaser:hover figure, .wh-roast-teaser:focus-within figure { transform:none; } }

@@ -58,6 +58,7 @@ export function InviteForm({
   const [nudged, setNudged] = useState(false);
   const opened = useRef(false);
   const emailRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const reduce = useReducedMotion();
 
   /* One "the visitor is at the ask" event, however they got here: the first
@@ -76,21 +77,51 @@ export function InviteForm({
       setOpen(true);
       setNudged(true);
       window.setTimeout(() => setNudged(false), 1400);
+      requestAnimationFrame(() => emailRef.current?.focus({ preventScroll: true }));
     }
     // The hash is for arriving from another page, and it is cleared as soon
     // as it is spent so a refresh does not re-fire the ring.
     if (window.location.hash === "#begin") {
-      history.replaceState(null, "", window.location.pathname);
+      history.replaceState(history.state, "", window.location.pathname + window.location.search);
       begin();
     }
     window.addEventListener("whiff:begin", begin);
     return () => window.removeEventListener("whiff:begin", begin);
   }, []);
 
-  // The field does not exist until `open`, so focus waits for the render that
-  // creates it rather than being called beside the state change.
+  // Mobile keyboards shrink the visual viewport, not necessarily the layout
+  // viewport. Keep the focused field inside the space above the keyboard as
+  // it animates open. Only correct clipped fields; ordinary scrolling is free.
   useEffect(() => {
-    if (open) emailRef.current?.focus({ preventScroll: true });
+    if (!open) return;
+    let frame = 0;
+    const viewport = window.visualViewport;
+    function revealFocusedField() {
+      const input = document.activeElement;
+      if (!(input instanceof HTMLInputElement) || !formRef.current?.contains(input)) return;
+      const rect = input.getBoundingClientRect();
+      const top = (viewport?.offsetTop ?? 0) + 24;
+      const bottom = (viewport?.offsetTop ?? 0) + (viewport?.height ?? window.innerHeight) - 24;
+      const delta = rect.bottom > bottom ? rect.bottom - bottom : rect.top < top ? rect.top - top : 0;
+      // Instant scrolling avoids racing the browser's keyboard animation or
+      // the site's smooth anchor scrolling, especially on iOS Safari.
+      if (Math.abs(delta) > 1) window.scrollBy({ top: delta, behavior: "instant" });
+    }
+    function scheduleReveal() {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(revealFocusedField);
+    }
+    viewport?.addEventListener("resize", scheduleReveal);
+    window.addEventListener("resize", scheduleReveal);
+    document.addEventListener("focusin", scheduleReveal);
+    emailRef.current?.focus({ preventScroll: true });
+    scheduleReveal();
+    return () => {
+      cancelAnimationFrame(frame);
+      viewport?.removeEventListener("resize", scheduleReveal);
+      window.removeEventListener("resize", scheduleReveal);
+      document.removeEventListener("focusin", scheduleReveal);
+    };
   }, [open]);
 
   // The one flourish on the whole site, and it is deliberately unreachable
@@ -233,7 +264,7 @@ export function InviteForm({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
     >
-      <form onSubmit={handleSubmit} aria-label="Request an invite">
+      <form ref={formRef} onSubmit={handleSubmit} aria-label="Request an invite">
         {/* One well, hairline-divided. The border is on the group and never on
             the inputs: three bordered boxes in a row is a form, one bordered
             well with dividers is a control. */}

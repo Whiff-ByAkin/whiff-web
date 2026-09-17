@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Header } from "./header";
+import { HomeScene } from "./home-scene";
 import { InviteForm } from "./invite-cta";
 import { RoleExplorer } from "./role-explorer";
 import { JsonLd } from "./json-ld";
@@ -31,7 +32,6 @@ export function HomeScreen({ initialRole }: { initialRole?: string } = {}) {
 
   function begin() {
     window.dispatchEvent(new Event("whiff:begin"));
-    document.getElementById("begin")?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "center" });
   }
 
   return (
@@ -50,7 +50,7 @@ export function HomeScreen({ initialRole }: { initialRole?: string } = {}) {
           </div>
 
           <figure className="wh-hero-art">
-            <Image src="/generated/four-chairs.webp" alt="Four handmade chairs in blue, yellow, terracotta, and sage gathered around a small table." width={1200} height={896} sizes="(max-width: 760px) 420px, 45vw" preload />
+            <HomeScene />
             <figcaption>Different chairs. Same table.</figcaption>
           </figure>
 
@@ -82,7 +82,7 @@ export function HomeScreen({ initialRole }: { initialRole?: string } = {}) {
 
         <section className="wh-invite-section" id="begin"><div className="wh-wrap wh-invite-inner"><div><p className="wh-eyebrow">MINNEAPOLIS–SAINT PAUL / NOW FORMING</p><h2>Your next chapter<br />has <span>other people in it.</span></h2><p>We’re getting our first circles together in {HUB_NAME}. Join the invite list. We’ll email you when it’s time to begin.</p></div><div className="wh-invite-box"><span className="wh-hand">A small first step.</span><InviteForm /><p>Just your email. Your city helps us know where to go next.</p><p className="wh-price">Joining the invite list is free.<br />Membership: {PRICING.perMonth}/month after a {PRICING.trialDays}-day trial.<br />Activity costs are separate. <Link href="/terms">The details</Link></p></div></div></section>
 
-        <section className="wh-roast-teaser wh-wrap" aria-labelledby="roast-teaser-title"><div><p className="wh-eyebrow">FROM THE ROAST WALL</p><h2 id="roast-teaser-title">Even good ideas<br />deserve a little roasting.</h2><Link href="/roast/friendship-syllabus">Read this roast <span aria-hidden="true">↗</span></Link></div><figure><span>ONE FROM THE WALL</span><blockquote>“Making friends apparently comes with a syllabus.”</blockquote></figure></section>
+        <section className="wh-roast-teaser wh-wrap" aria-labelledby="roast-teaser-title"><div><p className="wh-eyebrow">FROM THE ROAST WALL</p><h2 id="roast-teaser-title">Even good ideas<br />deserve a little roasting.</h2><Link href="/roast">Read the roast wall</Link></div><figure><span>ONE FROM THE WALL</span><blockquote>“Making friends apparently comes with a syllabus.”</blockquote></figure></section>
 
         <section className="wh-faq wh-wrap" aria-label="A few good questions"><p className="wh-eyebrow">A FEW GOOD QUESTIONS</p><div><details><summary>Is this a dating thing?<span>+</span></summary><p>No. Whiff is for platonic friendship. Four people, shared activities, and time to get to know each other.</p></details><details><summary>What happens after I join the invite list?<span>+</span></summary><p>We’ll email you with updates and next steps as our first Twin Cities circles come together. Signing up here doesn’t start a subscription or match you immediately.</p></details><details><summary>What if Whiff isn’t in my city?<span>+</span></summary><p>Add your city when you request an invite. It helps us decide where to open next. We’re starting with one hub: Minneapolis–Saint Paul.</p></details></div></section>
       </main>

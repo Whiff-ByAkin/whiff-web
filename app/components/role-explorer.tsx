@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import {
   AnimatePresence,
   MotionConfig,
   motion,
   useReducedMotion,
 } from "motion/react";
+import { SITE_URL } from "@/app/config/site";
 import { AskLabel } from "@/app/components/ask-label";
 import { CLOSING, ROLES, ROLE_BY_ID } from "@/app/config/roles";
 
@@ -49,7 +50,13 @@ export function RoleExplorer({
   const reduce = useReducedMotion();
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const touched = useRef(false);
-  const [copied, setCopied] = useState(false);
+  const [shareStatus, setShareStatus] = useState("");
+  const [manualLink, setManualLink] = useState("");
+  const [sharing, setSharing] = useState(false);
+  const sharingRef = useRef(false);
+  const shareRevision = useRef(0);
+  const manualRef = useRef<HTMLInputElement>(null);
+  const manualId = useId();
 
   const index = TABS.findIndex((tab) => tab.id === active);
   const role = ROLE_BY_ID.get(active);
@@ -74,29 +81,35 @@ export function RoleExplorer({
   function select(id: string) {
     touched.current = true;
     // The confirmation belongs to the role that was copied, not to the panel.
-    setCopied(false);
+    setShareStatus(""); setManualLink(""); shareRevision.current++;
     setActive(id);
   }
 
-  /* Share sheet on a phone, clipboard everywhere else, and no third state:
-   * if both are unavailable the button is simply not rendered, rather than
-   * being a control that does nothing when pressed. */
   async function share(name: string, url: string) {
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: `${name} · whiff`, url });
-        return;
-      } catch {
-        // Cancelled, or the sheet refused. Fall through to the clipboard.
-      }
-    }
+    if (sharingRef.current) return;
+    sharingRef.current = true; setSharing(true); setShareStatus(""); setManualLink("");
+    const revision = shareRevision.current;
     try {
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // Nothing to do that a visitor would thank us for.
-    }
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: `${name} · whiff`, url });
+          if (revision === shareRevision.current) setShareStatus("Role shared.");
+          return;
+        } catch (error) {
+          if (error instanceof Error && error.name === "AbortError") return;
+        }
+      }
+      try {
+        if (!navigator.clipboard) throw new Error("Clipboard unavailable");
+        await navigator.clipboard.writeText(url);
+        if (revision === shareRevision.current) setShareStatus("Role link copied. Ready to send.");
+      } catch {
+        if (revision === shareRevision.current) {
+          setManualLink(url); setShareStatus("Automatic sharing is unavailable. Copy the link below.");
+          requestAnimationFrame(() => { manualRef.current?.focus(); manualRef.current?.select(); });
+        }
+      }
+    } finally { sharingRef.current = false; setSharing(false); }
   }
 
   // Automatic activation: for a tablist whose panels are already loaded, the
@@ -172,11 +185,7 @@ export function RoleExplorer({
           })}
         </div>
 
-        {/* ── The panel ───────────────────────────────────────────────
-            Height is reserved rather than measured: the page cannot scroll,
-            so a panel that grew by a line when you pressed Connector would
-            move the button underneath it. Every state is written to fit the
-            tallest one. */}
+        {/* Keep the active role readable without reserving blank space on phones. */}
         <div
           role="tabpanel"
           id="role-panel"
@@ -206,10 +215,9 @@ export function RoleExplorer({
 
                   <dl className="role-meta">
                     <dt>Clicks with</dt>
-                    <dd>
-                      {role.clicksWith.map((id, i) => (
+                    <dd className="role-connections">
+                      {role.clicksWith.map((id) => (
                         <span key={id}>
-                          {i > 0 && <span aria-hidden="true"> · </span>}
                           {/* Walkable, not decorative: this is how you find
                               out what the other three do. */}
                           <button
@@ -227,33 +235,15 @@ export function RoleExplorer({
                     <dd>{role.fact}</dd>
                   </dl>
 
-                  {/* Who this is for, not what the button does.
-                      "Send Host to someone" asks a visitor to go and find a
-                      recipient. Naming the recipient does the finding: the
-                      research on why people share is consistent that a share
-                      is judged by what it is worth to the person receiving it
-                      (94% of sharers say they weigh exactly that), and that
-                      the strongest hook of all is identity — this is so you.
-                      Every role here is written to be worth being told you
-                      are, so the share is a compliment somebody already has
-                      in mind before they finish reading the line. */}
-                  <button
-                    type="button"
-                    aria-label={`Share the ${role.name} card`}
-                    data-copied={copied || undefined}
-                    onClick={() =>
-                      share(
-                        role.name,
-                        `${window.location.origin}/roles/${role.id}`,
-                      )
-                    }
-                    className="role-share"
-                  >
-                    {copied && <span aria-hidden="true">✓</span>}
-                    {copied
-                      ? "link copied — go tell them"
-                      : `send it to the ${role.name} you know`}
-                  </button>
+                  <div className="role-share-area">
+                    <button type="button" aria-label={`Share ${role.name}`} disabled={sharing} onClick={() => share(role.name, `${SITE_URL}/roles/${role.id}`)} className="role-share">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4" /></svg>
+                      {sharing ? "Sharing…" : `Share ${role.name}`}
+                    </button>
+                    <p className="role-share-hint">For the {role.name} you know.</p>
+                    <p className="role-share-status" role="status" aria-live="polite">{shareStatus}</p>
+                    {manualLink && <div className="role-share-manual"><label htmlFor={manualId}>Select and copy this role link</label><input id={manualId} ref={manualRef} readOnly value={manualLink} onFocus={event => event.currentTarget.select()} /><button type="button" onClick={() => { setManualLink(""); setShareStatus(""); }}>Close</button></div>}
+                  </div>
                 </>
               ) : (
                 <>
