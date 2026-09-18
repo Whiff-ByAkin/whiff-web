@@ -18,8 +18,8 @@ export function RoastShare({ note }: { note: ShareableRoast }) {
     try {
       if (navigator.share) {
         try {
-          await navigator.share({ title: "Roast Whiff", text: text.slice(0, text.lastIndexOf("\n\n")), url: roastUrl(note.id) });
-          setStatus("Roast shared."); return;
+          await navigator.share({ title: note.source === "team" ? "Whiff-written example · What’s wrong with Whiff?" : "What’s wrong with Whiff?", text: text.slice(0, text.lastIndexOf("\n\n")), url: roastUrl(note.id) });
+          setStatus("Note shared."); return;
         } catch (error) {
           if (error instanceof Error && error.name === "AbortError") return;
         }
@@ -27,10 +27,10 @@ export function RoastShare({ note }: { note: ShareableRoast }) {
       try {
         if (!navigator.clipboard) throw new Error("Clipboard unavailable");
         await navigator.clipboard.writeText(text);
-        setStatus("Roast and link copied.");
+        setStatus("Note and link copied.");
       } catch {
         setManual(text);
-        setStatus("Automatic sharing is unavailable. Copy the roast and link below.");
+        setStatus("Automatic sharing is unavailable. Copy the note and link below.");
         requestAnimationFrame(() => { manualRef.current?.focus(); manualRef.current?.select(); });
       }
     } finally { sharing.current = false; setBusy(false); }
@@ -42,6 +42,6 @@ export function RoastShare({ note }: { note: ShareableRoast }) {
       {busy ? "Sharing…" : "Share"}
     </button>
     <p className="roast-share-status" role="status" aria-live="polite">{status}</p>
-    {manual && <div className="roast-manual-copy"><label htmlFor={manualId}>Select and copy this roast and link</label><textarea id={manualId} ref={manualRef} readOnly value={manual} onFocus={event => event.currentTarget.select()} /><button type="button" onClick={() => { setManual(""); setStatus(""); }}>Close</button></div>}
+    {manual && <div className="roast-manual-copy"><label htmlFor={manualId}>Select and copy this note and link</label><textarea id={manualId} ref={manualRef} readOnly value={manual} onFocus={event => event.currentTarget.select()} /><button type="button" onClick={() => { setManual(""); setStatus(""); }}>Close</button></div>}
   </div>;
 }

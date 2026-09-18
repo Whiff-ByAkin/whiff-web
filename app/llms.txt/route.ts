@@ -81,7 +81,7 @@ ${FAQ.map((f) => `### ${f.question}\n\n${f.answer}`).join("\n\n")}
 ## Pages
 
 - [Home](${url("/")}): friendship circles, six example activities, pricing, launch status, and the invite list
-- [Roast us](${url("/roast")}): public sticky-note feedback wall; everyone can read approved notes. New submissions stay private until reviewed.
+- [The bad stuff](${url("/roast")}): public sticky-note feedback wall; everyone can read approved notes. New submissions stay private until reviewed.
 - [Blog](${url("/blog")}): what whiff is, who it is for, how it works, why four people, why it is not a dating app
 - [States](${url("/states")}): where whiff is open, what a season of activities looks like there, and how to ask for a new state
 ${ROLES.map((r) => `- [${r.name}](${url(`/roles/${r.id}`)}): ${r.tagline}`).join("\n")}

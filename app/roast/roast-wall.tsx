@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { NOTE_MAX_LENGTH } from "../lib/roast-types";
 import { TEAM_ROASTS } from "../lib/roast-content";
 import Link from "next/link";
 import { NOTE_COLORS, NotePaper, RoastFooter, RoastHeader, readResponse, type NoteColor, type NotesResponse, type RoastNote } from "./roast-ui";
@@ -68,28 +69,24 @@ export function RoastWall({ initial = null }: { initial?: NotesResponse | null }
     <RoastHeader onAdd={() => { if (sendStatus === "success") setSendStatus("idle"); requestAnimationFrame(() => messageRef.current?.focus()); }} />
     <main id="main" className="roast-wrap">
       <section className="roast-campaign-intro">
-        <div><p className="roast-eyebrow">NO SUGAR-COATING.</p><h1>Roast <span>Whiff.</span></h1></div>
-        <p className="roast-annotation">Read one. Pass it on. Leave your own.</p>
+        <div><p className="roast-eyebrow">NO SUGAR-COATING.</p><h1>What’s wrong<br />with <span>Whiff?</span></h1></div>
+        <p className="roast-annotation">The rough edges. The honest feedback.</p>
       </section>
       <section className="roast-campaign-wall" id="the-wall" aria-labelledby="wall-title">
-        <div className="roast-wall-heading"><h2 id="wall-title">The wall of mild damage.</h2></div>
-        <div className="roast-campaign-grid">{TEAM_ROASTS.map(note => <NotePaper key={note.id} note={note} linked />)}</div>
-        <section className="roast-community" aria-labelledby="community-title" aria-busy={loading || moreLoading}>
-          <div className="roast-section-heading"><h3 id="community-title">From the community</h3><button onClick={() => setRevision(value => value + 1)} disabled={loading || moreLoading} aria-label="Refresh community notes">{loading ? "Loading…" : "Refresh ↻"}</button></div>
-          <p>Visitor notes, published after review.</p>
-          {notes.length > 0 && <div className="roast-campaign-grid roast-community-grid">{notes.map(note => <NotePaper key={note.id} note={note} linked />)}</div>}
-          {loading && <p role="status">Checking for community notes…</p>}
-          {!loading && loadError && <div className="roast-community-error" role="status"><p>Community notes couldn’t load right now. Please try again.</p><button className="roast-text-button" onClick={() => setRevision(value => value + 1)}>Try again</button></div>}
-          {!loading && !loadError && notes.length === 0 && <p className="roast-community-empty">No published community notes yet. Got something to get off your chest?</p>}
-          {!loading && cursor && <button className="roast-outline-button roast-load-more" onClick={loadMore} disabled={moreLoading}>{moreLoading ? "Loading more…" : "More community notes"}</button>}
-        </section>
+        <div className="roast-wall-heading"><h2 id="wall-title">The bad stuff belongs here, too.</h2><p>Read the full notes. Tell us what needs fixing. Whiff-written examples are labeled below.</p></div>
+        <div className="roast-campaign-grid">{[...notes, ...TEAM_ROASTS].map(note => <NotePaper key={note.id} note={note} linked />)}</div>
+        <div className="roast-wall-status" aria-busy={loading || moreLoading}>
+          {loading && <p role="status">Loading notes…</p>}
+          {!loading && loadError && <div className="roast-wall-load-error" role="status"><p>Submitted notes couldn’t load right now.</p><button className="roast-text-button" onClick={() => setRevision(value => value + 1)}>Try again</button></div>}
+          {!loading && cursor && <button className="roast-outline-button roast-load-more" onClick={loadMore} disabled={moreLoading}>{moreLoading ? "Loading more…" : "More notes"}</button>}
+        </div>
       </section>
       <div className="roast-curiosity"><Link href="/">Find out for yourself</Link></div>
-      <div className="roast-write-section"><div className="roast-write-intro"><p className="roast-eyebrow">OPEN TO CONSTRUCTIVE DESTRUCTION</p><h2 aria-label="We can take it. Probably.">We can take it.<br /><span>Probably.</span></h2><p>A roast, a real criticism, or a surprisingly nice thing to say. There’s room for all of it.</p><p>No email needed. Just your two cents.</p></div>
+      <div className="roast-write-section"><div className="roast-write-intro"><p className="roast-eyebrow">OPEN TO CONSTRUCTIVE DESTRUCTION</p><h2 aria-label="We can take it. Probably.">We can take it.<br /><span>Probably.</span></h2><p>A bug, an honest criticism, or a surprisingly nice thing to say. There’s room for all of it.</p><p>No email needed. Just your two cents.</p></div>
         <section className="roast-composer-section" id="write-a-note" aria-labelledby="composer-title"><div className="roast-section-heading"><h2 id="composer-title">Your turn. Take a shot.</h2></div>
           {sendStatus === "success" ? <div className={`roast-composer roast-color-${color} roast-sent`} role="status"><span className="roast-note-category">THANKS FOR KEEPING IT REAL</span><h3>Noted. Literally.</h3><p>Sent for review. Your note will appear here once approved.</p><button type="button" className="roast-button" onClick={() => { setSendStatus("idle"); requestAnimationFrame(() => messageRef.current?.focus()); }}>Write another note </button></div> : <form onSubmit={submit} className={`roast-composer roast-color-${color}`}>
-            <div className="roast-message-label"><label htmlFor="roast-message">Dear Whiff,</label><span>{message.length}/400</span></div>
-            <textarea ref={messageRef} id="roast-message" name="message" placeholder="Here’s what I really think…" maxLength={400} required value={message} onChange={event => setMessage(event.target.value)} disabled={sendStatus === "sending"} aria-describedby="note-guidance" />
+            <div className="roast-message-label"><label htmlFor="roast-message">Dear Whiff,</label><span>{message.length}/{NOTE_MAX_LENGTH}</span></div>
+            <textarea ref={messageRef} id="roast-message" name="message" placeholder="Here’s what I really think…" maxLength={NOTE_MAX_LENGTH} required value={message} onChange={event => setMessage(event.target.value)} disabled={sendStatus === "sending"} aria-describedby="note-guidance" />
             <div className="roast-name-row"><label htmlFor="roast-name">From</label><input id="roast-name" name="name" autoComplete="nickname" placeholder="Anonymous (or your name)" maxLength={30} value={name} onChange={event => setName(event.target.value)} disabled={sendStatus === "sending"} /></div>
             <fieldset className="roast-swatches" disabled={sendStatus === "sending"}><legend>Pick your paper</legend>{NOTE_COLORS.map(item => <label key={item} className={`roast-swatch roast-color-${item}`}><input type="radio" name="color" value={item} checked={color === item} onChange={() => setColor(item)} aria-label={`${item[0].toUpperCase()}${item.slice(1)} paper`} /><span aria-hidden="true">{color === item ? "✓" : ""}</span></label>)}</fieldset>
             <div className="roast-honeypot" aria-hidden="true"><label>Website<input name="website" type="text" tabIndex={-1} autoComplete="off" value={website} onChange={event => setWebsite(event.target.value)} /></label></div>

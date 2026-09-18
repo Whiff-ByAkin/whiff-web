@@ -3,7 +3,7 @@
 `/roast` is the public wall. `/roast/review` is the private review area. Notes
 may be positive or negative; no note appears publicly before approval.
 
-The composer sends a message (3–400 characters), an optional name (up to 30
+The composer sends a message (3–2,000 characters), an optional name (up to 30
 characters), a color, and consent to public display after review. Empty names
 display as Anonymous. No email address is collected. Text is rendered as text,
 never HTML. Pending and hidden notes are excluded from the public API.
@@ -112,3 +112,11 @@ success. Local UI verification uses an isolated temporary file store.
 See `ROAST-CAMPAIGN.md` for posting examples and campaign guidance. Tests cover
 moderation, durable link/OG/download privacy, PNG dimensions and editorial-note
 availability without storage.
+
+## September feedback refresh
+
+The public navigation is “The bad stuff” and the page headline is “What’s wrong with Whiff?”. Existing `/roast` routes remain stable. Approved submissions and three explicitly illustrative Whiff-written critiques share one wall. Longer previews open a full note page. Notes accept up to 2,000 characters; moderation still gates public visibility.
+
+The three examples are fictional scenarios about reliability, commitment, and planning, each ending in suggested improvements. They are not beta-test reports. Example cards, detail pages, copied share text, and generated images identify their origin.
+
+Database cleanup was not run: this checkout has no configured database connection, and the public production feedback API returned HTTP 503 during this refresh. Do not delete unrelated application collections. Confirm the intended feedback records and export a backup before removing data.

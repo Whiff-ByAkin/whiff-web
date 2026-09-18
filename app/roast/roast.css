@@ -253,7 +253,7 @@
 .roast-wordmark { display:inline-flex; align-items:center; min-height:44px; }
 .roast-header nav a:last-child { padding:10px 16px; }
 .roast-campaign-intro { display:flex; align-items:end; justify-content:space-between; gap:30px; padding:38px 0 30px; }
-.roast-campaign-intro h1 { font-family:var(--font-fredoka),sans-serif; font-size:clamp(62px,7.5vw,108px); font-weight:500; line-height:1; letter-spacing:-4px; margin-top:16px; }
+.roast-campaign-intro h1 { font-family:var(--font-fredoka),sans-serif; font-size:clamp(56px,6.4vw,92px); font-weight:500; line-height:1; letter-spacing:-4px; margin-top:16px; }
 .roast-campaign-intro h1 span { color:#a64e3e; }
 .roast-annotation { font-family:var(--font-caveat); color:#8c4538; font-size:26px; line-height:1.3; padding-bottom:8px; }
 .roast-wall-heading { border-top:1px solid var(--roast-ink); padding:20px 0 28px; }
@@ -264,8 +264,11 @@
 .roast-campaign-grid .roast-note:nth-child(3n) { transform:rotate(-.6deg); }
 .roast-campaign-grid .roast-note:nth-child(2)::before, .roast-selected .roast-note::before { content:""; position:absolute; width:95px; height:28px; background:#eee6d5b3; border:1px solid #ffffff50; top:-15px; left:calc(50% - 47px); transform:rotate(-6deg); }
 .roast-campaign-grid .roast-note::after { content:""; position:absolute; right:0; bottom:0; width:20px; height:20px; background:linear-gradient(135deg,#0000000c 50%,var(--roast-paper) 51%); pointer-events:none; }
-.roast-campaign-grid .roast-note-message { font-size:clamp(28px,2.5vw,37px); line-height:1.14; font-weight:500; margin:14px 0 24px; min-height:145px; flex:1; overflow-wrap:anywhere; }
-.roast-campaign-grid .roast-note>footer { padding:0 0 19px; font-size:13px; }
+.roast-campaign-grid .roast-note-message { font-size:25px; line-height:1.25; font-weight:500; margin:17px 0 20px; flex:1; overflow-wrap:anywhere; }
+.roast-campaign-grid .roast-note-link { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:12; overflow:hidden; }
+.roast-read-full { display:flex; align-items:center; justify-content:space-between; min-height:44px; font-size:13px; font-weight:800; }
+.roast-read-full:hover { text-decoration:underline; text-underline-offset:4px; }
+.roast-campaign-grid .roast-note>footer { padding:13px 0 7px; font-size:11px; }
 .roast-note-link { display:block; color:inherit; text-decoration:none; min-height:44px; }
 .roast-note-link:hover { text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:5px; }
 .roast-note-link:focus-visible { outline-offset:7px; }
@@ -279,15 +282,11 @@
 .roast-manual-copy label { display:block; font-size:13px; line-height:1.5; font-weight:700; margin-bottom:8px; }
 .roast-manual-copy textarea { display:block; width:100%; min-height:145px; padding:8px; border:1px solid #28282080; background:#ffffff66; font-size:16px; }
 .roast-manual-copy button { font-size:14px; min-height:44px; text-decoration:underline; }
-.roast-community { margin-top:32px; padding:24px 0 30px; border-top:1px dashed #aaa697; }
-.roast-community .roast-section-heading { margin:0; }
-.roast-community h3 { font-size:15px; font-weight:800; }
-.roast-community>p, .roast-community-error { font-size:13px; line-height:1.7; color:#605d50; }
-.roast-community-error { display:flex; align-items:center; flex-wrap:wrap; gap:0 14px; }
-.roast-community-error .roast-text-button { margin-left:0; font-size:14px!important; }
-.roast-community .roast-section-heading>button { font-size:14px; }
-.roast-community-empty { margin-top:13px; }
-.roast-community-grid { margin:30px 0 20px; }
+.roast-wall-heading>p { font-size:13px; line-height:1.7; color:#605d50; margin-top:8px; }
+.roast-wall-status { padding:14px 0 30px; font-size:13px; line-height:1.7; color:#605d50; }
+.roast-wall-load-error { display:flex; align-items:center; flex-wrap:wrap; gap:0 14px; }
+.roast-wall-load-error .roast-text-button { margin-left:0; }
+.roast-wall-status .roast-load-more { margin-top:8px; }
 .roast-curiosity { border-block:1px solid var(--roast-ink); padding-block:16px; text-align:center; }
 .roast-curiosity a { display:inline-flex; align-items:center; min-height:44px; font-size:14px; font-weight:700; }
 .roast-curiosity a:hover, .roast-note-links a:hover { text-decoration:underline; text-underline-offset:5px; }
@@ -299,10 +298,10 @@
 .roast-write-intro>p:not(.roast-eyebrow) { max-width:340px; font-size:14px; line-height:1.8; margin-top:15px; }
 .roast-write-section .roast-consent, .roast-write-section .roast-composer-help { font-size:13px; line-height:1.7; }
 .roast-write-section .roast-name-row input { font-size:16px; }
-.roast-selected { max-width:610px; margin:32px auto 48px; }
+.roast-selected { max-width:720px; margin:32px auto 48px; }
 .roast-selected>h1 { font-family:var(--font-fredoka); font-size:42px; letter-spacing:-1px; margin:18px 0 35px; }
-.roast-selected>.roast-note { position:relative; padding:35px; transform:rotate(-1deg); }
-.roast-selected .roast-note-message { font-size:clamp(34px,4.5vw,58px); line-height:1.15; margin-block:25px; overflow-wrap:anywhere; }
+.roast-selected>.roast-note { position:relative; padding:35px; transform:none; }
+.roast-selected .roast-note-message { font-size:30px; line-height:1.35; margin-block:25px; overflow-wrap:anywhere; }
 .roast-selected .roast-note footer { padding-bottom:20px; }
 .roast-selected>p { font-size:14px; line-height:1.7; margin-top:27px; }
 .roast-selected>.roast-outline-button { margin-top:22px; }
@@ -317,7 +316,7 @@
 .roast-bridge-actions>a { display:inline-flex; align-items:center; font-size:14px; min-height:44px; }
 @media(max-width:1000px) {
  .roast-campaign-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:30px; }
- .roast-campaign-grid .roast-note-message { font-size:34px; }
+ .roast-campaign-grid .roast-note-message { font-size:25px; }
  .roast-write-section { gap:40px; }
 }
 @media(max-width:760px) {
@@ -329,7 +328,7 @@
  .roast-wall-heading { padding:18px 0 24px; }
  .roast-campaign-grid { gap:25px; padding-inline:6px; }
  .roast-campaign-grid .roast-note { padding:23px 22px 10px; }
- .roast-campaign-grid .roast-note-message { font-size:32px; min-height:105px; }
+ .roast-campaign-grid .roast-note-message { font-size:25px; }
  .roast-write-section { grid-template-columns:1fr; gap:27px; padding:32px 0; }
  .roast-write-intro { padding:0; }
  .roast-write-intro h2 { font-size:41px; margin:14px 0; }
@@ -339,7 +338,7 @@
  .roast-selected { margin:25px auto 30px; }
  .roast-selected>h1 { font-size:34px; }
  .roast-detail .roast-selected>.roast-note { min-height:290px; padding:24px 25px 12px; }
- .roast-detail .roast-selected .roast-note-message { font-size:38px; margin:15px 0 23px; }
+ .roast-detail .roast-selected .roast-note-message { font-size:27px; margin:15px 0 23px; }
  .roast-note-links { margin-top:20px; }
  .roast-footer nav { font-size:14px; gap:24px; }
  .roast-footer nav a { display:inline-flex; align-items:center; min-height:44px; }

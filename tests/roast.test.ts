@@ -49,7 +49,7 @@ test("pending notes stay private; approval publishes; hiding removes them",async
 });
 
 test("server validates lengths, types, consent, color and honeypot",async()=>{
-  for(const invalid of [{message:"  "},{message:"a".repeat(401)},{name:"x".repeat(31)},{message:{bad:true}},{consent:false},{color:"red"},{website:"bot.example"}])
+  for(const invalid of [{message:"  "},{message:"a".repeat(2001)},{name:"x".repeat(31)},{message:{bad:true}},{consent:false},{color:"red"},{website:"bot.example"}])
     assert.equal((await submit(request("","POST",{...note,...invalid}))).status,400);
   assert.equal((await submit(request("","POST",{...note,name:" "}))).status,201);
 });
@@ -148,8 +148,8 @@ test("editorial routes and neutral share text work without storage", async () =>
       assert.deepEqual(await getPublicRoast(note.id), note);
       const text = roastShareText(note);
       assert.ok(text.includes(note.message));
-      assert.ok(text.includes("Roast Whiff"));
-      assert.equal(text.includes("The Whiff team"), false);
+      assert.ok(text.includes("What’s wrong with Whiff?"));
+      assert.ok(text.includes("Whiff-written example — not a user review"));
       assert.ok(text.endsWith(roastUrl(note.id)));
     }
     assert.equal(await getPublicRoast("not-a-roast"), null);
@@ -160,15 +160,15 @@ test("editorial routes and neutral share text work without storage", async () =>
 test("saved images have square PNG dimensions, safe attachment names and the same approval gate", async () => {
   const { GET: image } = await import("../app/roast/[id]/og/route");
   const download = (id: string) => image(new Request(`http://localhost/roast/${id}/og?download=1`), { params: Promise.resolve({ id }) });
-  const response = await download("friendship-syllabus");
+  const response = await download("example-planning");
   assert.equal(response.status, 200);
   assert.equal(response.headers.get("cache-control"), "no-store");
-  assert.equal(response.headers.get("content-disposition"), 'attachment; filename="whiff-roast-friendship-syllabus.png"');
+  assert.equal(response.headers.get("content-disposition"), 'attachment; filename="whiff-roast-example-planning.png"');
   const png = Buffer.from(await response.arrayBuffer());
   assert.equal(png.toString("ascii", 1, 4), "PNG");
   assert.equal(png.readUInt32BE(16), 1080);
   assert.equal(png.readUInt32BE(20), 1080);
-  const preview = await image(new Request("http://localhost/roast/houseplants/og"), { params: Promise.resolve({ id: "houseplants" }) });
+  const preview = await image(new Request("http://localhost/roast/example-reliability/og"), { params: Promise.resolve({ id: "example-reliability" }) });
   const previewPng = Buffer.from(await preview.arrayBuffer());
   assert.equal(previewPng.readUInt32BE(16), 1200);
   assert.equal(previewPng.readUInt32BE(20), 630);
@@ -182,4 +182,16 @@ test("saved images have square PNG dimensions, safe attachment names and the sam
   await publicImage.arrayBuffer();
   await moderateNote(id, "rejected");
   assert.equal((await download(id)).status, 404);
+});
+
+
+test("long feedback survives submission, moderation and public detail without truncation", async () => {
+  const message = "界".repeat(2000);
+  assert.equal((await submit(request("", "POST", {...note, message}))).status, 201);
+  const cookie = await session();
+  const pending = await (await reviewNotes(request("/review", "GET", undefined, cookie))).json();
+  await moderateNote(pending.notes[0].id, "approved");
+  assert.equal((await getPublicNote(pending.notes[0].id))?.message, message);
+  const published = await (await publicNotes(request(""))).json();
+  assert.equal(published.notes[0].message, message);
 });

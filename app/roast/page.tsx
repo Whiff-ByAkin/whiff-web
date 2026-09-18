@@ -4,11 +4,11 @@ import { listPublicNotes } from "../lib/roast-store";
 import { RoastWall } from "./roast-wall";
 
 export const metadata: Metadata = {
-  title: "Roast Whiff",
-  description: "No sugar-coating. Read one. Pass it on. Leave your own.",
+  title: "What’s wrong with Whiff?",
+  description: "Read the rough edges and leave your honest feedback. Whiff-written examples are clearly labeled.",
   alternates: { canonical: "/roast" },
-  twitter: { card: "summary_large_image", title: "Roast Whiff", description: "No sugar-coating. Read one. Pass it on. Leave your own." },
-  openGraph: { title: "Roast Whiff", description: "No sugar-coating. Read one. Pass it on. Leave your own.", url: "/roast" },
+  twitter: { card: "summary_large_image", title: "What’s wrong with Whiff?", description: "Read the rough edges and leave your honest feedback. Whiff-written examples are clearly labeled." },
+  openGraph: { title: "What’s wrong with Whiff?", description: "Read the rough edges and leave your honest feedback. Whiff-written examples are clearly labeled.", url: "/roast" },
 };
 
 export default async function RoastPage() {

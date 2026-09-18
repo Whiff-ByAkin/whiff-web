@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { NextRequest } from "next/server";
-import { NOTE_COLORS, type NoteColor } from "@/app/lib/roast-types";
+import { NOTE_COLORS, NOTE_MAX_LENGTH, type NoteColor } from "@/app/lib/roast-types";
 import { consumeLimit, insertNote, listPublicNotes } from "@/app/lib/roast-store";
 import { body, clientKey, cursor, failure, json, RequestError } from "@/app/lib/roast-http";
 
@@ -17,8 +17,8 @@ export async function POST(request:NextRequest) {
   try {
     const input=await body(request);
     if (typeof input.website==="string" && input.website.trim()) throw new RequestError("This submission could not be accepted.");
-    if (typeof input.message!=="string" || input.message.trim().length<3 || input.message.trim().length>400)
-      throw new RequestError("Write a note between 3 and 400 characters.");
+    if (typeof input.message!=="string" || input.message.trim().length<3 || input.message.trim().length>NOTE_MAX_LENGTH)
+      throw new RequestError(`Write a note between 3 and ${NOTE_MAX_LENGTH} characters.`);
     if (input.name!==undefined && (typeof input.name!=="string" || input.name.trim().length>30)) throw new RequestError("Keep your name to 30 characters.");
     if (!NOTE_COLORS.includes(input.color as NoteColor)) throw new RequestError("Choose a note color.");
     if (input.consent!==true) throw new RequestError("Please agree to share your note publicly after review.");
