@@ -10,6 +10,11 @@ export const SITE_NAME = "whiff";
 
 export const INSTAGRAM_URL = "https://www.instagram.com/discover_whiff/";
 
+// Add verified listing/profile URLs when available. Null renders a clear coming-soon state.
+export const APP_STORE_URL: string | null = null;
+export const GOOGLE_PLAY_URL: string | null = null;
+export const TIKTOK_URL: string | null = null;
+
 export const FOUNDED_YEAR = "2026";
 
 /** Markets whiff actually operates in. Nothing here is aspirational. */

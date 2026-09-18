@@ -71,12 +71,12 @@ export const BET = {
  *  so it leads with the definition and contains the qualifying nouns a model
  *  needs to categorise whiff correctly. */
 export const ANSWER =
-  "whiff is an activity-first social platform that helps adults build real friendships without browsing profiles. It brings the same four people together for six activities over twelve weeks. Its first circles are forming in Minneapolis–Saint Paul, Minnesota; the website currently accepts invite-list signups. whiff is not a dating app.";
+  "whiff is an activity-first social platform that helps adults build real friendships without browsing profiles. It brings the same four people together for six activities over twelve weeks. Its first circles are forming in Minneapolis–Saint Paul, Minnesota; App Store and Google Play links are coming soon. whiff is not a dating app.";
 
 /** Longer About copy — the crawlable, visible explanation. */
 export const ABOUT_PARAGRAPHS = [
   "whiff is an activity-first way to make friends as an adult. You never browse anyone, and you never have to organise anything. You answer a short set of questions about what you actually enjoy doing, and whiff takes it from there.",
-  "The first circles are forming in Minneapolis–Saint Paul. Join the invite list for updates and next steps; a website signup does not begin a subscription or guarantee an immediate match.",
+  "The first circles are forming in Minneapolis–Saint Paul. App Store and Google Play links are coming soon. Circles depend on local availability; an immediate match is not guaranteed.",
   "In the background, whiff works out who you belong with and forms a circle of four compatible people. Then it plans a run of real-world experiences for that same four. The faces do not change. That repetition is the whole mechanism: friendships come from repeated, unforced contact with the same people, not from meeting a new set of strangers every month.",
   "There is no feed, no swiping, no profile to maintain and no group chat to keep alive. whiff is not a dating app and it is not a networking event.",
 ];
@@ -224,7 +224,7 @@ export const FAQ: { question: string; answer: string }[] = [
   {
     question: "What happens while I wait to be matched?",
     answer:
-      "Our first Twin Cities circles are forming. Website signups receive updates and next steps by email. Activity suggestions depend on local availability; signing up does not guarantee immediate outings or a match.",
+      "Our first Twin Cities circles are forming. App Store and Google Play links are coming soon. Activity suggestions depend on local availability; immediate outings or a match are not guaranteed.",
   },
   {
     question: "How many people are in a whiff circle?",
@@ -244,7 +244,7 @@ export const FAQ: { question: string; answer: string }[] = [
   {
     question: "Which cities is whiff in?",
     answer:
-      "whiff is forming its first circles in Minneapolis–Saint Paul, Minnesota, and plans to expand one city at a time. If whiff is not in your city yet you can register your city and be told when it opens.",
+      "whiff is forming its first circles in Minneapolis–Saint Paul, Minnesota, and plans to expand one city at a time. Availability outside the Twin Cities has not been announced.",
   },
   {
     question: "Is whiff good for people who just moved to a new city?",
@@ -264,6 +264,6 @@ export const FAQ: { question: string; answer: string }[] = [
   {
     question: "How do I join whiff?",
     answer:
-      "Enter your email on the whiff website to start. whiff opens one city at a time, so if your city is already live you will be taken through the questions, and if it is not you will be told as soon as it opens.",
+      "Whiff is preparing for App Store and Google Play access. Store links are coming soon; the website no longer collects email signups. Its first circles are forming in Minneapolis–Saint Paul.",
   },
 ];

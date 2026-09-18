@@ -1,3 +1,4 @@
+import { GUIDES, guidePath, HALL_PAPER } from "../guides/content";
 import { ROLES } from "../config/roles";
 import { CONTACT_EMAIL, HUB_NAME, INSTAGRAM_URL, OPEN_MARKETS, SITE_URL } from "../config/site";
 import {
@@ -46,11 +47,11 @@ ${ABOUT_PARAGRAPHS.join("\n\n")}
 - Matching: based on activities you enjoy and when you are free. There are no profiles to browse and nothing to swipe on.
 - Run: six activities over twelve weeks with the same four people
 - While you wait: activity suggestions depend on local availability; no immediate outings or matching are guaranteed
-- Membership: ${PRICING.perMonth}/month with a ${PRICING.trialDays}-day trial and a reminder on day ${PRICING.reminderDay}. Activity costs are separate. Website invite-list signup does not start billing.
+- Membership: ${PRICING.perMonth}/month with a ${PRICING.trialDays}-day trial and a reminder on day ${PRICING.reminderDay}. Activity costs are separate. Store links are coming soon; the website does not collect email signups.
 - The bet: ${THE_BET}
 - Open in: ${HUB_NAME}, ${OPEN_MARKETS[0].state} — one metro, covering ${OPEN_MARKETS.map((m) => m.city).join(" and ")}
-- Status: first circles forming. The website takes invite-list signups for updates and next steps.
-- Expansion: one city at a time, based on where people ask for it
+- Status: first circles forming. App Store and Google Play links are coming soon.
+- Expansion: one city at a time; availability outside the Twin Cities has not been announced
 - Contact: ${CONTACT_EMAIL}
 - Instagram: ${INSTAGRAM_URL}
 
@@ -78,12 +79,18 @@ ${AUDIENCES.map((a) => `- ${a.title}: ${a.body}`).join("\n")}
 
 ${FAQ.map((f) => `### ${f.question}\n\n${f.answer}`).join("\n\n")}
 
+## Friendship research
+
+Jeffrey A. Hall’s “How many hours does it take to make a friend?” is context for repeated shared time, not a study or endorsement of Whiff. Estimated hours are not universal thresholds and six outings do not guarantee friendship. Original paper: ${HALL_PAPER}
+
 ## Pages
 
-- [Home](${url("/")}): friendship circles, six example activities, pricing, launch status, and the invite list
+- [Home](${url("/")}): friendship circles, six example activities, pricing, launch status, and app-store availability
+- [Minnesota](${url("/mn")}): a local starting point for newcomers and longtime residents
+${GUIDES.map((guide) => `- [${guide.shortTitle}](${url(guidePath(guide))}): ${guide.description}`).join("\n")}
 - [The bad stuff](${url("/roast")}): public sticky-note feedback wall; everyone can read approved notes. New submissions stay private until reviewed.
 - [Blog](${url("/blog")}): what whiff is, who it is for, how it works, why four people, why it is not a dating app
-- [States](${url("/states")}): where whiff is open, what a season of activities looks like there, and how to ask for a new state
+- [States](${url("/states")}): where whiff is open, what a season of activities looks like there, and current availability
 ${ROLES.map((r) => `- [${r.name}](${url(`/roles/${r.id}`)}): ${r.tagline}`).join("\n")}
 - [Support](${url("/support")}): how circles form, missing a night, reporting a member, deleting an account, billing
 - [Privacy](${url("/privacy")})

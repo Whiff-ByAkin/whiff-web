@@ -253,10 +253,6 @@ export function RoleExplorer({
 
                   <p className="role-closing-body">{CLOSING.body}</p>
 
-                  {/* The same ask as the button under the claim, in the same
-                      words — and the reason that button is hidden while this
-                      panel is up. Pressing it opens the field over there and
-                      puts the cursor in it. */}
                   <button
                     type="button"
                     onClick={onBegin}

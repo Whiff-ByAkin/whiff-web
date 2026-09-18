@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { InviteForm } from "@/app/components/invite-cta";
+import { DownloadButtons } from "./download-buttons";
 import { RoleExplorer } from "@/app/components/role-explorer";
-import { CLOSING, ROLES } from "@/app/config/roles";
+import { ROLES } from "@/app/config/roles";
 import { BET, PROMISE } from "@/app/seo-content";
 
 // Each element gets its own delay and a spring-like ease, so the entrance never
@@ -59,9 +59,7 @@ export function Hero({
   const reduce = useReducedMotion();
   const R = reduce ? fade : reveal;
 
-  // Which panel the explorer is showing. The page needs it for one reason:
-  // the seventh panel ends on the same ask as the button beside it, and two
-  // controls saying "Get your invite" at once is one too many.
+  // The role explorer keeps its active panel as the visitor browses.
   const [tab, setTab] = useState(initialRole ?? ROLES[0].id);
 
   return (
@@ -139,7 +137,7 @@ export function Hero({
             // renders at this width.
             className="hero-ask order-5 mt-[clamp(1.1rem,4.5vh,2.75rem)] flex w-full justify-center md:mt-[clamp(1.1rem,3.6vh,2.1rem)] md:justify-start"
           >
-            <InviteForm triggerHidden={tab === CLOSING.id} />
+            <div id="download"><span id="begin" /><DownloadButtons /></div>
           </motion.div>
 
           {/* Nunito italic, not Caveat — the handwriting is spent on the
@@ -161,10 +159,8 @@ export function Hero({
           <RoleExplorer
             active={tab}
             onActiveChange={setTab}
-            // The closing panel's ask opens the field in the other column. It
-            // goes through the same window event the header and /#begin use,
-            // so there is one way in, not three.
-            onBegin={() => window.dispatchEvent(new Event("whiff:begin"))}
+            // Point the closing panel at the store availability buttons.
+            onBegin={() => document.getElementById("download")?.scrollIntoView({ behavior: "instant" })}
           />
         </motion.div>
       </div>

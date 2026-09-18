@@ -1,0 +1,19 @@
+.section { max-width:1120px; width:calc(100% - 80px); margin:0 auto; padding:88px 0; display:grid; grid-template-columns:1.08fr 1fr; align-items:center; gap:clamp(35px,6vw,86px); color:#292820; }
+.poster { background:#e7edda; border:1px solid #cacaba; padding:20px 20px 26px; transform:rotate(-2deg); box-shadow:5px 8px 0 #2928200c; }
+.masthead { display:flex; justify-content:space-between; gap:12px; font-size:10px; letter-spacing:.11em; font-weight:800; padding-bottom:16px; }
+.poster img { display:block; width:100%; height:auto; }
+.caption { font-family:var(--font-display),sans-serif; font-size:clamp(23px,2.5vw,32px); font-weight:500; line-height:1.2; margin:21px 0 0; }
+.caption em { font-style:normal; color:#506344; }
+.eyebrow { font-size:10px; letter-spacing:.14em; font-weight:800; margin:0 0 19px; }
+.copy h2 { font-family:var(--font-display),sans-serif; font-size:clamp(38px,4.5vw,61px); font-weight:500; line-height:1.05; letter-spacing:-.04em; margin:0 0 25px; }
+.copy h2 span { color:#68774d; }
+.copy>p:not(.eyebrow):not(.disclosure) { max-width:45ch; font-size:15px; line-height:1.8; margin:0 0 15px; }
+.actions { display:flex; flex-wrap:wrap; gap:10px; margin:26px 0 17px; }
+.actions a,.actions button { display:inline-flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px; min-height:48px; border:1px solid #292820; border-radius:5px; padding:11px 15px; font-size:12px; font-weight:800; }
+.actions a { background:#292820; color:#fffaf0; text-decoration:none; }
+.actions a:hover { background:#494335; }
+.actions a:focus-visible { outline:3px solid #39715c; outline-offset:4px; }
+.actions button { background:transparent; border-color:#a59e90; color:#625e51; cursor:not-allowed; }
+.actions small { font-size:10px; font-weight:600; }
+.disclosure { color:#655f51; font-size:11px; line-height:1.7; max-width:40ch; margin:0; }
+@media(max-width:760px) { .section { width:calc(100% - 40px); grid-template-columns:1fr; gap:37px; padding:50px 0; } .poster { max-width:520px; margin:0 5px; padding:16px 16px 22px; } .copy h2 { font-size:43px; } .copy h2 br { display:none; } .copy h2 span::before { content:' '; } .copy>p:not(.eyebrow):not(.disclosure) { max-width:none; } }

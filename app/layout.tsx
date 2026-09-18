@@ -35,7 +35,7 @@ const nunito = Nunito({
 // Search results explain the product; social previews keep the shareable promise.
 const TITLE = "Whiff | Make friends in Minneapolis–Saint Paul";
 const SHARE_TITLE = "Strangers only on week one.";
-const DESCRIPTION = "Make friends in the Twin Cities with Whiff: the same four people, six activities, twelve weeks. Join the invite list as our first circles form.";
+const DESCRIPTION = "Make friends in the Twin Cities with Whiff: the same four people, six activities, twelve weeks. Platonic friendship, with first circles forming and app-store links coming soon.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -96,19 +96,6 @@ export const metadata: Metadata = {
 // emits one @graph containing the Organization plus whatever that page is
 // actually about — FAQPage, HowTo, a city Service, and so on.
 
-/* The CTA split, assigned before the first paint.
- *
- * It runs synchronously as the first thing in <body>, which is what makes it
- * safe: the attribute is on <html> before the button below it is parsed, so
- * nobody sees "Get your invite" turn into "Take your seat". The variant is
- * kept in localStorage so a returning visitor stays in the arm they were
- * counted in — a split that reshuffles per visit measures nothing.
- *
- * Wrapped in try/catch because localStorage throws outright in some privacy
- * modes. When it does, no attribute is set, the CSS default wins, and that
- * visitor is simply not in the experiment. */
-const CTA_SPLIT = `(function(){try{var k="whiff-cta",v=localStorage.getItem(k);if(v!=="begin"&&v!=="seat"){v=Math.random()<0.5?"begin":"seat";localStorage.setItem(k,v)}document.documentElement.dataset.cta=v}catch(e){}})()`;
-
 export const viewport: Viewport = {
   themeColor: "#f6f2e9",
   width: "device-width",
@@ -131,7 +118,6 @@ export default function RootLayout({
           Grammarly, ad blockers) commonly inject nodes/attributes into <body>
           before React hydrates. That mismatch is benign; this quiets it. */}
       <body suppressHydrationWarning className="min-h-[100svh] flex flex-col">
-        <script dangerouslySetInnerHTML={{ __html: CTA_SPLIT }} />
         {/* Keyboard and screen-reader users land on the header's dialog buttons
             first on every page; this gives them one tab to skip past it. */}
         <a

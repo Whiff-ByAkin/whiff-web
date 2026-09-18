@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { NOTE_MAX_LENGTH } from "../lib/roast-types";
 import { TEAM_ROASTS } from "../lib/roast-content";
 import Link from "next/link";
+import { RoastBridge } from "./roast-bridge";
 import { NOTE_COLORS, NotePaper, RoastFooter, RoastHeader, readResponse, type NoteColor, type NotesResponse, type RoastNote } from "./roast-ui";
 import "./roast.css";
 
@@ -72,6 +73,7 @@ export function RoastWall({ initial = null }: { initial?: NotesResponse | null }
         <div><p className="roast-eyebrow">NO SUGAR-COATING.</p><h1>What’s wrong<br />with <span>Whiff?</span></h1></div>
         <p className="roast-annotation">The rough edges. The honest feedback.</p>
       </section>
+      <RoastBridge />
       <section className="roast-campaign-wall" id="the-wall" aria-labelledby="wall-title">
         <div className="roast-wall-heading"><h2 id="wall-title">The bad stuff belongs here, too.</h2><p>Read the full notes. Tell us what needs fixing. Whiff-written examples are labeled below.</p></div>
         <div className="roast-campaign-grid">{[...notes, ...TEAM_ROASTS].map(note => <NotePaper key={note.id} note={note} linked />)}</div>

@@ -344,3 +344,16 @@
  .roast-footer nav a { display:inline-flex; align-items:center; min-height:44px; }
 }
 @media(max-width:560px) { .roast-campaign-grid { grid-template-columns:1fr; } }
+
+/* Give a shared note enough context to make sense on its own. */
+.roast-bridge { display:grid; grid-template-columns:1fr auto; align-items:center; gap:35px; border-block:1px solid var(--roast-rule); padding:22px 0; margin:0 0 30px; }
+.roast-bridge h2 { font-family:var(--font-fredoka),sans-serif; font-size:25px; font-weight:500; line-height:1.2; letter-spacing:-.5px; }
+.roast-bridge p { max-width:620px; font-size:13px; line-height:1.7; margin-top:8px; color:#605e52; }
+.roast-bridge .roast-bridge-location { font-size:11px; font-weight:700; margin-top:5px; }
+.roast-bridge .roast-bridge-actions { display:flex; align-items:center; flex-wrap:wrap; justify-content:flex-end; gap:6px 20px; max-width:415px; }
+.roast-bridge .roast-button { padding:11px 17px; gap:16px; min-height:44px; }
+.roast-bridge-invite { display:inline-flex; align-items:center; min-height:44px; font-size:13px; font-weight:800; text-decoration:underline; text-underline-offset:4px; }
+.roast-bridge .roast-bridge-actions>p { flex-basis:100%; font-size:10px; margin:0; text-align:right; }
+.roast-detail .roast-bridge { max-width:900px; margin:0 auto 40px; }
+@media(max-width:1000px) { .roast-bridge { grid-template-columns:1fr; gap:13px; } .roast-bridge .roast-bridge-actions { justify-content:flex-start; max-width:none; } .roast-bridge .roast-bridge-actions>p { text-align:left; } }
+@media(max-width:760px) { .roast-bridge { padding:19px 0; margin-bottom:24px; } .roast-bridge h2 { font-size:23px; } .roast-bridge p { font-size:12px; } .roast-bridge .roast-bridge-location { font-size:10px; } .roast-bridge .roast-bridge-actions { gap:5px 16px; } .roast-bridge .roast-button { font-size:12px!important; padding:10px 14px; gap:10px; } .roast-bridge .roast-bridge-actions>p { font-size:10px; } }

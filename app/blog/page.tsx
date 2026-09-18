@@ -1,4 +1,6 @@
-import Link from "next/link";
+import { DownloadButtons } from "../components/download-buttons";
+import { MinnesotaResources } from "../components/minnesota-resources";
+import { FriendshipResearch } from "../components/friendship-research";
 import type { Metadata } from "next";
 import { Header } from "../components/header";
 import { JsonLd } from "../components/json-ld";
@@ -20,7 +22,7 @@ const DESCRIPTION =
 /* BlogPosting wants dates. Without them a crawler has no freshness signal for
    the page at all, so this is the date the pieces were last rewritten — bump
    it with the sitemap's CONTENT_UPDATED when the copy changes. */
-const UPDATED = "2026-08-18";
+const UPDATED = "2026-09-18";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -128,12 +130,14 @@ export default function BlogPage() {
           </header>
 
           <BlogExplorer />
+          <FriendshipResearch />
+          <MinnesotaResources />
 
           <section id="where-we-are" aria-labelledby="launch-title" className="mx-auto mt-14 w-full max-w-[68rem] border-t border-line pt-8">
             <p className="font-display text-sm font-medium uppercase tracking-wider text-ink-muted">First circles / Twin Cities</p>
             <h2 id="launch-title" className="mt-3 font-display text-3xl font-semibold tracking-tight text-ink">Starting in Minneapolis–Saint Paul.</h2>
-            <p className="mt-4 max-w-[60ch] leading-relaxed text-ink-muted">We’re bringing our first circles together in the Twin Cities. Join the invite list for updates and next steps as they take shape. Signing up doesn’t start a subscription or match you immediately.</p>
-            <Link href="/#begin" className="mt-5 inline-flex min-h-11 items-center rounded-full bg-ink px-5 py-3 font-display text-sm font-semibold text-ground">Get an invite</Link>
+            <p className="mt-4 max-w-[60ch] leading-relaxed text-ink-muted">We’re bringing our first circles together in the Twin Cities. App Store and Google Play links are coming soon. Matching depends on local availability.</p>
+            <div className="mt-5"><DownloadButtons /></div>
           </section>
         </main>
       </div>

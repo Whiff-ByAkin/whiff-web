@@ -4,7 +4,7 @@ import { JsonLd } from "./json-ld";
 import { organization, service, ORG_ID, WEBSITE_ID, abs } from "../lib/structured-data";
 import type { HomeVariant } from "../lib/home-types";
 
-const cityDescription = "Whiff helps newcomers and longtime locals make platonic friends in Minneapolis and Saint Paul. The same four people meet for six planned activities over twelve weeks. First circles are forming; join the invite list for updates.";
+const cityDescription = "Whiff helps newcomers and longtime locals make platonic friends in Minneapolis and Saint Paul. The same four people meet for six planned activities over twelve weeks. First circles are forming; App Store and Google Play links are coming soon.";
 
 export function HomeVariantView({ variant }: { variant: HomeVariant }) {
   return <div data-home-variant={variant}>{variant === "classic" ? <HomeScreen /> : <>

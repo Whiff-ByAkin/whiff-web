@@ -367,7 +367,8 @@ const SECTIONS: DocSection[] = [
           <li>
             <strong>
               <a href="https://formspree.io/legal/privacy-policy/">Formspree</a>
-            </strong>: processing the invite form on this website.
+            </strong>: previously processed website invite-list submissions.
+            This website no longer collects invite-list signups.
           </li>
           <li>
             <strong>
@@ -719,7 +720,7 @@ export default function PrivacyPage() {
   return (
     <DocShell
       title="Privacy Policy"
-      updated="September 15, 2026"
+      updated="September 18, 2026"
       intro={INTRO}
       sections={SECTIONS}
     />

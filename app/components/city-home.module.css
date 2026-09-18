@@ -6,7 +6,7 @@
 .page :global(.whiff-menu-icon) span { background:var(--ink); }
 .page :global(.whiff-menu-panel) a:hover, .page :global(.whiff-menu-panel) a:focus-visible { background:#e9e5da; }
 .page button,.page summary { cursor:pointer; }
-.page button:disabled { opacity:.38; cursor:default; }
+.page button:disabled { opacity:1; cursor:not-allowed; }
 .page :focus-visible { outline:2px solid var(--blue); outline-offset:5px; }
 .page h1,.page h2,.page h3 { color:var(--ink); font-family:var(--font-fredoka),sans-serif; font-weight:500; }
 .wrap { width:calc(100% - 96px); max-width:1300px; margin-inline:auto; }
@@ -109,3 +109,7 @@
 }
 @media(max-width:360px) { .wrap { width:calc(100% - 32px); } .hero h1 { font-size:48px; } .story { padding-inline:12px; } .scene h3 { font-size:25px; } .scene figcaption { min-height:198px; } .storyControls>p { font-size:20px; } .storyControls button { min-width:62px; padding-inline:8px; } .invitation h2 { color:inherit; font-size:38px; } .formBox { padding:21px 15px; } }
 @media(prefers-reduced-motion:reduce) { .scene { animation:none; } .primary,.perspectiveButton { transition:none; } .primary:hover,.primary:active { transform:none; } }
+
+.heroDownloads { margin-top:25px; }
+
+.downloadMascot { height:112px; width:63px; margin-bottom:36px; }

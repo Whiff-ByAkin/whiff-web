@@ -25,7 +25,7 @@ import { StateInterestForm } from "./state-interest-form";
 const STATE_LINE = OPEN_STATES.join(" and ");
 const CITY_LINE = OPEN_MARKETS.map((m) => m.city).join(" and ");
 
-export const metadata = pageMetadata("/states", `Friendship circles in ${CITY_LINE}`, `Whiff’s first friendship circles are forming in ${CITY_LINE}, ${STATE_LINE}. Explore example activities and join the invite list.`);
+export const metadata = pageMetadata("/states", `Friendship circles in ${CITY_LINE}`, `Whiff’s first friendship circles are forming in ${CITY_LINE}, ${STATE_LINE}. Explore example activities and app availability.`);
 
 export default function StatesPage() {
   return (
@@ -52,8 +52,7 @@ export default function StatesPage() {
           <p className="mt-4 text-[15px] leading-relaxed text-ink/90 sm:text-base">
             whiff opens one metro at a time, so each has enough members to form
             good circles. {HUB_NAME} is one metro, not two markets — circles
-            are seated across the whole of it. This is where whiff is taking
-            members now, and at the bottom, how to open yours.
+            are seated across the whole of it. Our first circles are forming here. App Store and Google Play links are coming soon.
           </p>
         </div>
 
@@ -93,7 +92,7 @@ export default function StatesPage() {
               </dl>
 
               <p className="mt-6 text-sm leading-relaxed text-ink-faint">
-                Circles meet in {market.neighborhoods.join(", ")}.
+                Possible neighborhoods include {market.neighborhoods.join(", ")}. Actual plans will vary.
               </p>
             </section>
           ))}
@@ -101,26 +100,15 @@ export default function StatesPage() {
 
         <hr className="mt-12 border-line" />
 
-        {/* Not a waitlist, and the difference is the whole section.
-            "Join the waitlist" casts the reader as somebody queueing to be
-            served: wait there, we will get to you. Every claim on this page
-            is already the other way round — whiff opens a state when enough
-            people in it are ready to be seated — so the form should ask them
-            to open one, not to wait for one. Same action, same field, same
-            email in the same inbox; the person filling it in is a founder of
-            their own market rather than the last name on a list. */}
         <section className="mt-10" aria-labelledby="next-state">
           <h2
             id="next-state"
             className="font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl"
           >
-            open your state.
+            A little room for friendship.
           </h2>
           <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-ink/90">
-            whiff opens a state when enough people there are ready to be
-            seated, and it picks the next one from where people ask. So this
-            is not a waiting list — it is the one form that actually moves a
-            map.
+            Whiff is starting in Minneapolis–Saint Paul. App Store and Google Play links will appear here when they’re ready. We don’t have launch dates for other states yet.
           </p>
           <div className="mt-6">
             <StateInterestForm />

@@ -8,17 +8,10 @@ import {
 } from "@/app/config/site";
 import { ANSWER, PROMISE } from "@/app/seo-content";
 
-/* The site is a single page, so this is the whole graph: who whiff is, the
-   website itself, and what it does. It is emitted once, on `/`.
-
-   The file used to also build FAQPage, HowTo, DefinedTermSet, BreadcrumbList,
-   per-city Service and Event nodes. Those described pages that no longer
-   exist, and structured data for a URL you do not serve is worse than none —
-   it is a mismatch a crawler will hold against the domain. They went with the
-   pages. Restoring them means restoring the pages first.
-
-   Stable @ids are kept: if content pages ever return, every node already has a
-   canonical identity to merge against. */
+/** Shared identity nodes for public product, Minnesota guide and article pages.
+ * Each page adds only schema that describes its visible content. Stable @ids
+ * let search engines connect the organization, website and friendship service
+ * across those pages without inventing locations, events or endorsements. */
 export const ORG_ID = `${SITE_URL}/#organization`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
 export const SERVICE_ID = `${SITE_URL}/#service`;

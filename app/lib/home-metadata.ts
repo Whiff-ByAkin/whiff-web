@@ -6,8 +6,8 @@ export function homeMetadata(variant: HomeVariant): Metadata {
   const path = city ? "/mn" : "/";
   const title = city ? "New to Minnesota? Make friends in the Twin Cities | Whiff" : "Whiff | Make friends in Minneapolis and Saint Paul";
   const description = city
-    ? "New to Minneapolis or Saint Paul? Explore the city with a small group. Know it well? Share an afternoon with new arrivals. Whiff’s first friendship circles are forming."
-    : "Make friends in the Twin Cities with Whiff: the same four people, six activities, twelve weeks. Join the invite list as our first circles form.";
+    ? "Moving to Minnesota or making new friends? Explore Twin Cities activities, local guides and Whiff’s platonic friendship circles. App-store links coming soon."
+    : "Make friends in the Twin Cities with Whiff: the same four people, six activities, twelve weeks. Platonic friendship, with first circles forming and app-store links coming soon.";
   const shareTitle = city ? "You moved here. Now live a little." : "Strangers only on week one.";
   const images = city ? [{ url: `${SITE_URL}/home-share/city`, width: 1200, height: 630, alt: "Whiff. You moved here. Now live a little." }] : undefined;
   return {

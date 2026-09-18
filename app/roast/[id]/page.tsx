@@ -5,6 +5,7 @@ import { cache } from "react";
 import { getPublicRoast } from "../../lib/public-roast";
 import { roastUrl } from "../../lib/roast-content";
 import { NotePaper, RoastHeader, RoastFooter } from "../roast-ui";
+import { RoastBridge } from "../roast-bridge";
 import "../roast.css";
 
 export const dynamic = "force-dynamic";
@@ -24,5 +25,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function RoastDetail({ params }: Props) {
   const note = await lookup((await params).id);
   if (!note) notFound();
-  return <div className="roast-page roast-detail"><RoastHeader /><main id="main" className="roast-wrap"><div className="roast-selected"><h1>What’s wrong with Whiff?</h1><NotePaper note={note} /><nav className="roast-note-links" aria-label="Explore more"><Link href="/roast">All notes</Link><Link href="/">Find out for yourself</Link></nav></div></main><RoastFooter /></div>;
+  return <div className="roast-page roast-detail"><RoastHeader /><main id="main" className="roast-wrap"><div className="roast-selected"><h1>What’s wrong with Whiff?</h1><NotePaper note={note} /><nav className="roast-note-links" aria-label="Explore more"><Link href="/roast">All notes</Link><Link href="/">Find out for yourself</Link></nav></div><RoastBridge /></main><RoastFooter /></div>;
 }

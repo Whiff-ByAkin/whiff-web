@@ -1,0 +1,12 @@
+.buttons { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.store { display:inline-flex; align-items:center; gap:9px; min-height:58px; min-width:158px; padding:9px 17px 10px 12px; border:1px solid #292820; border-radius:10px; background:#292820; color:#fffaf0; text-align:left; text-decoration:none; line-height:1.2; }
+.store small { display:block; font-size:10px; letter-spacing:.035em; margin-bottom:3px; }
+.store strong { display:block; font-size:17px; font-weight:800; white-space:nowrap; }
+.store:disabled { cursor:not-allowed; opacity:1; background:#e8e3d8; color:#514d43; border-color:#a59e90; }
+a.store:hover { background:#494335; }
+.store:focus-visible { outline:3px solid #39715c; outline-offset:4px; }
+.icon { width:28px; height:30px; display:flex; align-items:center; flex-shrink:0; }
+.icon svg { width:100%; height:100%; }
+.compact .store { min-width:140px; min-height:50px; padding:8px 12px 8px 9px; }
+.compact .store strong { font-size:15px; }
+@media(max-width:380px) { .buttons { gap:8px; } .store { min-width:150px; flex:1 1 150px; padding-right:10px; } .store strong { font-size:15px; } }
