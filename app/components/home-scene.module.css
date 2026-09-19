@@ -17,24 +17,6 @@
   pointer-events: none;
   mix-blend-mode: multiply;
 }
-.toggle {
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  min-height: 44px;
-  padding: 9px 13px;
-  color: #24241f;
-  background: #f6f2e9;
-  border: 1px solid #c5bfaf;
-  border-radius: 5px;
-  font: 700 11px var(--font-nunito), sans-serif;
-  cursor: pointer;
-}
-.toggle:hover { background: #fffdf5; }
-.toggle:focus-visible { outline: 2px solid #3651c8; outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
-  .video, .toggle { display: none; }
+  .video { display: none; }
 }

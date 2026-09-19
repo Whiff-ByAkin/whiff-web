@@ -14,11 +14,9 @@ export function HomeScene() {
   const [entered, setEntered] = useState(false);
   const [inView, setInView] = useState(false);
   const [pageVisible, setPageVisible] = useState(true);
-  const [userPaused, setUserPaused] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -57,7 +55,7 @@ export function HomeScene() {
     const element = video.current;
     if (!element) return;
     let cancelled = false;
-    if (available && inView && pageVisible && !userPaused) {
+    if (available && inView && pageVisible) {
       void element.play().catch(() => {
         // Low-power mode and autoplay restrictions leave the poster usable.
         if (!cancelled) setPlaying(false);
@@ -66,7 +64,7 @@ export function HomeScene() {
       element.pause();
     }
     return () => { cancelled = true; element.pause(); };
-  }, [available, inView, pageVisible, userPaused, attempt]);
+  }, [available, inView, pageVisible]);
 
   return (
     <div ref={frame} className={styles.scene} data-home-scene data-motion={playing ? "playing" : "still"}>
@@ -87,6 +85,7 @@ export function HomeScene() {
           style={{ opacity: revealed ? 1 : 0 }}
           src="/generated/four-chairs-loop.mp4"
           muted
+          autoPlay
           loop
           playsInline
           preload="none"
@@ -96,26 +95,6 @@ export function HomeScene() {
           onPause={() => setPlaying(false)}
           onError={() => { setFailed(true); setPlaying(false); }}
         />
-        <button
-          type="button"
-          className={styles.toggle}
-          onClick={() => {
-            if (playing) {
-              setUserPaused(true);
-              video.current?.pause();
-            } else {
-              setUserPaused(false);
-              setAttempt(value => value + 1);
-              // Use this gesture directly when a browser has blocked autoplay.
-              void video.current?.play().catch(() => setPlaying(false));
-            }
-          }}
-        >
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            {playing ? <><path d="M5 3v10" /><path d="M11 3v10" /></> : <path d="m5 3 8 5-8 5V3Z" />}
-          </svg>
-          {playing ? "Pause motion" : "Play motion"}
-        </button>
       </>}
     </div>
   );

@@ -9,7 +9,6 @@ export function MascotMotion({ videoSrc, className = "" }: { videoSrc?: string; 
   const root = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const [canMove, setCanMove] = useState(false);
-  const [finished, setFinished] = useState(false);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
@@ -27,8 +26,8 @@ export function MascotMotion({ videoSrc, className = "" }: { videoSrc?: string; 
     return () => { observer.disconnect(); preference.removeEventListener("change", update); };
   }, [videoSrc]);
 
-  const showVideo = videoSrc && canMove && !failed && !finished;
+  const showVideo = videoSrc && canMove && !failed;
   return <div ref={root} className={`${styles.mascot} ${className}`}>
-    {showVideo ? <video ref={video} src={videoSrc} poster="/whiff-mascot.png" muted playsInline autoPlay preload="none" aria-label="Whiff’s mascot giving a friendly wave" onTimeUpdate={() => { if (video.current && video.current.currentTime >= 4.5) setFinished(true); }} onEnded={() => setFinished(true)} onError={() => setFailed(true)} /> : <Image src="/whiff-mascot.png" alt="Whiff’s friendly little mascot" width={2160} height={3870} sizes="90px" />}
+    {showVideo ? <video ref={video} src={videoSrc} poster="/whiff-mascot.png" muted playsInline autoPlay loop preload="none" aria-label="Whiff’s mascot giving a friendly wave" onError={() => setFailed(true)} /> : <Image src="/whiff-mascot.png" alt="Whiff’s friendly little mascot" width={2160} height={3870} sizes="90px" />}
   </div>;
 }
