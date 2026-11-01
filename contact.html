@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Contact · Whiff</title>
+  <meta name="description" content="Questions, press, partnerships, or just hello. Write to Whiff.">
+  <meta name="theme-color" content="#FFFFFF">
+  <link rel="icon" type="image/webp" href="/favicon.webp">
+  <script type="module" src="/src/page.js"></script>
+</head>
+<body class="page">
+  <header class="bar">
+    <a class="logo" href="/" aria-label="Whiff home">whiff</a>
+    <a class="btn btn-sm" href="/">Home</a>
+  </header>
+
+  <main class="contact">
+    <div class="contact-intro">
+      <img src="/assets/whiff/wave.webp" width="667" height="699" alt="Tiny Whiff waving.">
+      <h1>Say hi.</h1>
+      <p class="quiet">Questions, press, partnerships, or something on your mind. A real person reads every message.</p>
+    </div>
+
+    <form class="contact-form" id="contact-form" novalidate>
+      <div class="field">
+        <label for="c-name">Your name</label>
+        <input id="c-name" name="name" type="text" autocomplete="name" required maxlength="80">
+      </div>
+      <div class="field">
+        <label for="c-email">Email</label>
+        <input id="c-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="160">
+      </div>
+      <div class="field">
+        <label for="c-topic">What's it about?</label>
+        <select id="c-topic" name="topic">
+          <option>A question about Whiff</option>
+          <option>Whiff Moments</option>
+          <option>My data or privacy</option>
+          <option>Press</option>
+          <option>Partnerships</option>
+          <option>Something else</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="c-message">Message</label>
+        <textarea id="c-message" name="message" rows="6" required maxlength="3000"></textarea>
+      </div>
+      <!-- Bots fill this; people never see it. -->
+      <div class="hp" aria-hidden="true">
+        <label for="c-honey">Leave this empty</label>
+        <input id="c-honey" name="_honey" type="text" tabindex="-1" autocomplete="off">
+      </div>
+      <p class="fine">Please don't send passwords, card numbers, or bank details. By sending, you agree to our <a href="/privacy">Privacy Policy</a>.</p>
+      <button class="btn" type="submit" id="c-send">Send message</button>
+      <p class="form-msg" id="form-msg" role="status" aria-live="polite"></p>
+    </form>
+  </main>
+
+<!--FOOTER-->
+</body>
+</html>
