@@ -48,6 +48,88 @@
           "value": "public, max-age=86400"
         }
       ]
+    },
+    {
+      "source": "/llms.txt",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/blog",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/mn",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/mn/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/roast",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/roast/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/roles/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/states",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/owner",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/owner/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/support",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.whi-ff.com"
+        }
+      ],
+      "destination": "https://whi-ff.com/$1",
+      "permanent": true
     }
   ]
 }
